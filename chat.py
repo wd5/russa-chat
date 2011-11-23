@@ -158,7 +158,7 @@ class ChatConnection(tornadio2.conn.SocketConnection):
                     waiter.send(message_for_all)
             self.messages_cache.extend([message_for_all])
             if len(self.messages_cache) > self.cache_size:
-                self.messages_cache = self.messages_cache[-self.cache_size:]
+                self.messages_cache = self.messages_cache[1:]
         elif private:
             for waiter in self.waiters:
                 if waiter.user_name == private_to:
@@ -170,7 +170,7 @@ class ChatConnection(tornadio2.conn.SocketConnection):
                 waiter.send(message)
             self.messages_cache.extend([message])
             if len(self.messages_cache) > self.cache_size:
-                self.messages_cache = self.messages_cache[-self.cache_size:]
+                self.messages_cache = self.messages_cache[1:]
 
     def console_message(self, message_src):
         for waiter in self.waiters:
