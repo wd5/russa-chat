@@ -203,7 +203,7 @@ class ChatConnection(tornadio2.conn.SocketConnection):
                                         "user_id", info.get_cookie("user_id").value)
 
 # Create tornadio server
-ChatRouter = tornadio2.router.TornadioRouter(ChatConnection,dict(enabled_protocols=['websocket','xhr-polling','jsonp-polling','htmlfile']))
+ChatRouter = tornadio2.router.TornadioRouter(ChatConnection,dict(enabled_protocols=['websocket','xhr-polling','jsonp-polling','htmlfile'],session_check_interval=5,session_expiry=10))
 
 # Create socket application
 application = tornado.web.Application(
