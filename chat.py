@@ -108,6 +108,9 @@ class ChatConnection(tornadio2.conn.SocketConnection):
             }
             self.users_online.append(message["user"])
             self.console_message(message)
+            ChatConnection.messages_cache.extend([message])
+            if len(ChatConnection.messages_cache) > self.cache_size:
+                ChatConnection.messages_cache = ChatConnection.messages_cache[1:]
 
     def on_message(self, message_src):
         time = datetime.datetime.time(datetime.datetime.now()).strftime("%H:%M")
@@ -187,6 +190,9 @@ class ChatConnection(tornadio2.conn.SocketConnection):
                 "html": loader.load("message_out.html").generate(message="%s ушел(timeout)" % self.user_name, time = time),
             }
             self.console_message(message)
+            ChatConnection.messages_cache.extend([message])
+            if len(ChatConnection.messages_cache) > self.cache_size:
+                ChatConnection.messages_cache = ChatConnection.messages_cache[1:]
 
     @tornadio2.event('exit')
     def out_user(self, args):
