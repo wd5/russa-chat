@@ -65,7 +65,7 @@ class IndexHandler(BaseHandler):
 
 class SocketIOHandler(BaseHandler):
     def get(self):
-        self.render('/var/www/my-chat/my-chat2/static/socket.io.js')
+        self.render('/var/www/russa-chat/static/socket.io.js')
 
 class ChatConnection(tornadio2.conn.SocketConnection):
     # Class level variable
@@ -148,7 +148,7 @@ class ChatConnection(tornadio2.conn.SocketConnection):
             for waiter in self.waiters:
                 if waiter.user_name == private_to:
                     waiter.send(message1)
-                else:
+                if waiter.user_name == self.user_name:
                     waiter.send(message2)
         else:
             for waiter in self.waiters:
