@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    var s = new io.connect('http://' + window.location.hostname + ':8001', {
+    var s = new io.connect('http://' + window.location.hostname + ':80', {
         rememberTransport: false
         });
     // Постинг формы через ajax
