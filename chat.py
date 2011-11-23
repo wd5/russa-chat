@@ -31,6 +31,16 @@ class Application(tornado.web.Application):
         )
         tornado.web.Application.__init__(self, handlers, **settings)
 
+class WebSocketFileHandler(tornado.web.RequestHandler):
+    def get(self):
+        # Obviously, you want this on CDN, but for sake of
+        # example this approach will work.
+        self.set_header('Content-Type', 'application/x-shockwave-flash')
+
+        with open(op.join(ROOT, 'static/WebSocketMain.swf'), 'rb') as f:
+            self.write(f.read())
+            self.finish()
+
 class BaseHandler(tornado.web.RequestHandler):
     def get_current_user(self):
         user = self.get_secure_cookie("user")
@@ -65,7 +75,7 @@ class IndexHandler(BaseHandler):
 
 class SocketIOHandler(BaseHandler):
     def get(self):
-        self.render('/var/www/russa-chat/static/socket.io.js')
+        self.render(op.join(ROOT, '/static/socket.io.js'))
 
 class ChatConnection(tornadio2.conn.SocketConnection):
     # Class level variable
@@ -200,9 +210,10 @@ application = tornado.web.Application(
     ChatRouter.apply_routes([(r"/", IndexHandler),
         (r"/socket.io.js", SocketIOHandler),
         (r"/auth/login", AuthLoginHandler),
-        (r"/auth/logout", AuthLogoutHandler)]),
+        (r"/auth/logout", AuthLogoutHandler),
+        (r"/WebSocketMain.swf", WebSocketFileHandler)]),
     flash_policy_port = 843,
-    flash_policy_file = op.join(ROOT, 'flashpolicy.xml'),
+    flash_policy_file = op.join(ROOT, '/static/flashpolicy.xml'),
     socket_io_port = 8001,
     static_path=os.path.join(os.path.dirname(__file__), "static"),
     xsrf_cookies=True,

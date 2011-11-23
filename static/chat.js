@@ -1,3 +1,4 @@
+WEB_SOCKET_SWF_LOCATION = 'WebSocketMain.swf';
 $(document).ready(function() {
     var s = new io.connect('http://' + window.location.hostname + ':80', {
         rememberTransport: false
