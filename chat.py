@@ -18,7 +18,7 @@ from tornado.web import decode_signed_value
 loader = tornado.template.Loader(os.path.join(os.path.dirname(__file__), "templates"))
 ROOT = op.normpath(op.dirname(__file__))
 # На каком порту запсукаемся
-define("port", default=8001, type=int)
+define("port", default=8005, type=int)
 
 class Application(tornado.web.Application):
     def __init__(self):
@@ -203,7 +203,7 @@ application = tornado.web.Application(
         (r"/auth/logout", AuthLogoutHandler)]),
     flash_policy_port = 843,
     flash_policy_file = op.join(ROOT, 'flashpolicy.xml'),
-    socket_io_port = 8001,
+    socket_io_port = 8005,
     static_path=os.path.join(os.path.dirname(__file__), "static"),
     xsrf_cookies=True,
     template_path=os.path.join(os.path.dirname(__file__), "templates"),
