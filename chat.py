@@ -54,10 +54,15 @@ class BaseHandler(tornado.web.RequestHandler):
 
 class AuthLoginHandler(BaseHandler):
   def get(self):
-      self.render("login.html")
+      self.render("login.html", error=False)
 
   def post(self):
       name = self.get_argument("name")
+      for waiter in ChatConnection.waiters:
+          print waiter.user_name
+          print name
+          if str(waiter.user_name) == name.encode('utf-8'):
+              self.render("login.html", error=True)
       self.set_secure_cookie("user", name)
       self.set_secure_cookie("user_id", str(uuid.uuid4()))
       self.redirect("/")

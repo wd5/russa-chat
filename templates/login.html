@@ -1,5 +1,8 @@
 <html>
 <body>
+{% if error %}
+Кто то уже сидит под таким ником!
+{% end %}
 <form action="/auth/login" method="post">
     {% module xsrf_form_html() %}
     Name: <input type="text" name="name">
