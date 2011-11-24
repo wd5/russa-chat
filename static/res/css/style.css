@@ -288,6 +288,16 @@ body {
 #smile_block a{
 	text-decoration: none;
 }
+#smile_link{
+	display: inline-block;
+	width: 30px;
+	height: 30px;
+	background: url(../img/smile.png) top left no-repeat;
+	text-indent: -9999px;
+}
+#smile_link:hover{
+	background-position: bottom left;
+}
 /*Smiles END*/
 @media print{
 *{background:transparent !important;color:black !important;text-shadow:none !important;filter:none !important;-ms-filter:none !important}
