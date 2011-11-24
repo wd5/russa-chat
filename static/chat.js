@@ -1,6 +1,6 @@
 WEB_SOCKET_SWF_LOCATION = 'WebSocketMain.swf';
 $(document).ready(function() {
-    var s = new io.connect('http://' + window.location.hostname + ':80', {
+    var s = new io.connect('http://' + window.location.host, {
         rememberTransport: false
         });
     // Постинг формы через ajax

@@ -2,6 +2,7 @@
 from os import path as op
 import uuid
 import datetime
+import re
 import tornado
 from tornado.options import define
 import tornado.web
@@ -81,6 +82,10 @@ class IndexHandler(BaseHandler):
 class SocketIOHandler(BaseHandler):
     def get(self):
         self.render(op.join(ROOT, '/static/socket.io.js'))
+
+class StatsHandler(BaseHandler):
+    def get(self):
+        self.render('stats.html')
 
 class ChatConnection(tornadio2.conn.SocketConnection):
     # Class level variable
@@ -213,16 +218,34 @@ class ChatConnection(tornadio2.conn.SocketConnection):
         return decode_signed_value(application.settings["cookie_secret"],
                                         "user_id", info.get_cookie("user_id").value)
 
+class PingConnection(tornadio2.conn.SocketConnection):
+    @tornadio2.event('ping')
+    def ping(self, client):
+        now = datetime.datetime.now()
+        return client, [now.hour, now.minute, now.second, now.microsecond / 1000]
+
+    @tornadio2.event('stats')
+    def stats(self):
+        return self.session.server.stats.dump()
+
 # Create tornadio server
 ChatRouter = tornadio2.router.TornadioRouter(ChatConnection,dict(enabled_protocols=['websocket','xhr-polling','jsonp-polling','htmlfile'],session_check_interval=5,session_expiry=10))
 
-# Create socket application
+StatsRouter = tornadio2.router.TornadioRouter(PingConnection, dict(enabled_protocols=['websocket', 'xhr-polling','jsonp-polling', 'htmlfile']),namespace='stats')
+
+urls = ([(r"/", IndexHandler),
+         (r"/stats", StatsHandler),
+         (r"/socket.io.js", SocketIOHandler),
+         (r"/auth/login", AuthLoginHandler),
+         (r"/auth/logout", AuthLogoutHandler),
+         (r"/WebSocketMain.swf", WebSocketFileHandler),
+        ])
+
+ChatRouter.apply_routes(urls)
+StatsRouter.apply_routes(urls)
+
 application = tornado.web.Application(
-    ChatRouter.apply_routes([(r"/", IndexHandler),
-        (r"/socket.io.js", SocketIOHandler),
-        (r"/auth/login", AuthLoginHandler),
-        (r"/auth/logout", AuthLogoutHandler),
-        (r"/WebSocketMain.swf", WebSocketFileHandler)]),
+    urls,
     flash_policy_port = 843,
     flash_policy_file = op.join(ROOT, '/static/flashpolicy.xml'),
     socket_io_port = 8001,
@@ -233,6 +256,8 @@ application = tornado.web.Application(
     debug=True,
     login_url="/auth/login",
 )
+
+
 
 if __name__ == "__main__":
     logging.getLogger().setLevel(logging.DEBUG)
