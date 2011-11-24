@@ -266,6 +266,29 @@ body {
 	line-height:1.3; 
 	resize:none
 }
+/*Smiles BEGIN*/
+#smile_block{
+	position: absolute;
+	left: 0;
+	bottom: 100%;
+	width: 100%;
+	background: white;
+	display: none;
+	-webkit-box-shadow: 0 -4px 4px #C8C8C8;
+	-moz-box-shadow: 0 -4px 4px #C8C8C8;
+	box-shadow: 0 -4px 4px #C8C8C8;
+	-webkit-border-radius: 5px 5px 0 0;
+	-moz-border-radius: 5px 5px 0 0;
+	border-radius: 5px 5px 0 0;
+	border-bottom: 1px solid #CCCCCC;
+}
+#smile_block .smile_block{
+	padding: 10px;
+}
+#smile_block a{
+	text-decoration: none;
+}
+/*Smiles END*/
 @media print{
 *{background:transparent !important;color:black !important;text-shadow:none !important;filter:none !important;-ms-filter:none !important}
 a, a:visited{color:#444 !important;text-decoration:underline}

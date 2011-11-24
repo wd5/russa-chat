@@ -1,5 +1,8 @@
 WEB_SOCKET_SWF_LOCATION = 'WebSocketMain.swf';
 $(document).ready(function() {
+	//Очистка инпутов
+	$('#messageform input[type="hidden"]').val('');
+	$('#message').val('').focus();
     var s = new io.connect('http://' + window.location.host, {
         rememberTransport: false
         });

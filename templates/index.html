@@ -51,6 +51,7 @@
 				      {% end %}
 				      </div>
 				      <div id="input">
+				      	{% include smile.html %}
 				      	<div id="private_name">
 				      	</div>
 				        <form action="/a/message/new" method="post" id="messageform">
@@ -61,6 +62,9 @@
 				              <td style="padding-left:15px">
 				                <input class="button_blue" type="submit" value="{{ _("Post") }}"/>
 				                {% module xsrf_form_html() %}
+				              </td>
+				              <td style="padding-left:15px">
+				                <a href="javascript:smiles()" title="Смайлы">Smiles</a>
 				              </td>
 				            </tr>
 				          </table>
