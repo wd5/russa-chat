@@ -7,7 +7,7 @@
                 {{personal}}{% if value != last %},{% end %}
             {% end %}
 		</div>
-		<p>{{ message }}</p>
+		<p>{% raw message %}</p>
 	</div>
 	<div class="msg_date alignright">
 		{{ time }}

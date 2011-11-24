@@ -1,23 +1,19 @@
-import os
-from tornado.web import RequestHandler
-from tornado import template
+import re
 
-def render_string(template_name, **kwargs):
-    """Generate the given template with the given arguments.
+def to_smile(match):
+    smiles = {
+        ':acute:' : '<img src=\'/static/smiles/standart/acute.gif\'/>',
+        ':aggressive:' : '<img src=\'/static/smiles/standart/aggressive.gif\'/>',
+    }
+    return smiles[match.group()]
 
-    We return the generated string. To generate and write a template
-    as a response, use render() above.
-    """
-    # If no template_path is specified, use the path of the calling file
-    template_path=os.path.join(os.path.dirname(__file__), "templates")
-    template_path="/Users/vladimir/PycharmProjects/my-chat2/templates"
-    if not getattr(RequestHandler, "_templates", None):
-        RequestHandler._templates = {}
-    if template_path not in RequestHandler._templates:
-        loader = template.Loader(template_path)
-        RequestHandler._templates[template_path] = loader
-    t = RequestHandler._templates[template_path].load(template_name)
-    args = dict(
-    )
-    args.update(kwargs)
-    return t.generate(**args)
+smiles_code = ':acute:|:aggressive:'
+
+def unescape(match):
+    message = str(match.group())
+    return message.replace("&lt;","<").replace("/&gt;",">")
+
+def format_message(message):
+    format_message = re.sub(':acute:|:aggressive:',to_smile, message)
+    return re.sub('&lt;img src=\'/static/.*&gt;',unescape, format_message)
+

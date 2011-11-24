@@ -2,7 +2,7 @@
 from os import path as op
 import uuid
 import datetime
-import re
+from api import api
 import cgi
 import tornado
 from tornado.options import define
@@ -21,20 +21,6 @@ loader = tornado.template.Loader(os.path.join(os.path.dirname(__file__), "templa
 ROOT = op.normpath(op.dirname(__file__))
 # На каком порту запсукаемся
 define("port", default=8001, type=int)
-
-def unescape(match):
-    print "9999999999999999"
-    i = str(match.group())
-    b = i.replace("&lt;","<")
-    return b.replace("/&gt;",">")
-
-def to_smile(match):
-    oo = {
-        ':acute:' : '<img src=\'/static/smiles/standart/acute.gif\'/>',
-        ':aggressive:' : '<img src=\'/static/smiles/standart/aggressive.gif\'/>',
-    }
-    print "00000000000000000"
-    return oo[match.group()]
 
 class Application(tornado.web.Application):
     def __init__(self):
@@ -139,13 +125,11 @@ class ChatConnection(tornadio2.conn.SocketConnection):
         for input in message_src:
             print input['name']
             if input['name'] == 'message':
-                test_message = cgi.escape(input['value'])
-                test_message = re.sub(':acute:|:aggressive:',to_smile, test_message)
-                test_message = re.sub('&lt;img src=\'/static/.*&gt;',unescape, test_message)
+                format_message = api.format_message(cgi.escape(input['value']))
                 message = {
                     "type": "new_message",
-                    "html": loader.load("message.html").generate(message=test_message, time = time, current_user=self.user_name, id=self.user_id),
-                    "message" : input['value'],
+                    "html": loader.load("message.html").generate(message=format_message, time = time, current_user=self.user_name, id=self.user_id),
+                    "message" : format_message,
                 }
             elif input['name'] == 'personal[]':
                 if input['value']:
