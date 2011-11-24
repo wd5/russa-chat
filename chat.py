@@ -226,7 +226,7 @@ class PingConnection(tornadio2.conn.SocketConnection):
 
     @tornadio2.event('stats')
     def stats(self):
-        return self.session.server.stats.dump()
+        return ChatRouter.stats.dump()
 
 # Create tornadio server
 ChatRouter = tornadio2.router.TornadioRouter(ChatConnection,dict(enabled_protocols=['websocket','xhr-polling','jsonp-polling','htmlfile'],session_check_interval=5,session_expiry=10))
