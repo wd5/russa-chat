@@ -10,11 +10,6 @@
             resource: 'stats'
         });
 
-        // Establish event handlers
-        stats.on('disconnect', function() {
-            stats.socket.reconnect();
-        });
-
         var graph_items = ['active_sessions',
                            'active_connections',
                            'connections_ps',

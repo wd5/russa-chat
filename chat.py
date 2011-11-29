@@ -231,9 +231,9 @@ class PingConnection(tornadio2.conn.SocketConnection):
         return ChatRouter.stats.dump()
 
 # Create tornadio server
-ChatRouter = tornadio2.router.TornadioRouter(ChatConnection,dict(enabled_protocols=['websocket','xhr-polling','jsonp-polling','htmlfile'],session_check_interval=5,session_expiry=10))
+ChatRouter = tornadio2.router.TornadioRouter(ChatConnection,dict(enabled_protocols=['xhr-polling','jsonp-polling','htmlfile'],session_check_interval=10,session_expiry=5))
 
-StatsRouter = tornadio2.router.TornadioRouter(PingConnection, dict(enabled_protocols=['websocket', 'xhr-polling','jsonp-polling', 'htmlfile']),namespace='stats')
+StatsRouter = tornadio2.router.TornadioRouter(PingConnection, dict(enabled_protocols=['websocket','xhr-polling','jsonp-polling', 'htmlfile'],websocket_check=True),namespace='stats')
 
 urls = ([(r"/", IndexHandler),
          (r"/stats", StatsHandler),
