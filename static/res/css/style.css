@@ -96,7 +96,6 @@ body {
 }
 #private_name{ 
 	position: relative;
-	width: 406px;
 }
 #private_name div{
 	padding: 5px 10px;
@@ -217,6 +216,9 @@ body {
     width: 630px;
     z-index: 200;
 }
+#input table{
+	width: 100%;
+}
 #input .input_block{
 	padding: 20px;
 }
@@ -303,6 +305,14 @@ body {
 #smile_link:hover{
 	background-position: bottom left;
 }
+.send_button{
+	width: 64px;
+	padding-left: 15px;
+}
+.smile_button{
+	width: 34px;
+	padding-left: 15px;
+}
 /*Smiles END*/
 /*Fullscreen SKIN*/
 #fullscreen #page{
@@ -316,7 +326,7 @@ body {
 	width: 100%;
 }
 #fullscreen #inbox .msg_date, #fullscreen #inbox .msg_text, #fullscreen #inbox .msg .msg_name, #fullscreen #inbox .msg .msg_text p {
-	display: inline-block; 
+	display: table-cell; 
 	vertical-align: top;
 	float: none;
 	line-height: normal;
@@ -325,11 +335,14 @@ body {
 	width: auto;
 	white-space: nowrap;
 }
+#fullscreen #inbox .msg .msg_name{
+	padding-right: 5px;
+}
 #fullscreen #inbox .msg_date{
 	padding: 0 5px 0px 0;
 }
 #fullscreen #inbox .msg{
-	padding: 8px 10px 2px;
+	padding: 6px 10px 4px;
 	margin: 5px;
 	white-space: nowrap;
 }
@@ -342,6 +355,12 @@ body {
 }
 #fullscreen #input{
 	width: 100%;
+}
+#fullscreen #input .input_block{
+	padding: 20px 242px 20px 20px;
+}
+#fullscreen #message{
+	width: 95%;
 }
 /*END*/
 @media print{

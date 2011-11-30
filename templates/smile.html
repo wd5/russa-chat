@@ -348,8 +348,14 @@
 		$('body').click(function(){
 			$smile_block.hide();
 		});
+		$('#smile_link').click(function(event){
+			event.preventDefault(); 
+			event.stopPropagation();
+			if($smile_block.is(':hidden')){
+				$smile_block.show();
+			}else{
+				$smile_block.hide();
+			}
+		});
 	});
-	var smiles = function(){
-		$smile_block.show();
-	}
 </script>
