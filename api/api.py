@@ -2,6 +2,7 @@ import re
 
 def to_smile(match):
     smiles = {
+        ':acute:' : '<img src=\'/static/smiles/standart/acute.gif\'/>',
         ':aggressive:' : '<img src=\'/static/smiles/standart/aggressive.gif\'/>',
         ':agree:' : '<img src=\'/static/smiles/standart/agree.gif\'/>',
         ':air_kiss:' : '<img src=\'/static/smiles/standart/air_kiss.gif\'/>',
