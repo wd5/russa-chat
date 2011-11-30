@@ -1,16 +1,19 @@
 <div class="msg clearfix personal">
+	<div class="msg_date">
+		{{ time }}
+	</div>
 	<div class="shadow"></div>
-	<div class="msg_text alignleft">
+	<div class="msg_text">
 		<div class="msg_name">
 			<a id="{{id}}" href="noscript" class="from user_nik sub_id_{{id}}" title="личное сообщение">{{ current_user }}</a> :
             {% set last = len(personals) - 1 %}
+            <span class="personal_for">
 			{% for value, personal in enumerate(personals) %}
 				{{personal}}{% if value != last %},{% end %}
 			{% end %}
+			</span>
+			
 		</div>
 		<p>{% raw message %}</p>
-	</div>
-	<div class="msg_date alignright">
-		{{ time }}
 	</div>
 </div>

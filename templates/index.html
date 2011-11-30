@@ -15,6 +15,22 @@
 	 $(window).load(function(){
 		window.scrollTo(0,1e3);
 	});
+	$(function(){
+		if(!$.cookie("skin")){
+			$.cookie("skin",'default');
+		}
+		$('body').attr('id',$.cookie("skin"));
+		$('#skin').click(function(event){
+			event.preventDefault(); 
+			if($.cookie("skin")=='fullscreen'){
+				$.cookie("skin",'default');
+				$('body').attr('id','default');
+			}else{
+				$.cookie("skin",'fullscreen');
+				$('body').attr('id','fullscreen');
+			}
+		});
+	});
 </script>
 </head>
 <body onload="scrollTop()">
@@ -30,6 +46,7 @@
 			<div id="header_logo" class="alignleft">
 				<a href="/">Russa Chat Demo</a>
 			</div>
+			<a id="skin" href="noscript">Сменить скин</a>
 			<a class="out_link" href="/auth/logout" title="выйти">{{ _("Sign out") }}</a>
 		</div>
 	</header>
@@ -51,6 +68,7 @@
 				      {% end %}
 				      </div>
 				      <div id="input">
+				      	<div class="input_block">
 				      	{% include smile.html %}
 				      	<div id="private_name">
 				      	</div>
@@ -71,6 +89,7 @@
 				          <input id="private" type="hidden" value="" name="private">
 				          <input id="personal" type="hidden" value="" name="personal[]">
 				        </form>
+				        </div>
 				      </div>
 
 			</div>

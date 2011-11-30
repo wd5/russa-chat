@@ -183,9 +183,11 @@ body {
 	width: 482px;
 	position: relative;
 	z-index: 100;
+	float: left;
 }
 #inbox .msg .msg_text p{
 	line-height: 20px;
+	white-space: normal;
 }
 #inbox .msg .msg_name{
 	margin: 0 0 3px;
@@ -205,15 +207,18 @@ body {
 	color: #B1B1B1;
 	font-size: 11px;
 	padding: 0 27px 0 0;
+	float: right;
 }
 #input{
 	background: none repeat scroll 0 0 #F7F7F7;
     border-top: 1px solid #E8E8E8;
     bottom: 0px;
-    padding: 20px;
     position: fixed;
-    width: 590px;
+    width: 630px;
     z-index: 200;
+}
+#input .input_block{
+	padding: 20px;
 }
 #input .button_blue{
 	height: 30px;
@@ -299,6 +304,46 @@ body {
 	background-position: bottom left;
 }
 /*Smiles END*/
+/*Fullscreen SKIN*/
+#fullscreen #page{
+	width: auto;
+	margin-right: 242px;
+}
+#fullscreen #sidebar{
+	right: 0;
+}
+#fullscreen #content_block{
+	width: 100%;
+}
+#fullscreen #inbox .msg_date, #fullscreen #inbox .msg_text, #fullscreen #inbox .msg .msg_name, #fullscreen #inbox .msg .msg_text p {
+	display: inline-block; 
+	vertical-align: top;
+	float: none;
+	line-height: normal;
+}
+#fullscreen #inbox .msg_text{
+	width: auto;
+	white-space: nowrap;
+}
+#fullscreen #inbox .msg_date{
+	padding: 0 5px 0px 0;
+}
+#fullscreen #inbox .msg{
+	padding: 8px 10px 2px;
+	margin: 5px;
+	white-space: nowrap;
+}
+#fullscreen .personal_for{
+	font-weight: bold;
+	color: rgba(81,180,22,.8);
+}
+#fullscreen #inbox{
+	padding: 52px 10px 95px 0;
+}
+#fullscreen #input{
+	width: 100%;
+}
+/*END*/
 @media print{
 *{background:transparent !important;color:black !important;text-shadow:none !important;filter:none !important;-ms-filter:none !important}
 a, a:visited{color:#444 !important;text-decoration:underline}

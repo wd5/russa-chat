@@ -93,11 +93,6 @@ function newMessage(form, s) {
 function addMessage(response){
     if (response.type == 'new_message'){
         var $last = $(response.html).appendTo("#inbox");
-        if($last.hasClass('personal')){
-        	setTimeout(function(){
-        		$last.children('.shadow').animate({opacity:0},4000);
-        	},2000)
-        }
         if (response.private =="True"){
             if (focus == "False"){
                 document.getElementById('audiotag1').play();
