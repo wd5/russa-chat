@@ -4,8 +4,7 @@ $(document).ready(function() {
 	$('#messageform input[type="hidden"]').val('');
 	$('#message').val('').focus();
     var s = new io.connect('http://' + window.location.host, {
-       rememberTransport: false,
-       'connect timeout': 3000
+       rememberTransport: false
         });
     // Постинг формы через ajax
     $("#messageform").live("keypress", function(e) {
