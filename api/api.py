@@ -124,5 +124,7 @@ def unescape(match):
 
 def format_message(message):
     format_message = re.sub(smiles_code, to_smile, message)
-    return re.sub('&lt;img src=\'/static/.*&gt;',unescape, format_message)
+    format_message = re.sub('&lt;img src=\'/static/.*&gt;',unescape, format_message)
+    format_message = re.sub('http:\/\/(?P<name>[^\s]+)', '<a href="http://\g<name>" target="_blank">\g<name></a>', format_message)
+    return format_message
 
