@@ -12,25 +12,25 @@
 <link rel="stylesheet" href="{{ static_url("res/css/style.css") }}" type="text/css"/>
 <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
 <script type="text/javascript" language="javascript">
-	 $(window).load(function(){
-		window.scrollTo(0,1e3);
-	});
-	$(function(){
-		if(!$.cookie("skin")){
-			$.cookie("skin",'default');
-		}
-		$('body').attr('id',$.cookie("skin"));
-		$('#skin').click(function(event){
-			event.preventDefault(); 
-			if($.cookie("skin")=='fullscreen'){
-				$.cookie("skin",'default');
-				$('body').attr('id','default');
-			}else{
-				$.cookie("skin",'fullscreen');
-				$('body').attr('id','fullscreen');
-			}
-		});
-	});
+$(window).load(function(){
+    window.scrollTo(0,1e3);
+});
+$(function(){
+    if(!$.cookie("skin")){
+        $.cookie("skin",'fullscreen');
+    }
+    $('body').attr('id',$.cookie("skin"));
+    $('#skin').click(function(event){
+        event.preventDefault();
+        if($.cookie("skin")=='fullscreen'){
+            $.cookie("skin",'default');
+            $('body').attr('id','default');
+        }else{
+            $.cookie("skin",'fullscreen');
+            $('body').attr('id','fullscreen');
+        }
+    });
+});
 </script>
 </head>
 <body onload="scrollTop()">
