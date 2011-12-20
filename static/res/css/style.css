@@ -25,6 +25,50 @@ body {
 	background:url("data:image/png; base64,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") repeat scroll 0 0 transparent;
 	min-height: 100%;
 }
+body.main{
+	background: #fff url(../img/mp_bg.jpg) center top no-repeat;
+	font:12px/1.231 Trebuchet MS, Helvetica, sans-serif;
+}
+body.main input{
+	font:12px/1.231 Trebuchet MS, Helvetica, sans-serif;
+}
+#mp_wrapper{
+	width: 902px;
+	min-height: 946px;
+	height: 946px;
+	margin: 0 auto;
+}
+#mp_wrapper form{
+	padding: 400px 0 0 0;
+	text-align: center;
+}
+.mp_footer{
+	color: #b4b4b4;
+	font-size: 12px;
+	width: 100%;
+	text-align: center;
+	padding: 20px 0 10px;
+}
+.mp_footer a{
+	color: #f6c76d;
+}
+#mp_wrapper form *{
+	display: inline-block;
+	vertical-align: middle;
+}
+#mp_wrapper form .name{
+	font-size: 30px;
+	font-style: italic;
+	background: #ededed;
+	color: #474747;
+	padding: 10px 15px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	border-width: 1px;
+	border-color: #686868 #ededed #ededed #686868;
+	margin-right: 15px;
+}
 #header{
 	width:100%; 
 	height:49px; 

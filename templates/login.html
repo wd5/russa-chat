@@ -1,12 +1,32 @@
-<html>
-<body>
-{% if error %}
-Кто то уже сидит под таким ником!
-{% end %}
-<form action="/auth/login" method="post">
-    {% module xsrf_form_html() %}
-    Name: <input type="text" name="name">
-    <input type="submit" value="Sign in">
-</form>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>Russa Chat Demo</title>
+<meta name="description" content="">
+<meta name="keywords" content="">
+<meta name="author" content="humans.txt">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="shortcut icon" href="favicon.ico">
+<link rel="stylesheet" href="res/css/style.css">
+<link rel="stylesheet" href="{{ static_url("res/css/style.css") }}" type="text/css"/>
+</head>
+<body class="main">
+<!--[if IE]>
+  <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+<!--[if lt IE 7 ]>
+	<script src="{{ static_url("res/js/dd_belatedpng.js") }}"></script>
+	<script>DD_belatedPNG.fix("img, .png_bg");</script>
+<![endif]-->  
+<div id="mp_wrapper">
+	<form action="/auth/login" method="post">
+	    {% module xsrf_form_html() %}
+		<input class="name" type="text" name="name" placeholder="Ваше имя...">
+	    <input class="login" type="image" src="{{ static_url("res/img/input.png") }}" value="Sign in">
+	</form>
+</div>
+<div class="mp_footer">Copyright 2005–2011 <a href="http://russa-chat.ru">russa-chat.ru</a></div>
 </body>
 </html>
