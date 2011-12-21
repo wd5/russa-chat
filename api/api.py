@@ -3,6 +3,12 @@ import re
 def to_smile(match):
     smiles = {
         ':avtor:' : '<img src=\'/static/smiles/standart/avtor.png\'/>',
+        ':crazygirl:' : '<img src=\'/static/smiles/standart/crazygirl.gif\'/>',
+        ':nun:' : '<img src=\'/static/smiles/standart/nun.gif\'/>',
+        ':guns:' : '<img src=\'/static/smiles/standart/guns.gif\'/>',
+        ':kruger:' : '<img src=\'/static/smiles/standart/kruger.gif\'/>',
+        ':mol:' : '<img src=\'/static/smiles/standart/mol.gif\'/>',
+        ':rev:' : '<img src=\'/static/smiles/standart/rev.gif\'/>',
         ':big_smile:' : '<img src=\'/static/smiles/standart/big_smile.gif\'/>',
         ':celebrity:' : '<img src=\'/static/smiles/standart/celebrity.gif\'/>',
         ':clap:' : '<img src=\'/static/smiles/standart/clap.gif\'/>',
@@ -19,8 +25,8 @@ def to_smile(match):
         ':metal:' : '<img src=\'/static/smiles/standart/metal.gif\'/>',
         ':shuffle:' : '<img src=\'/static/smiles/standart/shuffle.gif\'/>',
         ':tarantino_dance:' : '<img src=\'/static/smiles/standart/tarantino_dance.gif\'/>',
-        ':ura:' : '<img src=\'/static/smiles/sex/ura.gif\'/>',
-        ':wall:' : '<img src=\'/static/smiles/sex/wall.gif\'/>',
+        ':ura:' : '<img src=\'/static/smiles/standart/ura.gif\'/>',
+        ':wall:' : '<img src=\'/static/smiles/standart/wall.gif\'/>',
         ':bpr:' : '<img src=\'/static/smiles/sex/bpr.gif\'/>',
         ':bps:' : '<img src=\'/static/smiles/sex/bps.gif\'/>',
         ':bpt:' : '<img src=\'/static/smiles/sex/bpt.gif\'/>',
@@ -37,7 +43,7 @@ def to_smile(match):
     }
     return smiles[match.group()]
 
-smiles_code = ':avtor:|:big_smile:|:celebrity:|:clap:|:crazy:|:crazynuts:|:crazyny:|:csotona:|:flyhigh:|:fuck_yeah:|:fuck_you:|:fun_run:|:kult:|:laugh:|:metal:|:shuffle:|:tarantino_dance:|:ura:|:wall:|:bpr:|:bps:|:bpt:|:wxa:|:wxb:|:wxc:|:wxd:|:wxf:|:wxg:|:wxh:|:wxi:|:wxj:|:wxk:'
+smiles_code = ':avtor:|:guns:|:kruger:|:mol:|:nun:|:rev:|:crazygirl:|:big_smile:|:celebrity:|:clap:|:crazy:|:crazynuts:|:crazyny:|:csotona:|:flyhigh:|:fuck_yeah:|:fuck_you:|:fun_run:|:kult:|:laugh:|:metal:|:shuffle:|:tarantino_dance:|:ura:|:wall:|:bpr:|:bps:|:bpt:|:wxa:|:wxb:|:wxc:|:wxd:|:wxf:|:wxg:|:wxh:|:wxi:|:wxj:|:wxk:'
 
 def unescape(match):
     message = str(match.group())
