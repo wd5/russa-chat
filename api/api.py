@@ -3,6 +3,9 @@ import re
 def to_smile(match):
     smiles = {
         ':big_smile:' : '<img src=\'/static/smiles/standart/big_smile.gif\'/>',
+        ':crazyny:' : '<img src=\'/static/smiles/standart/crazyny.gif\'/>',
+        ':crazy:' : '<img src=\'/static/smiles/standart/crazy.gif\'/>',
+        ':avtor:' : '<img src=\'/static/smiles/standart/avtor.png\'/>',
         ':fuck_yeah:' : '<img src=\'/static/smiles/standart/fuck_yeah.gif\'/>',
         ':fun_run:' : '<img src=\'/static/smiles/standart/fun_run.gif\'/>',
         ':clap:' : '<img src=\'/static/smiles/standart/clap.gif\'/>',
@@ -29,7 +32,7 @@ def to_smile(match):
     }
     return smiles[match.group()]
 
-smiles_code = ':angel:|:fuck_yeah:|:fun_run:|clap:|:blink:|:bye:|:cool:|:drool:|:dry:|:lol:|:mad:|:ohmy:|:popcorn:|:rant:|:rolleyes:|:sad:|:shy:|:smile:|:tears:|:tongue:|:unsure:|:what:|:wink:|:big_smile:'
+smiles_code = ':angel:|:crazy:|:crazy:|:avtor:|:fuck_yeah:|:fun_run:|clap:|:blink:|:bye:|:cool:|:drool:|:dry:|:lol:|:mad:|:ohmy:|:popcorn:|:rant:|:rolleyes:|:sad:|:shy:|:smile:|:tears:|:tongue:|:unsure:|:what:|:wink:|:big_smile:'
 
 def unescape(match):
     message = str(match.group())
