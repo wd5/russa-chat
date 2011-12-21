@@ -4,6 +4,8 @@ def to_smile(match):
     smiles = {
         ':big_smile:' : '<img src=\'/static/smiles/standart/big_smile.gif\'/>',
         ':crazyny:' : '<img src=\'/static/smiles/standart/crazyny.gif\'/>',
+        ':crazynuts:' : '<img src=\'/static/smiles/standart/crazynuts.gif\'/>',
+        ':csotona:' : '<img src=\'/static/smiles/standart/csotona.gif\'/>',
         ':crazy:' : '<img src=\'/static/smiles/standart/crazy.gif\'/>',
         ':avtor:' : '<img src=\'/static/smiles/standart/avtor.png\'/>',
         ':fuck_yeah:' : '<img src=\'/static/smiles/standart/fuck_yeah.gif\'/>',
@@ -29,10 +31,24 @@ def to_smile(match):
         ':unsure:' : '<img src=\'/static/smiles/standart/unsure.gif\'/>',
         ':what:' : '<img src=\'/static/smiles/standart/what.gif\'/>',
         ':wink:' : '<img src=\'/static/smiles/standart/wink.gif\'/>',
+        ':bpr:' : '<img src=\'/static/smiles/sex/bpr.gif\'/>',
+        ':bps:' : '<img src=\'/static/smiles/sex/bps.gif\'/>',
+        ':bpt:' : '<img src=\'/static/smiles/sex/bpt.gif\'/>',
+        ':bpu:' : '<img src=\'/static/smiles/sex/bpu.gif\'/>',
+        ':wxa:' : '<img src=\'/static/smiles/sex/wxa.gif\'/>',
+        ':wxb:' : '<img src=\'/static/smiles/sex/wxb.gif\'/>',
+        ':wxc:' : '<img src=\'/static/smiles/sex/wxc.gif\'/>',
+        ':wxd:' : '<img src=\'/static/smiles/sex/wxd.gif\'/>',
+        ':wxf:' : '<img src=\'/static/smiles/sex/wxf.gif\'/>',
+        ':wxg:' : '<img src=\'/static/smiles/sex/wxg.gif\'/>',
+        ':wxh:' : '<img src=\'/static/smiles/sex/wxh.gif\'/>',
+        ':wxi:' : '<img src=\'/static/smiles/sex/wxi.gif\'/>',
+        ':wxj:' : '<img src=\'/static/smiles/sex/wxj.gif\'/>',
+        ':wxk:' : '<img src=\'/static/smiles/sex/wxk.gif\'/>',
     }
     return smiles[match.group()]
 
-smiles_code = ':angel:|:crazy:|:crazyny:|:avtor:|:fuck_yeah:|:fun_run:|clap:|:blink:|:bye:|:cool:|:drool:|:dry:|:lol:|:mad:|:ohmy:|:popcorn:|:rant:|:rolleyes:|:sad:|:shy:|:smile:|:tears:|:tongue:|:unsure:|:what:|:wink:|:big_smile:'
+smiles_code = ':angel:|:crazy:|:csotona:|:crazynuts:|:crazyny:|:avtor:|:fuck_yeah:|:fun_run:|clap:|:blink:|:bye:|:cool:|:drool:|:dry:|:lol:|:mad:|:ohmy:|:popcorn:|:rant:|:rolleyes:|:sad:|:shy:|:smile:|:tears:|:tongue:|:unsure:|:what:|:wink:|:big_smile:|:bpr:|:bps:|:bpt:|:wxa:|:wxb:|:wxc:|:wxd:|:wxf:|:wxg:|:wxh:|:wxi:|:wxj:|:wxk:'
 
 def unescape(match):
     message = str(match.group())
