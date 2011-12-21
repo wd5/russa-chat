@@ -32,7 +32,7 @@ def to_smile(match):
     }
     return smiles[match.group()]
 
-smiles_code = ':angel:|:crazy:|:crazy:|:avtor:|:fuck_yeah:|:fun_run:|clap:|:blink:|:bye:|:cool:|:drool:|:dry:|:lol:|:mad:|:ohmy:|:popcorn:|:rant:|:rolleyes:|:sad:|:shy:|:smile:|:tears:|:tongue:|:unsure:|:what:|:wink:|:big_smile:'
+smiles_code = ':angel:|:crazy:|:crazyny:|:avtor:|:fuck_yeah:|:fun_run:|clap:|:blink:|:bye:|:cool:|:drool:|:dry:|:lol:|:mad:|:ohmy:|:popcorn:|:rant:|:rolleyes:|:sad:|:shy:|:smile:|:tears:|:tongue:|:unsure:|:what:|:wink:|:big_smile:'
 
 def unescape(match):
     message = str(match.group())
