@@ -3,6 +3,11 @@ import re
 def to_smile(match):
     smiles = {
         ':avtor:' : '<img src=\'/static/smiles/standart/avtor.png\'/>',
+        ':loveshower:' : '<img src=\'/static/smiles/standart/loveshower.gif\'/>',
+        ':guitar:' : '<img src=\'/static/smiles/standart/guitar.gif\'/>',
+        ':rock:' : '<img src=\'/static/smiles/standart/rock.gif\'/>',
+        ':cheerleader:' : '<img src=\'/static/smiles/standart/cheerleader.gif\'/>',
+        ':dancing_chilli:' : '<img src=\'/static/smiles/standart/dancing_chilli.gif\'/>',
         ':crazygirl:' : '<img src=\'/static/smiles/standart/crazygirl.gif\'/>',
         ':nun:' : '<img src=\'/static/smiles/standart/nun.gif\'/>',
         ':guns:' : '<img src=\'/static/smiles/standart/guns.gif\'/>',
@@ -43,7 +48,7 @@ def to_smile(match):
     }
     return smiles[match.group()]
 
-smiles_code = ':avtor:|:guns:|:kruger:|:mol:|:nun:|:rev:|:crazygirl:|:big_smile:|:celebrity:|:clap:|:crazy:|:crazynuts:|:crazyny:|:csotona:|:flyhigh:|:fuck_yeah:|:fuck_you:|:fun_run:|:kult:|:laugh:|:metal:|:shuffle:|:tarantino_dance:|:ura:|:wall:|:bpr:|:bps:|:bpt:|:wxa:|:wxb:|:wxc:|:wxd:|:wxf:|:wxg:|:wxh:|:wxi:|:wxj:|:wxk:'
+smiles_code = ':avtor:|:loveshower:|:guitar:|:rock:|:dancing_chilli:|:cheerleader:|:guns:|:kruger:|:mol:|:nun:|:rev:|:crazygirl:|:big_smile:|:celebrity:|:clap:|:crazy:|:crazynuts:|:crazyny:|:csotona:|:flyhigh:|:fuck_yeah:|:fuck_you:|:fun_run:|:kult:|:laugh:|:metal:|:shuffle:|:tarantino_dance:|:ura:|:wall:|:bpr:|:bps:|:bpt:|:wxa:|:wxb:|:wxc:|:wxd:|:wxf:|:wxg:|:wxh:|:wxi:|:wxj:|:wxk:'
 
 def unescape(match):
     message = str(match.group())
