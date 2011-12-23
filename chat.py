@@ -120,8 +120,8 @@ class ChatConnection(tornadio2.conn.SocketConnection):
                 "user": loader.load("user.html").generate(current_user=self.user_name, id=self.user_id),
                 "html": loader.load("new_user.html").generate(time = time, current_user=self.user_name, id=self.user_id),
             }
-            self.users_online.append(message["user"])
             self.send(self.users_online2)
+            self.users_online.append(message["user"])
             self.users_online2.append([self.user_name, self.user_id])
             self.console_message(message)
             ChatConnection.messages_cache.extend([message])
