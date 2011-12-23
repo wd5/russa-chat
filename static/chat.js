@@ -119,5 +119,11 @@ function addMessage(response){
         $("#inbox").append(response.html);
         $('#'+response.user_id).remove();
     }
+    else {
+        $("#sidebar_inner").empty();
+        for (i in response) {
+            $("#sidebar_inner").append('<a id="' + response[i][1] + '" href="noscript" class="user_nik sub_id_' + response[i][1] + '" title="личное сообщение">' + response[i][0] + '</a);')
+        }
+    }
     window.scrollTo(0, document.body.scrollHeight);
 }
