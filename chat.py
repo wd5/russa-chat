@@ -106,6 +106,7 @@ class ChatConnection(tornadio2.conn.SocketConnection):
     user_id = None
 
     def on_open(self, info):
+        self.send(self.users_online2)
         self.user_name = self.get_current_user(info)
         self.user_id = self.get_user_id(info)
         time = datetime.datetime.time(datetime.datetime.now()).strftime("%H:%M")
@@ -120,7 +121,6 @@ class ChatConnection(tornadio2.conn.SocketConnection):
                 "user": loader.load("user.html").generate(current_user=self.user_name, id=self.user_id),
                 "html": loader.load("new_user.html").generate(time = time, current_user=self.user_name, id=self.user_id),
             }
-            self.send(self.users_online2)
             self.users_online.append(message["user"])
             self.users_online2.append([self.user_name, self.user_id])
             self.console_message(message)
