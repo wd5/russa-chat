@@ -4,9 +4,9 @@ $(document).ready(function() {
 	$('#messageform input[type="hidden"]').val('');
 	$('#message').val('').focus();
     var s = new io.connect('http://' + window.location.host, {
-        rememberTransport: true,
-        'reconnect': false,
-        'reconnection delay': 500,
+        rememberTransport: false,
+        'reconnect': true,
+        'reconnection delay': 1000,
         'max reconnection attempts': 10
         });
     // Постинг формы через ajax
