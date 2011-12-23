@@ -26,6 +26,9 @@
 		<input class="name" type="text" name="name" placeholder="Ваше имя...">
 	    <input class="login" type="image" src="{{ static_url("res/img/input.png") }}" value="Sign in">
 	</form>
+    {% if error %}
+    {{ error }}
+    {% end %}
 </div>
 <div class="mp_footer">Copyright 2005–2011 <a href="http://russa-chat.ru">russa-chat.ru</a></div>
 </body>

@@ -2,6 +2,7 @@
 from os import path as op
 import uuid
 import datetime
+import re
 from api import api
 import cgi
 import tornado
@@ -60,14 +61,19 @@ class AuthLoginHandler(BaseHandler):
 
   def post(self):
       name = self.get_argument("name")
-      for waiter in ChatConnection.waiters:
-          print waiter.user_name
-          print name
-          if str(waiter.user_name) == name.encode('utf-8'):
-              self.render("login.html", error=True)
-      self.set_secure_cookie("user", name)
-      self.set_secure_cookie("user_id", str(uuid.uuid4()))
-      self.redirect("/")
+      p = re.compile('^[a-zA-Z0-9]*$|^[а-яА-Я0-9]*$')
+      m = p.match(name)
+      if m:
+          for waiter in ChatConnection.waiters:
+              print waiter.user_name
+              print name
+              if str(waiter.user_name) == name.encode('utf-8'):
+                  self.render("login.html", error="Такое имя уже используется")
+          self.set_secure_cookie("user", name)
+          self.set_secure_cookie("user_id", str(uuid.uuid4()))
+          self.redirect("/")
+      else:
+          self.render("login.html", error="Имя должно состоять из латинских или русских букв")
 
 class AuthLogoutHandler(BaseHandler):
   def get(self):
