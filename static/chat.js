@@ -4,10 +4,10 @@ $(document).ready(function() {
 	$('#messageform input[type="hidden"]').val('');
 	$('#message').val('').focus();
     var s = new io.connect('http://' + window.location.host, {
-        'reconnect': true,
-        'reconnection delay': 500,
-        'max reconnection attempts': 10,
-        rememberTransport: false
+        rememberTransport: false,
+        reconnect: true,
+        reconnectionDelay: 500,
+        'max reconnection attempts': 10
         });
     // Постинг формы через ajax
     $("#messageform").live("keypress", function(e) {
