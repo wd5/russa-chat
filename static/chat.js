@@ -8,6 +8,7 @@ $(document).ready(function() {
         reconnect: true,
         reconnectionDelay: 500
         });
+    s.on('disconnect', function(msg) { s.socket.reconnect(); });
     // Постинг формы через ajax
     $("#messageform").live("keypress", function(e) {
         if (e.keyCode == 13){
