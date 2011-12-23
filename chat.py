@@ -61,8 +61,9 @@ class AuthLoginHandler(BaseHandler):
 
   def post(self):
       name = self.get_argument("name")
-      p = re.compile('^[a-zA-Z0-9]*$|^[а-яА-Я0-9]*$')
+      p = re.compile(u'^[a-zA-Z0-9]*$|^[а-яА-Я0-9]*$')
       m = p.match(name)
+      print m
       if m:
           for waiter in ChatConnection.waiters:
               print waiter.user_name
