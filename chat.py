@@ -121,8 +121,8 @@ class ChatConnection(tornadio2.conn.SocketConnection):
                 "html": loader.load("new_user.html").generate(time = time, current_user=self.user_name, id=self.user_id),
             }
             self.users_online.append(message["user"])
-            self.users_online2.append([self.user_name, self.user_id])
             self.send(self.users_online2)
+            self.users_online2.append([self.user_name, self.user_id])
             self.console_message(message)
             ChatConnection.messages_cache.extend([message])
             if len(ChatConnection.messages_cache) > self.cache_size:
@@ -194,8 +194,7 @@ class ChatConnection(tornadio2.conn.SocketConnection):
 
     def console_message(self, message_src):
         for waiter in self.waiters:
-            if not waiter.user_name == self.user_name:
-                waiter.send(message_src)
+            waiter.send(message_src)
 
     def on_close(self):
         time = datetime.datetime.time(datetime.datetime.now()).strftime("%H:%M")
