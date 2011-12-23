@@ -85,7 +85,7 @@ class IndexHandler(BaseHandler):
     """Regular HTTP handler to serve the chatroom page"""
     @tornado.web.authenticated
     def get(self):
-        self.render('index.html', users_online = ChatConnection.users_online, messages = ChatConnection.messages_cache)
+        self.render('index.html', users_online = map(lambda a: loader.load("user.html").generate(current_user=a[0], id=a[1]), ChatConnection.users_online), messages = ChatConnection.messages_cache)
 
 class SocketIOHandler(BaseHandler):
     def get(self):
@@ -99,20 +99,19 @@ class ChatConnection(tornadio2.conn.SocketConnection):
     # Class level variable
     waiters = set()
     users_online = []
-    users_online2 = []
     messages_cache = []
     cache_size = 40
     user_name = None
     user_id = None
 
     def on_open(self, info):
-        self.send(self.users_online2)
+        self.send(self.users_online)
         self.user_name = self.get_current_user(info)
         self.user_id = self.get_user_id(info)
         time = datetime.datetime.time(datetime.datetime.now()).strftime("%H:%M")
         new_user = False
         print "Подключился %s" % self.user_name
-        if loader.load("user.html").generate(current_user=self.user_name, id=self.user_id) not in self.users_online:
+        if [self.user_name, self.user_id] not in self.users_online:
             new_user = True
         self.waiters.add(self)
         if new_user:
@@ -121,8 +120,7 @@ class ChatConnection(tornadio2.conn.SocketConnection):
                 "user": loader.load("user.html").generate(current_user=self.user_name, id=self.user_id),
                 "html": loader.load("new_user.html").generate(time = time, current_user=self.user_name, id=self.user_id),
             }
-            self.users_online.append(message["user"])
-            self.users_online2.append([self.user_name, self.user_id])
+            self.users_online.append([self.user_name, self.user_id])
             self.console_message(message)
             ChatConnection.messages_cache.extend([message])
             if len(ChatConnection.messages_cache) > self.cache_size:
@@ -200,8 +198,7 @@ class ChatConnection(tornadio2.conn.SocketConnection):
         time = datetime.datetime.time(datetime.datetime.now()).strftime("%H:%M")
         self.waiters.remove(self)
         if self.user_name not in map(lambda a: a.user_name, self.waiters):
-            self.users_online.remove(loader.load("user.html").generate(current_user=self.user_name, id=self.user_id))
-            self.users_online2.remove([self.user_name, self.user_id])
+            self.users_online.remove([self.user_name, self.user_id])
             message = {
                 "type": "user_is_out",
                 "user_id": self.user_id,
@@ -216,8 +213,7 @@ class ChatConnection(tornadio2.conn.SocketConnection):
     def out_user(self, args):
         time = datetime.datetime.time(datetime.datetime.now()).strftime("%H:%M")
         self.waiters.remove(self)
-        self.users_online.remove(loader.load("user.html").generate(current_user=self.user_name, id=self.user_id))
-        self.users_online2.remove([self.user_name, self.user_id])
+        self.users_online.remove([self.user_name, self.user_id])
         message = {
             "type": "user_is_out",
             "user_id": self.user_id,
