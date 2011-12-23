@@ -201,7 +201,7 @@ class ChatConnection(tornadio2.conn.SocketConnection):
         self.waiters.remove(self)
         if self.user_name not in map(lambda a: a.user_name, self.waiters):
             self.users_online.remove(loader.load("user.html").generate(current_user=self.user_name, id=self.user_id))
-            self.users_online2.remove(self.user_name)
+            self.users_online2.remove([self.user_name, self.user_id])
             message = {
                 "type": "user_is_out",
                 "user_id": self.user_id,
@@ -217,7 +217,7 @@ class ChatConnection(tornadio2.conn.SocketConnection):
         time = datetime.datetime.time(datetime.datetime.now()).strftime("%H:%M")
         self.waiters.remove(self)
         self.users_online.remove(loader.load("user.html").generate(current_user=self.user_name, id=self.user_id))
-        self.users_online2.remove(self.user_name)
+        self.users_online2.remove([self.user_name, self.user_id])
         message = {
             "type": "user_is_out",
             "user_id": self.user_id,
