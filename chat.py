@@ -267,12 +267,11 @@ application = tornado.web.Application(
     xsrf_cookies=True,
     template_path=os.path.join(os.path.dirname(__file__), "templates"),
     cookie_secret="43oETzKXQAGaYdkL5gEmGeJJFuYh7EQnp2XdTP1o/Vo=",
-    debug=False,
+    debug=True,
     login_url="/auth/login",
 )
 
 
 
 if __name__ == "__main__":
-    logging.getLogger().setLevel(logging.DEBUG)
     tornadio2.server.SocketServer(application)
