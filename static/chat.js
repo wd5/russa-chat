@@ -120,6 +120,7 @@ function addMessage(response){
         $('#'+response.user_id).remove();
     }
     else {
+        $("#sidebar_inner").empty();
         for (i in response) {
             $("#sidebar_inner").append('<a id="' + response[i][1] + '" href="noscript" class="user_nik sub_id_' + response[i][1] + '" title="личное сообщение">' + response[i][0] + '</a);')
         }
