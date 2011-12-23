@@ -5,11 +5,10 @@ $(document).ready(function() {
 	$('#message').val('').focus();
     var s = new io.connect('http://' + window.location.host, {
         rememberTransport: false,
-        'reconnect': true,
+        'reconnect': false,
         'reconnection delay': 500,
         'max reconnection attempts': 10
         });
-    s.on('disconnect', function(msg) { s.socket.reconnect(); });
     // Постинг формы через ajax
     $("#messageform").live("keypress", function(e) {
         if (e.keyCode == 13){
