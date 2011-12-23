@@ -44,10 +44,6 @@ $(document).ready(function() {
 	    		}
 	    	}
     	}
-
-
-
-
         $('#inbox').css({paddingBottom: '135px'});
         window.scrollTo(0, document.body.scrollHeight);
         $('#message').focus();

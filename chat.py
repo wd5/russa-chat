@@ -191,7 +191,8 @@ class ChatConnection(tornadio2.conn.SocketConnection):
 
     def console_message(self, message_src):
         for waiter in self.waiters:
-            waiter.send(message_src)
+            if not waiter.user_name == self.user_name:
+                waiter.send(message_src)
 
     def on_close(self):
         time = datetime.datetime.time(datetime.datetime.now()).strftime("%H:%M")
@@ -216,7 +217,7 @@ class ChatConnection(tornadio2.conn.SocketConnection):
         message = {
             "type": "user_is_out",
             "user_id": self.user_id,
-            "html": loader.load("message_out.html").generate(message="%s ушел(timeout)" % self.user_name, time = time),
+            "html": loader.load("message_out.html").generate(message="%s ушел" % self.user_name, time = time),
         }
         self.console_message(message)
 
