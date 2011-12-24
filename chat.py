@@ -57,7 +57,13 @@ class BaseHandler(tornado.web.RequestHandler):
         user_id = self.get_secure_cookie("user_id")
         return user_id
 
+    def get_user_sex(self):
+        username = self.get_current_user()
+        user = User.objects.get(username=username)
+        print user.is_men
+
 class Registration(BaseHandler):
+    men = False
     def get(self):
         self.render("registration.html", error_name=False, error_password=False, error_password_again=False, error_sex=False)
 
@@ -105,9 +111,7 @@ class Registration(BaseHandler):
         try:
             is_men = self.get_argument("sex")
             if is_men == "True":
-                is_men = True
-            else:
-                is_men == False
+                self.men = True
         except :
             error_sex = "Укажите ваш пол"
             error = True
@@ -117,7 +121,7 @@ class Registration(BaseHandler):
             new_user = User()
             new_user.username = name
             new_user.password = crypt(password)
-            new_user.is_men = is_men
+            new_user.is_men = self.men
             new_user.save()
             self.set_secure_cookie("user", name)
             self.set_secure_cookie("user_id", str(uuid.uuid4()))
@@ -185,7 +189,7 @@ class IndexHandler(BaseHandler):
     """Regular HTTP handler to serve the chatroom page"""
     @tornado.web.authenticated
     def get(self):
-        self.render('index.html', users_online = map(lambda a: loader.load("user.html").generate(current_user=a[0], id=a[1]), ChatConnection.users_online), messages = ChatConnection.messages_cache)
+        self.render('index.html', users_online = map(lambda a: loader.load("user.html").generate(current_user=a[0], id=a[1], sex=a[2]), ChatConnection.users_online), messages = ChatConnection.messages_cache)
 
 class SocketIOHandler(BaseHandler):
     def get(self):
@@ -203,24 +207,26 @@ class ChatConnection(tornadio2.conn.SocketConnection):
     cache_size = 40
     user_name = None
     user_id = None
+    user_sex = None
 
     def on_open(self, info):
         self.send(self.users_online)
         self.user_name = self.get_current_user(info)
         self.user_id = self.get_user_id(info)
+        self.user_sex = self.get_user_sex(info)
         time = datetime.datetime.time(datetime.datetime.now()).strftime("%H:%M")
         new_user = False
         print "Подключился %s" % self.user_name
-        if [self.user_name, self.user_id] not in self.users_online:
+        if [self.user_name, self.user_id, self.user_sex] not in self.users_online:
             new_user = True
         self.waiters.add(self)
         if new_user:
             message = {
                 "type": "new_user",
-                "user": loader.load("user.html").generate(current_user=self.user_name, id=self.user_id),
+                "user": loader.load("user.html").generate(current_user=self.user_name, id=self.user_id, sex=self.user_sex),
                 "html": loader.load("new_user.html").generate(time = time, current_user=self.user_name, id=self.user_id),
             }
-            self.users_online.append([self.user_name, self.user_id])
+            self.users_online.append([self.user_name, self.user_id, self.user_sex])
             self.console_message(message)
 
     def on_message(self, message_src):
@@ -300,7 +306,7 @@ class ChatConnection(tornadio2.conn.SocketConnection):
         time = datetime.datetime.time(datetime.datetime.now()).strftime("%H:%M")
         self.waiters.remove(self)
         if self.user_name not in map(lambda a: a.user_name, self.waiters):
-            self.users_online.remove([self.user_name, self.user_id])
+            self.users_online.remove([self.user_name, self.user_id, self.user_sex])
             message = {
                 "type": "user_is_out",
                 "user_id": self.user_id,
@@ -312,7 +318,7 @@ class ChatConnection(tornadio2.conn.SocketConnection):
     def out_user(self, args):
         time = datetime.datetime.time(datetime.datetime.now()).strftime("%H:%M")
         self.waiters.remove(self)
-        self.users_online.remove([self.user_name, self.user_id])
+        self.users_online.remove([self.user_name, self.user_id, self.user_sex])
         message = {
             "type": "user_is_out",
             "user_id": self.user_id,
@@ -326,6 +332,18 @@ class ChatConnection(tornadio2.conn.SocketConnection):
     def get_user_id(self, info):
         return decode_signed_value(application.settings["cookie_secret"],
                                         "user_id", info.get_cookie("user_id").value)
+    def get_user_sex(self, info):
+        username = decode_signed_value(application.settings["cookie_secret"],
+            "user", info.get_cookie("user").value)
+        user = User.objects.filter(username=username)
+        if user:
+            user = User.objects.get(username=username)
+            if user.is_men:
+                return "male"
+            else:
+                return "female"
+        else:
+            return "user"
 
 class PingConnection(tornadio2.conn.SocketConnection):
     @tornadio2.event('ping')

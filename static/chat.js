@@ -129,7 +129,9 @@ function addMessage(response){
     else {
         $("#sidebar_inner").children('a').remove();
         for (i in response) {
-            $("#sidebar_inner").append('<a id="' + response[i][1] + '" href="noscript" class="user_nik sub_id_' + response[i][1] + '" title="личное сообщение">' + response[i][0] + '</a);')
+            $("#sidebar_inner").append('<a id="' + response[i][1] + '" href="noscript" class="user_nik sub_id_'
+                + response[i][1] + '" title="личное сообщение">' + response[i][0] + '<img src="/static/res/img/' +
+            response[i][2] + '.png" alt="альтернативный текст"></a>')
         }
     }
     window.scrollTo(0, document.body.scrollHeight);
