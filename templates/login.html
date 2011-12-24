@@ -26,6 +26,12 @@
 		<input class="name" type="text" name="name" placeholder="Ваше имя...">
 	    <input class="login" type="image" src="{{ static_url("res/img/input.png") }}" value="Sign in">
 	</form>
+    <form action="/auth/login" method="post">
+        {% module xsrf_form_html() %}
+        <input class="name" type="text" name="name_reg" placeholder="Ваше имя...">
+        <input class="password" type="password" name="password" placeholder="Ваше имя...">
+        <input class="login" type="image" src="{{ static_url("res/img/input.png") }}" value="Sign in">
+    </form>
     {% if error %}
     {{ error }}
     {% end %}

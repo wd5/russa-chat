@@ -1,9 +1,11 @@
           # -*- coding: utf-8 -*-
 from os import path as op
+from pbkdf2 import crypt
 import uuid
 import datetime
 import re
 from api import api
+from api.models import User
 import cgi
 import tornado
 from tornado.options import define
@@ -20,7 +22,7 @@ from tornado.web import decode_signed_value
 
 loader = tornado.template.Loader(os.path.join(os.path.dirname(__file__), "templates"))
 ROOT = op.normpath(op.dirname(__file__))
-# На каком порту запсукаемся
+# На каком порту зауcкаемся
 define("port", default=8001, type=int)
 
 class Application(tornado.web.Application):
@@ -55,26 +57,124 @@ class BaseHandler(tornado.web.RequestHandler):
         user_id = self.get_secure_cookie("user_id")
         return user_id
 
+class Registration(BaseHandler):
+    def get(self):
+        self.render("registration.html", error_name=False, error_password=False, error_password_again=False, error_sex=False)
+
+    def post(self):
+        error_name = error_password = error_password_again = error_sex = False
+        error = False
+        try:
+            name = self.get_argument("name")
+            p = re.compile(u'^[a-zA-Z0-9]*$|^[а-яА-Я0-9]*$')
+            m = p.match(name)
+            if len(name) > 15:
+                error_name = "Логин не должен быть более 15 символов"
+                error = True
+            elif m:
+                for waiter in ChatConnection.waiters:
+                    if str(waiter.user_name) == name.encode('utf-8'):
+                        error_name = "Такой логин уже используется"
+                        error = True
+                if User.objects.filter(username=name):
+                    error_name = "Такой логин уже используется"
+                    error = True
+            else:
+                error_name = "Логин должен состоять из латинских или русских букв"
+                error = True
+        except :
+            error_name = "Укажите логин"
+            error = True
+        try:
+            password = self.get_argument("password")
+            if len(password) > 15:
+                error_password = "Пароль не должен быть более 15 символов"
+                error = True
+        except :
+            error_password = "Укажите пароль"
+            error = True
+        try:
+            password_again = self.get_argument("password_again")
+            if not error_password:
+                if not password == password_again:
+                    error_password_again = "Пароль не совпадает"
+                    error = True
+        except :
+            error_password_again = "Укажите повторный пароль"
+            error = True
+        try:
+            is_men = self.get_argument("sex")
+            if is_men == "True":
+                is_men = True
+            else:
+                is_men == False
+        except :
+            error_sex = "Укажите ваш пол"
+            error = True
+        if error:
+            self.render("registration.html", error_name=error_name, error_password=error_password, error_password_again=error_password_again, error_sex=error_sex)
+        else:
+            new_user = User()
+            new_user.username = name
+            new_user.password = crypt(password)
+            new_user.is_men = is_men
+            new_user.save()
+            self.set_secure_cookie("user", name)
+            self.set_secure_cookie("user_id", str(uuid.uuid4()))
+            self.redirect("/")
+
 class AuthLoginHandler(BaseHandler):
   def get(self):
       self.render("login.html", error=False)
 
   def post(self):
-      name = self.get_argument("name")
-      p = re.compile(u'^[a-zA-Z0-9]*$|^[а-яА-Я0-9]*$')
-      m = p.match(name)
-      print m
-      if m:
-          for waiter in ChatConnection.waiters:
-              print waiter.user_name
-              print name
-              if str(waiter.user_name) == name.encode('utf-8'):
+      try:
+          name = self.get_argument("name")
+          if len(name) > 15:
+              self.render("login.html", error="Имя должно состоять Не более чем из 15 символов")
+              return
+          p = re.compile(u'^[a-zA-Z0-9]*$|^[а-яА-Я0-9]*$')
+          m = p.match(name)
+          if m:
+              for waiter in ChatConnection.waiters:
+                  if str(waiter.user_name) == name.encode('utf-8'):
+                      self.render("login.html", error="Такое имя уже используется")
+                      return
+              if User.objects.filter(username=name):
                   self.render("login.html", error="Такое имя уже используется")
-          self.set_secure_cookie("user", name)
+                  return
+              self.set_secure_cookie("user", name)
+              self.set_secure_cookie("user_id", str(uuid.uuid4()))
+              self.redirect("/")
+              return
+          else:
+              self.render("login.html", error="Имя должно состоять из латинских или русских букв")
+              return
+      except :
+          pass
+      try:
+          reg_name = self.get_argument("name_reg")
+      except :
+          self.render("login.html", error="Введите логин")
+          return
+      try:
+          password = self.get_argument("password")
+      except :
+          self.render("login.html", error="Введите пароль")
+          return
+      try:
+          user = User.objects.get(username=reg_name)
+      except :
+          self.render("login.html", error="Логин или пароль не верны")
+          return
+      if user.password == crypt(password, user.password):
+          self.set_secure_cookie("user", user.username)
           self.set_secure_cookie("user_id", str(uuid.uuid4()))
           self.redirect("/")
       else:
-          self.render("login.html", error="Имя должно состоять из латинских или русских букв")
+          self.render("login.html", error="Логин или пароль не верны")
+          return
+
 
 class AuthLogoutHandler(BaseHandler):
   def get(self):
@@ -122,23 +222,22 @@ class ChatConnection(tornadio2.conn.SocketConnection):
             }
             self.users_online.append([self.user_name, self.user_id])
             self.console_message(message)
-            ChatConnection.messages_cache.extend([message])
-            if len(ChatConnection.messages_cache) > self.cache_size:
-                ChatConnection.messages_cache = ChatConnection.messages_cache[1:]
 
     def on_message(self, message_src):
         time = datetime.datetime.time(datetime.datetime.now()).strftime("%H:%M")
         personals = []
         private = False
         for input in message_src:
-            print input['name']
             if input['name'] == 'message':
-                format_message = api.format_message(cgi.escape(input['value']))
-                message = {
-                    "type": "new_message",
-                    "html": loader.load("message.html").generate(message=format_message, time = time, current_user=self.user_name, id=self.user_id),
-                    "message" : format_message,
-                }
+                if not input['value']:
+                    return
+                else:
+                    format_message = api.format_message(cgi.escape(input['value']))
+                    message = {
+                        "type": "new_message",
+                        "html": loader.load("message.html").generate(message=format_message, time = time, current_user=self.user_name, id=self.user_id),
+                        "message" : format_message,
+                    }
             elif input['name'] == 'personal[]':
                 if input['value']:
                     personals.append(input['value'])
@@ -190,9 +289,12 @@ class ChatConnection(tornadio2.conn.SocketConnection):
             if len(ChatConnection.messages_cache) > self.cache_size:
                 ChatConnection.messages_cache = ChatConnection.messages_cache[1:]
 
-    def console_message(self, message_src):
+    def console_message(self, message):
         for waiter in self.waiters:
-            waiter.send(message_src)
+            waiter.send(message)
+        ChatConnection.messages_cache.extend([message])
+        if len(ChatConnection.messages_cache) > self.cache_size:
+            ChatConnection.messages_cache = ChatConnection.messages_cache[1:]
 
     def on_close(self):
         time = datetime.datetime.time(datetime.datetime.now()).strftime("%H:%M")
@@ -205,9 +307,6 @@ class ChatConnection(tornadio2.conn.SocketConnection):
                 "html": loader.load("message_out.html").generate(message="%s ушел(timeout)" % self.user_name, time = time),
             }
             self.console_message(message)
-            ChatConnection.messages_cache.extend([message])
-            if len(ChatConnection.messages_cache) > self.cache_size:
-                ChatConnection.messages_cache = ChatConnection.messages_cache[1:]
 
     @tornadio2.event('exit')
     def out_user(self, args):
@@ -246,6 +345,7 @@ StatsRouter = tornadio2.router.TornadioRouter(PingConnection, dict(enabled_proto
 urls = ([(r"/", IndexHandler),
          (r"/stats", StatsHandler),
          (r"/socket.io.js", SocketIOHandler),
+         (r"/reg", Registration),
          (r"/auth/login", AuthLoginHandler),
          (r"/auth/logout", AuthLogoutHandler),
          (r"/WebSocketMain.swf", WebSocketFileHandler),

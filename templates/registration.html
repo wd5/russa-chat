@@ -1,0 +1,27 @@
+<form method="post" action="/reg">
+{% module xsrf_form_html() %}
+<p><b>Логин</b></p>
+{% if error_name %}
+    {{ error_name }}
+{% end %}
+<input type="text" name="name" size="15" maxlength="15">
+<p><b>Пароль</b></p>
+{% if error_password %}
+    {{ error_password }}
+{% end %}
+<input type="password" name="password" size="15" maxlength="15">
+<p><b>Повторите пароль</b></p>
+{% if error_password_again %}
+    {{ error_password_again }}
+{% end %}
+<input type="password" name="password_again" size="15" maxlength="15">
+<p><b>Ваш пол</b></p>
+{% if error_sex %}
+    {{ error_sex }}
+{% end %}
+<input type="radio" name="sex" value="True">Муж<Br>
+<input type="radio" name="sex" value="False">Жен<Br>
+<p><input type="submit"></p>
+</form>
+
+

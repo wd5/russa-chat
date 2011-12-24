@@ -12,13 +12,17 @@ $(document).ready(function() {
     // Постинг формы через ajax
     $("#messageform").live("keypress", function(e) {
         if (e.keyCode == 13){
-            newMessage($(this),s);
+            if ($.trim($('#messageform').find("textarea").val()) != "") {
+                newMessage($(this),s);
+            }
             return false;
         }
     });
     $("#messageform input").live("click", function(event) {
         event.preventDefault();
-        newMessage($('#messageform'), s);
+        if ($.trim($('#messageform').find("textarea").val()) != "") {
+            newMessage($('#messageform'), s);
+        }
     });
     $(".out_link").live("click", function() {
         s.emit('exit', 1);
