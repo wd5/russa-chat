@@ -1,6 +1,11 @@
 from django.conf import settings
 
-settings.configure(DATABASE_ENGINE='django.db.backends.mysql', DATABASE_NAME='chat', DATABASE_USER='chat', DATABASE_PASSWORD='kjasdlkj7askjhdg')
+try:
+    from local_settings import *
+except ImportError:
+    pass
+
+settings.configure(DATABASE_ENGINE=DATABASE_ENGINE, DATABASE_NAME=DATABASE_NAME, DATABASE_USER=DATABASE_USER, DATABASE_PASSWORD=DATABASE_PASSWORD)
 
 from django.db import models
 
