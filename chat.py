@@ -143,7 +143,9 @@ class AuthLoginHandler(BaseHandler):
               return
           p = re.compile(u'^[a-zA-Z0-9]*$|^[а-яА-Я0-9]*$')
           m = p.match(name)
+          print "aaaaa"
           if m:
+              print "bbbbb"
               for waiter in ChatConnection.waiters:
                   if str(waiter.user_name) == name.encode('utf-8'):
                       self.render("login.html", error="Такое имя уже используется")
@@ -151,7 +153,6 @@ class AuthLoginHandler(BaseHandler):
               if User.objects.filter(username=name):
                   self.render("login.html", error="Такое имя уже используется")
                   return
-              print "lflfl"
               self.set_secure_cookie("user", name)
               self.set_secure_cookie("user_id", str(uuid.uuid4()))
               self.redirect("/")
