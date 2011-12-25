@@ -145,15 +145,6 @@ class AuthLoginHandler(BaseHandler):
           m = p.match(name)
           if m:
               print "bbbbb"
-              for waiter in ChatConnection.waiters:
-                  if str(waiter.user_name) == name.encode('utf-8'):
-                      print "11111"
-                      self.render("login.html", error="Такое имя уже используется")
-                      return
-              if User.objects.filter(username=name):
-                  print "99999"
-                  self.render("login.html", error="Такое имя уже используется")
-                  return
               print "oooooo"
               self.set_secure_cookie("user", name)
               self.set_secure_cookie("user_id", str(uuid.uuid4()))
