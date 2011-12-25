@@ -138,7 +138,6 @@ class AuthLoginHandler(BaseHandler):
   def post(self):
       try:
           name = self.get_argument("name")
-          print name
           if len(name) > 15:
               self.render("login.html", error="Имя должно состоять Не более чем из 15 символов")
               return
@@ -152,6 +151,7 @@ class AuthLoginHandler(BaseHandler):
               if User.objects.filter(username=name):
                   self.render("login.html", error="Такое имя уже используется")
                   return
+              print "lflfl"
               self.set_secure_cookie("user", name)
               self.set_secure_cookie("user_id", str(uuid.uuid4()))
               self.redirect("/")
