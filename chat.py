@@ -79,7 +79,7 @@ class Registration(BaseHandler):
                 error = True
             elif m:
                 for waiter in ChatConnection.waiters:
-                    if str(waiter.user_name) == name.encode('utf-8'):
+                    if str(waiter.user_name).lower() == name.encode('utf-8').lower():
                         error_name = "Такой логин уже используется"
                         error = True
                 if User.objects.filter(username=name):
