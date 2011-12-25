@@ -1,27 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" type="text/css" href="/static/res/css/procssed_241211_11_51_24.css" media="all">
+</head>
+
+<body>
+<div id="auth-content" class="form">
+<h2>Регистрация</h2>
 <form method="post" action="/reg">
-{% module xsrf_form_html() %}
-<p><b>Логин</b></p>
-{% if error_name %}
-    {{ error_name }}
-{% end %}
-<input type="text" name="name" size="15" maxlength="15">
-<p><b>Пароль</b></p>
+    {% module xsrf_form_html() %}
+	<p class="name">
+		<label for="name">Введите имя пользователя
 {% if error_password %}
-    {{ error_password }}
+    <br><span class="form-err">{{ error_name }}</span>
 {% end %}
-<input type="password" name="password" size="15" maxlength="15">
-<p><b>Повторите пароль</b></p>
+		</label>
+		<br><input type="text" name="name" size="15" maxlength="15">
+	</p>
+	<p class="password">
+		<label for="email">Введите пароль
+{% if error_name %}
+    <br><span class="form-err">{{ error_password }}</span>
+{% end %}
+		</label>
+		<br><input type="password" name="password" size="15" maxlength="15">
+	</p>
+	<p class="password">
+		<label for="email">Повторите пароль
 {% if error_password_again %}
-    {{ error_password_again }}
+    <br><span class="form-err">{{ error_password_again }}</span>
 {% end %}
-<input type="password" name="password_again" size="15" maxlength="15">
-<p><b>Ваш пол</b></p>
+		</label>
+		<br><input type="password" name="password_again" size="15" maxlength="15">
+	</p>
+	<p class="gender">
+		<label for="gender">Пол
 {% if error_sex %}
-    {{ error_sex }}
+    <br><span class="form-err">{{ error_sex }}</span>
 {% end %}
-<input type="radio" name="sex" value="True">Муж<Br>
-<input type="radio" name="sex" value="False">Жен<Br>
-<p><input type="submit"></p>
+        </label>
+        <br><input type="radio" name="sex" value="True" class="def" id="gender_m"><label for="gender_m">Мужской</label> 
+        <input type="radio" name="sex" value="False" class="def" id="gender_f"><label for="gender_f">Женский</label><br>
+	</p>
+	<p class="submit">
+		<input type="submit" value="Отправить">
+	</p>
 </form>
-
-
+</div>
+</body>
+</html>
