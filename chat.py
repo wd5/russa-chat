@@ -324,6 +324,7 @@ class ChatConnection(tornadio2.conn.SocketConnection):
 
     @tornadio2.event('exit')
     def out_user(self, args):
+        print "exit"
         time = datetime.datetime.time(datetime.datetime.now()).strftime("%H:%M")
         self.waiters.remove(self)
         self.users_online.remove([self.user_name, self.user_id, self.user_sex])
