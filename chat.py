@@ -172,6 +172,10 @@ class AuthLoginHandler(BaseHandler):
           self.render("login.html", error="Логин или пароль не верны")
           return
       if user.password == crypt(password, user.password):
+          for waiter in ChatConnection.waiters:
+              if str(waiter.user_name).lower() == reg_name.encode('utf-8').lower():
+                  self.render("login.html", error="Такое имя уже используется")
+                  return
           self.set_secure_cookie("user", user.username)
           self.set_secure_cookie("user_id", str(uuid.uuid4()))
           self.redirect("/")
