@@ -5,7 +5,14 @@
 	<div class="shadow"></div>
 	<div class="msg_text">
 		<div class="msg_name">
-			К нам пришел <a id="{{id}}" href="noscript" class="from user_nik sub_id_{{id}}" title="личное сообщение">{{ current_user }}</a>
+            {% if sex == 'male' %}
+                К нам пришел
+            {% elif sex == 'female' %}
+                К нам пришла
+            {% else %}
+                К нам пришел гость
+            {% end %}
+			<a id="{{id}}" href="noscript" class="from user_nik sub_id_{{id}}" title="личное сообщение">{{ current_user }}</a>
 		</div>
 	</div>
 </div>

@@ -224,7 +224,7 @@ class ChatConnection(tornadio2.conn.SocketConnection):
             message = {
                 "type": "new_user",
                 "user": loader.load("user.html").generate(current_user=self.user_name, id=self.user_id, sex=self.user_sex),
-                "html": loader.load("new_user.html").generate(time = time, current_user=self.user_name, id=self.user_id),
+                "html": loader.load("new_user.html").generate(time = time, current_user=self.user_name, id=self.user_id, sex=self.user_sex),
             }
             self.users_online.append([self.user_name, self.user_id, self.user_sex])
             self.console_message(message)
@@ -310,7 +310,7 @@ class ChatConnection(tornadio2.conn.SocketConnection):
             message = {
                 "type": "user_is_out",
                 "user_id": self.user_id,
-                "html": loader.load("message_out.html").generate(message="%s ушел(timeout)" % self.user_name, time = time),
+                "html": loader.load("message_out.html").generate(time = time, sex = self.user_sex, current_user = self.user_name, timeout=True),
             }
             self.console_message(message)
 
@@ -322,7 +322,7 @@ class ChatConnection(tornadio2.conn.SocketConnection):
         message = {
             "type": "user_is_out",
             "user_id": self.user_id,
-            "html": loader.load("message_out.html").generate(message="%s ушел" % self.user_name, time = time),
+            "html": loader.load("message_out.html").generate(time = time, sex = self.user_sex, current_user = self.user_name, timeout=False),
         }
         self.console_message(message)
 
