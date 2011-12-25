@@ -138,6 +138,7 @@ class AuthLoginHandler(BaseHandler):
   def post(self):
       try:
           name = self.get_argument("name")
+          print name
           if len(name) > 15:
               self.render("login.html", error="Имя должно состоять Не более чем из 15 символов")
               return
