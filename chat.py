@@ -200,19 +200,23 @@ class AuthLogoutHandler(BaseHandler):
       self.clear_all_cookies()
       self.redirect("/")
       time = datetime.datetime.time(datetime.datetime.now()).strftime("%H:%M")
+      username = self.get_current_user()
+      userid = self.get_user_id()
+      sex = self.get_user_sex()
       message = {
           "type": "user_is_out",
-          "user_id": self.get_user_id(),
-          "html": loader.load("message_out.html").generate(time = time, sex = self.get_user_sex(), current_user = self.get_current_user(), timeout=False),
+          "user_id": userid,
+          "html": loader.load("message_out.html").generate(time = time, sex = sex, current_user = username, timeout=False),
           }
       for waiter in ChatConnection.waiters:
           waiter.send(message)
           ChatConnection.messages_cache.extend([message])
-          if waiter.user_name == self.get_current_user():
-              ChatConnection.waiters.remove(waiter)
+          if waiter.user_name == username:
+              waiter_del = waiter
+      ChatConnection.waiters.remove(waiter_del)
       if len(ChatConnection.messages_cache) > ChatConnection.cache_size:
           ChatConnection.messages_cache = ChatConnection.messages_cache[1:]
-      ChatConnection.users_online.remove([self.get_current_user(), self.get_user_id(), self.get_user_sex()])
+      ChatConnection.users_online.remove([username, userid, sex])
 
 class IndexHandler(BaseHandler):
     """Regular HTTP handler to serve the chatroom page"""
@@ -333,15 +337,18 @@ class ChatConnection(tornadio2.conn.SocketConnection):
 
     def on_close(self):
         time = datetime.datetime.time(datetime.datetime.now()).strftime("%H:%M")
-        self.waiters.remove(self)
-        if self.user_name not in map(lambda a: a.user_name, self.waiters):
-            self.users_online.remove([self.user_name, self.user_id, self.user_sex])
-            message = {
-                "type": "user_is_out",
-                "user_id": self.user_id,
-                "html": loader.load("message_out.html").generate(time = time, sex = self.user_sex, current_user = self.user_name, timeout=True),
-            }
-            self.console_message(message)
+        try:
+            self.waiters.remove(self)
+            if self.user_name not in map(lambda a: a.user_name, self.waiters):
+                self.users_online.remove([self.user_name, self.user_id, self.user_sex])
+                message = {
+                    "type": "user_is_out",
+                    "user_id": self.user_id,
+                    "html": loader.load("message_out.html").generate(time = time, sex = self.user_sex, current_user = self.user_name, timeout=True),
+                }
+                self.console_message(message)
+        except :
+            return
 
     def get_current_user(self, info):
         return decode_signed_value(application.settings["cookie_secret"],
