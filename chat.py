@@ -253,18 +253,6 @@ class ChatConnection(tornadio2.conn.SocketConnection):
                 "html": loader.load("new_user.html").generate(time = time, current_user=self.user_name, id=self.user_id, sex=self.user_sex),
             }
             self.users_online.append([self.user_name, self.user_id, self.user_sex])
-            self.users_online.append([self.user_name, self.user_id, self.user_sex])
-            self.users_online.append([self.user_name, self.user_id, self.user_sex])
-            self.users_online.append([self.user_name, self.user_id, self.user_sex])
-            self.users_online.append([self.user_name, self.user_id, self.user_sex])
-            self.users_online.append([self.user_name, self.user_id, self.user_sex])
-            self.users_online.append([self.user_name, self.user_id, self.user_sex])
-            self.users_online.append([self.user_name, self.user_id, self.user_sex])
-            self.users_online.append([self.user_name, self.user_id, self.user_sex])
-            self.users_online.append([self.user_name, self.user_id, self.user_sex])
-            self.users_online.append([self.user_name, self.user_id, self.user_sex])
-            self.users_online.append([self.user_name, self.user_id, self.user_sex])
-            self.users_online.append([self.user_name, self.user_id, self.user_sex])
             self.console_message(message)
 
     def on_message(self, message_src):
