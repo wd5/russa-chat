@@ -208,8 +208,11 @@ class AuthLogoutHandler(BaseHandler):
       for waiter in ChatConnection.waiters:
           waiter.send(message)
           ChatConnection.messages_cache.extend([message])
+          if waiter.user_name == self.get_current_user():
+              ChatConnection.waiters.remove(waiter)
       if len(ChatConnection.messages_cache) > ChatConnection.cache_size:
           ChatConnection.messages_cache = ChatConnection.messages_cache[1:]
+      ChatConnection.users_online.remove([self.get_current_user(), self.get_user_id(), self.get_user_sex()])
 
 class IndexHandler(BaseHandler):
     """Regular HTTP handler to serve the chatroom page"""
