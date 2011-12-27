@@ -244,9 +244,18 @@ class ChatConnection(tornadio2.conn.SocketConnection):
     away = False
 
     def on_open(self, info):
-        print self.users_online
-        self.send(self.users_online)
         self.user_name = self.get_current_user(info)
+        for i in self.users_online:
+            if i[0] == self.user_name:
+                if not i[3] == False:
+                    i[3] = False
+                    drop_away = {
+                        "type": "drop_away",
+                        "user_id": self.user_id
+                    }
+                    for waiter in self.waiters:
+                        waiter.send(drop_away)
+        self.send(self.users_online)
         self.user_id = self.get_user_id(info)
         self.user_sex = self.get_user_sex(info)
         time = datetime.datetime.time(datetime.datetime.now()).strftime("%H:%M")

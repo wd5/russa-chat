@@ -133,9 +133,7 @@ function addMessage(response){
         $("#sidebar_inner").children('a').remove();
         for (i in response) {
             var $status = '';
-            console.log(response[i][3]);
             if (response[i][3]) { $status = response[i][3]}
-            console.log($status);
             $("#sidebar_inner").append('<a id="' + response[i][1] + '" href="noscript" class="user_nik sub_id_'
                 + response[i][1] + '" title="личное сообщение">' + response[i][0] + '<img src="/static/res/img/' +
             response[i][2] + '.png"><span class="alignright">' + $status + '</span></a>')
