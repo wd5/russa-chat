@@ -245,6 +245,8 @@ class ChatConnection(tornadio2.conn.SocketConnection):
 
     def on_open(self, info):
         self.user_name = self.get_current_user(info)
+        self.waiters.add(self)
+        self.user_id = self.get_user_id(info)
         for i in self.users_online:
             if i[0] == self.user_name:
                 if not i[3] == False:
@@ -256,14 +258,12 @@ class ChatConnection(tornadio2.conn.SocketConnection):
                     for waiter in self.waiters:
                         waiter.send(drop_away)
         self.send(self.users_online)
-        self.user_id = self.get_user_id(info)
         self.user_sex = self.get_user_sex(info)
         time = datetime.datetime.time(datetime.datetime.now()).strftime("%H:%M")
         new_user = False
         print "Подключился %s" % self.user_name
         if [self.user_name, self.user_id, self.user_sex, self.away] not in self.users_online:
             new_user = True
-        self.waiters.add(self)
         if new_user:
             message = {
                 "type": "new_user",
@@ -285,7 +285,7 @@ class ChatConnection(tornadio2.conn.SocketConnection):
                     format_message = api.format_message(cgi.escape(input['value']))
                     if format_message[:6] == '/away ':
                         i = self.users_online.index([self.user_name, self.user_id, self.user_sex, self.away])
-                        self.away = format_message[6:]
+                        self.away = format_message[6:21]
                         message = {
                             "type": "status",
                             "user_id": self.user_id,
