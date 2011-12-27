@@ -244,6 +244,7 @@ class ChatConnection(tornadio2.conn.SocketConnection):
     away = False
 
     def on_open(self, info):
+        print self.users_online
         self.send(self.users_online)
         self.user_name = self.get_current_user(info)
         self.user_id = self.get_user_id(info)
@@ -274,6 +275,7 @@ class ChatConnection(tornadio2.conn.SocketConnection):
                 else:
                     format_message = api.format_message(cgi.escape(input['value']))
                     if format_message[:6] == '/away ':
+                        i = self.users_online.index([self.user_name, self.user_id, self.user_sex, self.away])
                         self.away = format_message[6:]
                         message = {
                             "type": "status",
@@ -281,8 +283,8 @@ class ChatConnection(tornadio2.conn.SocketConnection):
                             "status" : self.away,
                             }
                         for waiter in self.waiters:
-                            print waiter.user_name
                             waiter.send(message)
+                        self.users_online[i] = [self.user_name, self.user_id, self.user_sex, self.away]
                         return
                     else:
                         message = {
@@ -295,7 +297,9 @@ class ChatConnection(tornadio2.conn.SocketConnection):
                                 "type": "drop_away",
                                 "user_id": self.user_id
                             }
+                            i = self.users_online.index([self.user_name, self.user_id, self.user_sex, self.away])
                             self.away = False
+                            self.users_online[i] = [self.user_name, self.user_id, self.user_sex, self.away]
                             for waiter in self.waiters:
                                 waiter.send(drop_away)
             elif input['name'] == 'personal[]':
