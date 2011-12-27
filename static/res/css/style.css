@@ -141,6 +141,8 @@ body.main input{
 #sidebar_inner{
 	padding: 22px 20px 22px 22px;
 	color: #5B7393;
+    height: 500px;
+    overflow-y: scroll;
 }
 #sidebar_inner a{
 	padding: 5px;
