@@ -63,8 +63,15 @@ class BaseHandler(tornado.web.RequestHandler):
 
     def get_user_sex(self):
         username = self.get_current_user()
-        user = User.objects.get(username=username)
-        print user.is_men
+        user = User.objects.filter(username=username)
+        if user:
+            user = User.objects.get(username=username)
+            if user.is_men:
+                return "male"
+            else:
+                return "female"
+        else:
+          return "user"
 
 class Registration(BaseHandler):
     men = False
@@ -192,6 +199,17 @@ class AuthLogoutHandler(BaseHandler):
   def get(self):
       self.clear_all_cookies()
       self.redirect("/")
+      time = datetime.datetime.time(datetime.datetime.now()).strftime("%H:%M")
+      message = {
+          "type": "user_is_out",
+          "user_id": self.get_user_id(),
+          "html": loader.load("message_out.html").generate(time = time, sex = self.get_user_sex(), current_user = self.get_current_user(), timeout=False),
+          }
+      for waiter in ChatConnection.waiters:
+          waiter.send(message)
+          ChatConnection.messages_cache.extend([message])
+      if len(ChatConnection.messages_cache) > ChatConnection.cache_size:
+          ChatConnection.messages_cache = ChatConnection.messages_cache[1:]
 
 class IndexHandler(BaseHandler):
     """Regular HTTP handler to serve the chatroom page"""
@@ -321,19 +339,6 @@ class ChatConnection(tornadio2.conn.SocketConnection):
                 "html": loader.load("message_out.html").generate(time = time, sex = self.user_sex, current_user = self.user_name, timeout=True),
             }
             self.console_message(message)
-
-    @tornadio2.event('exit')
-    def out_user(self, args):
-        print "exit"
-        time = datetime.datetime.time(datetime.datetime.now()).strftime("%H:%M")
-        self.waiters.remove(self)
-        self.users_online.remove([self.user_name, self.user_id, self.user_sex])
-        message = {
-            "type": "user_is_out",
-            "user_id": self.user_id,
-            "html": loader.load("message_out.html").generate(time = time, sex = self.user_sex, current_user = self.user_name, timeout=False),
-        }
-        self.console_message(message)
 
     def get_current_user(self, info):
         return decode_signed_value(application.settings["cookie_secret"],

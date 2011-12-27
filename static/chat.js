@@ -24,9 +24,6 @@ $(document).ready(function() {
             newMessage($('#messageform'), s);
         }
     });
-    $(".out_link").live("click", function() {
-        s.emit('exit', 1);
-    });
     //Приват
     $("a.user_nik").live("click", function(event) {
     	event.preventDefault();
