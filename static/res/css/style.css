@@ -134,14 +134,14 @@ body.main input{
 	box-shadow: 0 1px 4px #DCDBDB inset;
 }
 #sidebar{
-	width: 242px;
+	width: 272px;
 	margin: 52px 0 0;
 	position: fixed;
 }
 #sidebar_inner{
 	padding: 22px 20px 22px 22px;
 	color: #5B7393;
-    height: 500px;
+    height: 600px;
     overflow-y: scroll;
 }
 #sidebar_inner a{
@@ -151,13 +151,13 @@ body.main input{
 	text-decoration: none;
 }
 #sidebar_inner a:hover{
-	background:#d9dcdf; 
-	box-shadow:inset 0 1px 2px #cdd2d7; 
-	-moz-box-shadow:inset 0 1px 2px #cdd2d7; 
-	-webkit-box-shadow:inset 0 1px 2px #cdd2d7; 
+	background:#d9dcdf;
+	box-shadow:inset 0 1px 2px #cdd2d7;
+	-moz-box-shadow:inset 0 1px 2px #cdd2d7;
+	-webkit-box-shadow:inset 0 1px 2px #cdd2d7;
 	border-radius:5px;
 }
-#private_name{ 
+#private_name{
 	position: relative;
 }
 #private_name div{
@@ -380,7 +380,7 @@ body.main input{
 /*Fullscreen SKIN*/
 #fullscreen #page{
 	width: auto;
-	margin-right: 242px;
+	margin-right: 262px;
 }
 #fullscreen #sidebar{
 	right: 0;
