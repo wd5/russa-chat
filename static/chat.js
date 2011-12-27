@@ -123,6 +123,13 @@ function addMessage(response){
         $("#inbox").append(response.html);
         $('#'+response.user_id).remove();
     }
+    else if (response.type == 'status') {
+        console.log(response.user_id);
+        $('#' + response.user_id).children('span').replaceWith('<span class="alignright">' + response.status + '</span>');
+    }
+    else if (response.type == 'drop_away') {
+        $('#' + response.user_id).children('span').replaceWith('<span class="alignright"></span>');
+    }
     else {
         $("#sidebar_inner").children('a').remove();
         for (i in response) {

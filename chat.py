@@ -222,7 +222,7 @@ class IndexHandler(BaseHandler):
     """Regular HTTP handler to serve the chatroom page"""
     @tornado.web.authenticated
     def get(self):
-        self.render('index.html', users_online = map(lambda a: loader.load("user.html").generate(current_user=a[0], id=a[1], sex=a[2]), ChatConnection.users_online), messages = ChatConnection.messages_cache)
+        self.render('index.html', users_online = map(lambda a: loader.load("user.html").generate(current_user=a[0], id=a[1], sex=a[2], away=a[3]), ChatConnection.users_online), messages = ChatConnection.messages_cache)
 
 class SocketIOHandler(BaseHandler):
     def get(self):
@@ -241,6 +241,7 @@ class ChatConnection(tornadio2.conn.SocketConnection):
     user_name = None
     user_id = None
     user_sex = None
+    away = False
 
     def on_open(self, info):
         self.send(self.users_online)
@@ -250,16 +251,16 @@ class ChatConnection(tornadio2.conn.SocketConnection):
         time = datetime.datetime.time(datetime.datetime.now()).strftime("%H:%M")
         new_user = False
         print "Подключился %s" % self.user_name
-        if [self.user_name, self.user_id, self.user_sex] not in self.users_online:
+        if [self.user_name, self.user_id, self.user_sex, self.away] not in self.users_online:
             new_user = True
         self.waiters.add(self)
         if new_user:
             message = {
                 "type": "new_user",
-                "user": loader.load("user.html").generate(current_user=self.user_name, id=self.user_id, sex=self.user_sex),
+                "user": loader.load("user.html").generate(current_user=self.user_name, id=self.user_id, sex=self.user_sex, away=self.away),
                 "html": loader.load("new_user.html").generate(time = time, current_user=self.user_name, id=self.user_id, sex=self.user_sex),
             }
-            self.users_online.append([self.user_name, self.user_id, self.user_sex])
+            self.users_online.append([self.user_name, self.user_id, self.user_sex, self.away])
             self.console_message(message)
 
     def on_message(self, message_src):
@@ -272,11 +273,31 @@ class ChatConnection(tornadio2.conn.SocketConnection):
                     return
                 else:
                     format_message = api.format_message(cgi.escape(input['value']))
-                    message = {
-                        "type": "new_message",
-                        "html": loader.load("message.html").generate(message=format_message, time = time, current_user=self.user_name, id=self.user_id),
-                        "message" : format_message,
-                    }
+                    if format_message[:6] == '/away ':
+                        self.away = format_message[6:]
+                        message = {
+                            "type": "status",
+                            "user_id": self.user_id,
+                            "status" : self.away,
+                            }
+                        for waiter in self.waiters:
+                            print waiter.user_name
+                            waiter.send(message)
+                        return
+                    else:
+                        message = {
+                            "type": "new_message",
+                            "html": loader.load("message.html").generate(message=format_message, time = time, current_user=self.user_name, id=self.user_id),
+                            "message" : format_message,
+                        }
+                        if self.away:
+                            drop_away = {
+                                "type": "drop_away",
+                                "user_id": self.user_id
+                            }
+                            self.away = False
+                            for waiter in self.waiters:
+                                waiter.send(drop_away)
             elif input['name'] == 'personal[]':
                 if input['value']:
                     personals.append(input['value'])
@@ -340,7 +361,7 @@ class ChatConnection(tornadio2.conn.SocketConnection):
         try:
             self.waiters.remove(self)
             if self.user_name not in map(lambda a: a.user_name, self.waiters):
-                self.users_online.remove([self.user_name, self.user_id, self.user_sex])
+                self.users_online.remove([self.user_name, self.user_id, self.user_sex, self.away])
                 message = {
                     "type": "user_is_out",
                     "user_id": self.user_id,
