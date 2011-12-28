@@ -214,6 +214,7 @@ class AuthLogoutHandler(BaseHandler):
           if waiter.user_name == username:
               waiter_del = waiter
       ChatConnection.waiters.remove(waiter_del)
+      ChatConnection.messages_cache.extend([message])
       if len(ChatConnection.messages_cache) > ChatConnection.cache_size:
           ChatConnection.messages_cache = ChatConnection.messages_cache[1:]
       ChatConnection.users_online.remove([username, userid, sex, False])
