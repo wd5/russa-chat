@@ -210,7 +210,6 @@ class AuthLogoutHandler(BaseHandler):
           }
       for waiter in ChatConnection.waiters:
           waiter.send(message)
-          ChatConnection.messages_cache.extend([message])
           if waiter.user_name == username:
               waiter_del = waiter
       ChatConnection.waiters.remove(waiter_del)
