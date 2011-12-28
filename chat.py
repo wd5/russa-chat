@@ -216,7 +216,11 @@ class AuthLogoutHandler(BaseHandler):
       ChatConnection.messages_cache.extend([message])
       if len(ChatConnection.messages_cache) > ChatConnection.cache_size:
           ChatConnection.messages_cache = ChatConnection.messages_cache[1:]
-      ChatConnection.users_online.remove([username, userid, sex, False])
+      count = 0
+      for user in ChatConnection.users_online:
+          count +=1
+          if user[0] == username:
+              del ChatConnection.users_online[count-1]
 
 class IndexHandler(BaseHandler):
     """Regular HTTP handler to serve the chatroom page"""
