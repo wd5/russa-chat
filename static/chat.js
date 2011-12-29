@@ -6,6 +6,7 @@ $(document).ready(function() {
     var s = new io.connect('http://' + window.location.host, {
         rememberTransport: false,
         'reconnect': true,
+        'reconnection delay': 1000,
         'max reconnection attempts': 10
         });
     // Постинг формы через ajax
@@ -129,7 +130,8 @@ function addMessage(response){
         $('#' + response.user_id).children('span').replaceWith('<span class="alignright"></span>');
     }
     else if (response.type == 'kick') {
-        window.location = '/auth/logout';
+        alert("Вы плохо себя вели!");
+        window.location = '/auth/logout'
     }
     else {
         $("#sidebar_inner").children('a').remove();
