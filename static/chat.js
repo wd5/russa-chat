@@ -6,7 +6,6 @@ $(document).ready(function() {
     var s = new io.connect('http://' + window.location.host, {
         rememberTransport: false,
         'reconnect': true,
-        'reconnection delay': 1000,
         'max reconnection attempts': 10
         });
     // Постинг формы через ajax
