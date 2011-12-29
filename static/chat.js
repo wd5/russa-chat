@@ -129,6 +129,9 @@ function addMessage(response){
     else if (response.type == 'drop_away') {
         $('#' + response.user_id).children('span').replaceWith('<span class="alignright"></span>');
     }
+    else if (response.type == 'kick') {
+        window.location = '/auth/logout';
+    }
     else {
         $("#sidebar_inner").children('a').remove();
         for (i in response) {

@@ -212,7 +212,10 @@ class AuthLogoutHandler(BaseHandler):
           waiter.send(message)
           if waiter.user_name == username:
               waiter_del = waiter
-      ChatConnection.waiters.remove(waiter_del)
+      try:
+          ChatConnection.waiters.remove(waiter_del)
+      except :
+          pass
       ChatConnection.messages_cache.extend([message])
       if len(ChatConnection.messages_cache) > ChatConnection.cache_size:
           ChatConnection.messages_cache = ChatConnection.messages_cache[1:]
@@ -298,6 +301,21 @@ class ChatConnection(tornadio2.conn.SocketConnection):
                         for waiter in self.waiters:
                             waiter.send(message)
                         self.users_online[i] = [self.user_name, self.user_id, self.user_sex, self.away]
+                        return
+                    elif format_message[:6] == '/kick ':
+                        if self.user_name == 'Владимир':
+                            kick_name = format_message[6:]
+                            message = {
+                                "type": "kick",
+                                }
+                            for waiter in self.waiters:
+                                if waiter.user_name == kick_name.encode('utf-8'):
+                                    waiter_del = waiter
+                                    waiter.send(message)
+                            try:
+                                ChatConnection.waiters.remove(waiter_del)
+                            except :
+                                pass
                         return
                     else:
                         message = {
