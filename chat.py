@@ -83,7 +83,7 @@ class Registration(BaseHandler):
         error = False
         try:
             name = self.get_argument("name")
-            p = re.compile(u'^[a-zA-Z0-9]*$|^[а-яА-Я0-9]*$')
+            p = re.compile(u'^[a-zA-Z0-9_]*$|^[а-яА-Я0-9_]*$')
             m = p.match(name)
             if len(name) > 15:
                 error_name = "Логин не должен быть более 15 символов"
@@ -148,7 +148,7 @@ class AuthLoginHandler(BaseHandler):
           if len(name) > 15:
               self.render("login.html", error="Имя должно состоять Не более чем из 15 символов")
               return
-          p = re.compile(u'^[a-zA-Z0-9]*$|^[а-яА-Я0-9]*$')
+          p = re.compile(u'^[a-zA-Z0-9_]*$|^[а-яА-Я0-9_]*$')
           m = p.match(name)
           if m:
               for waiter in ChatConnection.waiters:
@@ -436,7 +436,7 @@ class PingConnection(tornadio2.conn.SocketConnection):
         return ChatRouter.stats.dump()
 
 # Create tornadio server
-ChatRouter = tornadio2.router.TornadioRouter(ChatConnection,dict(enabled_protocols=['xhr-polling','jsonp-polling','htmlfile'],session_check_interval=15,session_expiry=10))
+ChatRouter = tornadio2.router.TornadioRouter(ChatConnection,dict(enabled_protocols=['xhr-polling','jsonp-polling','htmlfile'],session_check_interval=20,session_expiry=15))
 
 StatsRouter = tornadio2.router.TornadioRouter(PingConnection, dict(enabled_protocols=['websocket','xhr-polling','jsonp-polling', 'htmlfile'],websocket_check=True),namespace='stats')
 
