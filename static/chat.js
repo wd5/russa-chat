@@ -148,7 +148,6 @@ function addMessage(response){
                 + response[i][1] + '" title="личное сообщение">' + response[i][0] + '<img src="/static/res/img/' +
             response[i][2] + '.png"><span class="alignright">' + $status + '</span></a>')
         }
-        $('#sidebar_inner').children('h6').replaceWith('<h6>Пользователи онлайн(' + $USERS_ONLNE + '):</h6>')
     }
     window.scrollTo(0, document.body.scrollHeight);
 }
