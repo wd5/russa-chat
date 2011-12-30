@@ -117,7 +117,7 @@ function addMessage(response){
         var $last_user = $(response.html).appendTo("#inbox");
         setTimeout(function(){
         		$last_user.children('.shadow').animate({opacity:0},4000);
-        	},2000)
+        	},2000);
         $("#sidebar_inner").append(response.user);
         $USERS_ONLNE++;
         $('#sidebar_inner').children('h6').replaceWith('<h6>Пользователи онлайн(' + $USERS_ONLNE + '):</h6>')

@@ -6,6 +6,7 @@ import datetime
 import re
 from api import api
 from api.models import User
+from api.mixins import VKMixin
 import cgi
 import tornado
 from tornado.options import define
@@ -435,7 +436,54 @@ class PingConnection(tornadio2.conn.SocketConnection):
     def stats(self):
         return ChatRouter.stats.dump()
 
-# Create tornadio server
+class VKHandler(tornado.web.RequestHandler, VKMixin):
+  @tornado.web.asynchronous
+  def get(self):
+      if self.get_argument("code", None):
+          self.get_authenticated_user(self.async_callback(self._on_auth))
+          return
+
+      args = {
+          "response_type": "code",
+          "scope": "friends"
+      }
+
+      self.authorize_redirect(client_id=self.settings["client_id"], redirect_uri="http://127.0.0.1:8001/vkauth", extra_params=args)
+
+  def _on_auth(self, user):
+      if not user:
+          raise tornado.web.HTTPError(500, "Auth failed")
+      name = tornado.escape.xhtml_escape(user["response"][0]["first_name"])
+      if len(name) > 15:
+          name = name[:15]
+      p = re.compile(u'^[a-zA-Z0-9_]*$|^[а-яА-Я0-9_]*$')
+      m = p.match(name)
+      not_unique = True
+      if m:
+          name = name.encode('utf-8')
+          raw_name = name
+          while not_unique:
+              i = 0
+              for waiter in ChatConnection.waiters:
+                  if str(waiter.user_name) == name:
+                      i += 1
+                      name = raw_name + str(i)
+                      continue
+              if User.objects.filter(username=name):
+                  i += 1
+                  name = raw_name + str(i)
+              not_unique = False
+          self.set_secure_cookie("user", name)
+          self.set_secure_cookie("user_id", str(uuid.uuid4()))
+          self.redirect("/")
+          return
+      else:
+          self.render("login.html", error="Имя должно состоять из латинских или русских букв")
+      self.set_secure_cookie("user", name)
+      self.set_secure_cookie("user_id", str(uuid.uuid4()))
+      self.redirect("/")
+
+          # Create tornadio server
 ChatRouter = tornadio2.router.TornadioRouter(ChatConnection,dict(enabled_protocols=['xhr-polling','jsonp-polling','htmlfile'],session_check_interval=15,session_expiry=10))
 
 StatsRouter = tornadio2.router.TornadioRouter(PingConnection, dict(enabled_protocols=['websocket','xhr-polling','jsonp-polling', 'htmlfile'],websocket_check=True),namespace='stats')
@@ -446,6 +494,7 @@ urls = ([(r"/", IndexHandler),
          (r"/reg", Registration),
          (r"/auth/login", AuthLoginHandler),
          (r"/auth/logout", AuthLogoutHandler),
+         (r"/vkauth", VKHandler),
          (r"/WebSocketMain.swf", WebSocketFileHandler),
         ])
 
@@ -463,6 +512,8 @@ application = tornado.web.Application(
     cookie_secret="43oETzKXQAGaYdkL5gEmGeJJFuYh7EQnp2XdTP1o/Vo=",
     debug=True,
     login_url="/auth/login",
+    client_id=2644170,
+    client_secret="2Z8zrQH5wFGJGLGHOt3u",
 )
 
 
