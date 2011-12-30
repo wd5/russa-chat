@@ -448,7 +448,7 @@ class VKHandler(tornado.web.RequestHandler, VKMixin):
           "scope": "friends"
       }
 
-      self.authorize_redirect(client_id=self.settings["client_id"], redirect_uri="http://127.0.0.1:8001/vkauth", extra_params=args)
+      self.authorize_redirect(client_id=self.settings["client_id"], redirect_uri="/vkauth", extra_params=args)
 
   def _on_auth(self, user):
       if not user:
