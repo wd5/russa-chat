@@ -436,9 +436,37 @@ class PingConnection(tornadio2.conn.SocketConnection):
     def stats(self):
         return ChatRouter.stats.dump()
 
-class VKHandler(tornado.web.RequestHandler, VKMixin):
+class VKHandler(BaseHandler, VKMixin):
   @tornado.web.asynchronous
   def get(self):
+      self.clear_all_cookies()
+      time = datetime.datetime.time(datetime.datetime.now()).strftime("%H:%M")
+      username = self.get_current_user()
+      userid = self.get_user_id()
+      sex = self.get_user_sex()
+      if username:
+          message = {
+              "type": "user_is_out",
+              "user_id": userid,
+              "html": loader.load("message_out.html").generate(time = time, sex = sex, current_user = username, timeout=False),
+              }
+          for waiter in ChatConnection.waiters:
+              waiter.send(message)
+              if waiter.user_name == username:
+                  waiter_del = waiter
+          try:
+              ChatConnection.waiters.remove(waiter_del)
+          except :
+              pass
+          ChatConnection.messages_cache.extend([message])
+          if len(ChatConnection.messages_cache) > ChatConnection.cache_size:
+              ChatConnection.messages_cache = ChatConnection.messages_cache[1:]
+          count = 0
+          for user in ChatConnection.users_online:
+              count +=1
+              if user[0] == username:
+                  del ChatConnection.users_online[count-1]
+
       if self.get_argument("code", None):
           self.get_authenticated_user(self.async_callback(self._on_auth))
           return
@@ -448,7 +476,7 @@ class VKHandler(tornado.web.RequestHandler, VKMixin):
           "scope": "friends"
       }
 
-      self.authorize_redirect(client_id=self.settings["client_id"], redirect_uri="http://russa-chat.ru/vkauth", extra_params=args)
+      self.authorize_redirect(client_id=self.settings["client_id"], redirect_uri="http://127.0.0.1:8001/vkauth", extra_params=args)
 
   def _on_auth(self, user):
       if not user:
