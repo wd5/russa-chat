@@ -1,4 +1,5 @@
 WEB_SOCKET_SWF_LOCATION = 'WebSocketMain.swf';
+var $USERS_ONLNE = 0;
 $(document).ready(function() {
 	//Очистка инпутов
 	$('#messageform input[type="hidden"]').val('');
@@ -118,10 +119,14 @@ function addMessage(response){
         		$last_user.children('.shadow').animate({opacity:0},4000);
         	},2000)
         $("#sidebar_inner").append(response.user);
+        $USERS_ONLNE++;
+        $('#sidebar_inner').children('h6').replaceWith('<h6>Пользователи онлайн(' + $USERS_ONLNE + '):</h6>')
     }
     else if (response.type == 'user_is_out') {
         $("#inbox").append(response.html);
         $('#'+response.user_id).remove();
+        $USERS_ONLNE--;
+        $('#sidebar_inner').children('h6').replaceWith('<h6>Пользователи онлайн(' + $USERS_ONLNE + '):</h6>')
     }
     else if (response.type == 'status') {
         $('#' + response.user_id).children('span').replaceWith('<span class="alignright">' + response.status + '</span>');
@@ -131,11 +136,12 @@ function addMessage(response){
     }
     else if (response.type == 'kick') {
         alert("Вы плохо себя вели!");
-        window.location = '/auth/logout'
+        window.location = '/auth/logout';
     }
     else {
         $("#sidebar_inner").children('a').remove();
         for (i in response) {
+            $USERS_ONLNE++;
             var $status = '';
             if (response[i][3]) { $status = response[i][3]}
             $("#sidebar_inner").append('<a id="' + response[i][1] + '" href="noscript" class="user_nik sub_id_'

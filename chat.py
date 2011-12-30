@@ -229,7 +229,7 @@ class IndexHandler(BaseHandler):
     """Regular HTTP handler to serve the chatroom page"""
     @tornado.web.authenticated
     def get(self):
-        self.render('index.html', users_online = map(lambda a: loader.load("user.html").generate(current_user=a[0], id=a[1], sex=a[2], away=a[3]), ChatConnection.users_online), messages = ChatConnection.messages_cache)
+        self.render('index.html', users_online = map(lambda a: loader.load("user.html").generate(current_user=a[0], id=a[1], sex=a[2], away=a[3]), ChatConnection.users_online), quantity=len(ChatConnection.users_online), messages = ChatConnection.messages_cache)
 
 class SocketIOHandler(BaseHandler):
     def get(self):
@@ -316,7 +316,7 @@ class ChatConnection(tornadio2.conn.SocketConnection):
                                 ChatConnection.waiters.remove(waiter_del)
                             except :
                                 pass
-                        return
+                            return
                     else:
                         message = {
                             "type": "new_message",
