@@ -487,6 +487,7 @@ class VKHandler(BaseHandler, VKMixin):
       p = re.compile(u'^[a-zA-Z0-9_]*$|^[а-яА-Я0-9_]*$')
       m = p.match(name)
       not_unique = True
+      print user
       if m:
           name = name.encode('utf-8')
           raw_name = name
