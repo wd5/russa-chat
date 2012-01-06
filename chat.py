@@ -51,7 +51,7 @@ class WebSocketFileHandler(tornado.web.RequestHandler):
             self.write(f.read())
             self.finish()
 
-class BaseHandler(tornado.web.RequestHandler):
+class BaseHandler(tornado.web.RequestHandler, VKMixin):
     def get_current_user(self):
         user = self.get_secure_cookie("user")
         if not user:
@@ -65,12 +65,18 @@ class BaseHandler(tornado.web.RequestHandler):
     def get_user_sex(self):
         username = self.get_current_user()
         user = User.objects.filter(username=username)
+        try:
+            access_token = self.get_secure_cookie('access_token')
+        except :
+            access_token = False
         if user:
             user = User.objects.get(username=username)
             if user.is_men:
                 return "male"
             else:
                 return "female"
+        elif access_token:
+            print self.vk_request(access_token=access_token, api_method="getProfiles", params={"uids": self.get_user_id(), "fields": "sex"}, callback=None)
         else:
           return "user"
 
@@ -487,8 +493,6 @@ class VKHandler(BaseHandler, VKMixin):
       p = re.compile(u'^[a-zA-Z0-9_]*$|^[а-яА-Я0-9_]*$')
       m = p.match(name)
       not_unique = True
-      print user
-      print user['response'][0]['uid']
       if m:
           name = name.encode('utf-8')
           raw_name = name
@@ -524,7 +528,6 @@ class VKTest(BaseHandler, VKMixin):
 
     def _on_test(self, response):
         # "response" is json-response from server
-        print response
         self.redirect("/")
 
 # Create tornadio server
