@@ -82,7 +82,8 @@ class BaseHandler(tornado.web.RequestHandler, VKMixin):
             api_method = "getProfiles"
             url = self._OAUTH_REQUEST_URL + api_method + ".json?" + urlencode(args)
             f = urllib.urlopen(url)
-            aaa = f.read()
+            aaa = tornado.escape.json_decode(f.read())
+            print aaa
             print aaa[0]
             print aaa[0][0]
         else:
