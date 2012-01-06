@@ -488,6 +488,7 @@ class VKHandler(BaseHandler, VKMixin):
       m = p.match(name)
       not_unique = True
       print user
+      print user['response'][0]['uid']
       if m:
           name = name.encode('utf-8')
           raw_name = name
