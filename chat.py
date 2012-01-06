@@ -78,11 +78,13 @@ class BaseHandler(tornado.web.RequestHandler, VKMixin):
             else:
                 return "female"
         elif access_token:
-            args = {"access_token": access_token, "uids" : self.get_user_id()}
+            args = {"access_token": access_token, "uids" : self.get_user_id(), "fields" : "sex"}
             api_method = "getProfiles"
             url = self._OAUTH_REQUEST_URL + api_method + ".json?" + urlencode(args)
             f = urllib.urlopen(url)
-            print f.read()
+            aaa = f.read()
+            print aaa[0]
+            print aaa[0][0]
         else:
           return "user"
 
