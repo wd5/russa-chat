@@ -84,8 +84,6 @@ class BaseHandler(tornado.web.RequestHandler, VKMixin):
             f = urllib.urlopen(url)
             aaa = tornado.escape.json_decode(f.read())
             print aaa
-            print aaa[0]
-            print aaa[0][0]
         else:
           return "user"
 
