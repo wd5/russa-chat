@@ -54,6 +54,8 @@ class WebSocketFileHandler(tornado.web.RequestHandler):
             self.finish()
 
 class BaseHandler(tornado.web.RequestHandler, VKMixin):
+    @tornado.web.asynchronous
+    @tornado.gen.engine
     def get_current_user(self):
         user = self.get_secure_cookie("user")
         if not user:
