@@ -518,11 +518,11 @@ class VKTest(BaseHandler, VKMixin):
     @tornado.web.asynchronous
     def get(self):
         access_token = self.get_secure_cookie("access_token")
-        print access_token
         self.vk_request(self.async_callback(self._on_test), access_token=access_token, api_method="friends.get", params={"fields": "photo"})
 
     def _on_test(self, response):
         # "response" is json-response from server
+        print response
         self.redirect("/")
 
 # Create tornadio server
