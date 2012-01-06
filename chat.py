@@ -481,6 +481,7 @@ class VKHandler(BaseHandler, VKMixin):
   def _on_auth(self, user):
       if not user:
           raise tornado.web.HTTPError(500, "Auth failed")
+      print user['access_token']
       name = tornado.escape.xhtml_escape(user["response"][0]["first_name"])
       if len(name) > 15:
           name = name[:15]
