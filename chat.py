@@ -18,6 +18,8 @@ import tornadio2.server
 import tornadio2.conn
 import os.path
 import logging
+from urllib import urlencode
+from tornado import httpclient
 from tornado.web import decode_signed_value
 try:
   from local_settings import *
@@ -76,7 +78,10 @@ class BaseHandler(tornado.web.RequestHandler, VKMixin):
             else:
                 return "female"
         elif access_token:
-            print self.vk_request(access_token=access_token, api_method="getProfiles", params={"uids": self.get_user_id(), "fields": "sex"}, callback=None)
+            http = httpclient.AsyncHTTPClient()
+            args = {"access_token": access_token}
+            url = self._OAUTH_REQUEST_URL + api_method + ".json?" + urlencode(args)
+            print url
         else:
           return "user"
 
