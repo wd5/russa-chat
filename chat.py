@@ -503,14 +503,14 @@ class VKHandler(BaseHandler, VKMixin):
                   name = raw_name + str(i)
               not_unique = False
           self.set_secure_cookie("user", name)
-          self.set_secure_cookie("user_id", user['client_id'])
+          self.set_secure_cookie("user_id", user['uid'])
           self.set_secure_cookie("access_token", user['access_token'])
           self.redirect("/")
           return
       else:
           self.render("login.html", error="Имя должно состоять из латинских или русских букв")
       self.set_secure_cookie("user", name)
-      self.set_secure_cookie("user_id", user['client_id'])
+      self.set_secure_cookie("user_id", user['uid'])
       self.set_secure_cookie("access_token", user['access_token'])
       self.redirect("/")
 
