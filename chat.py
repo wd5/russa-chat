@@ -503,6 +503,7 @@ class VKHandler(BaseHandler, VKMixin):
               not_unique = False
           self.set_secure_cookie("user", name)
           self.set_secure_cookie("user_id", str(uuid.uuid4()))
+          self.set_secure_cookie("access_token", user['access_token'])
           self.redirect("/")
           return
       else:
@@ -518,7 +519,7 @@ class VKTest(BaseHandler, VKMixin):
     def get(self):
         access_token = self.get_secure_cookie("access_token")
         print access_token
-        print self.vk_request(self.async_callback(self._on_test), access_token=access_token, api_method="friends.get", params={"fields": "photo"})
+        self.vk_request(self.async_callback(self._on_test), access_token=access_token, api_method="friends.get", params={"fields": "photo"})
 
     def _on_test(self, response):
         # "response" is json-response from server
