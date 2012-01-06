@@ -481,7 +481,6 @@ class VKHandler(BaseHandler, VKMixin):
   def _on_auth(self, user):
       if not user:
           raise tornado.web.HTTPError(500, "Auth failed")
-      print user['access_token']
       name = tornado.escape.xhtml_escape(user["response"][0]["first_name"])
       if len(name) > 15:
           name = name[:15]
@@ -510,13 +509,14 @@ class VKHandler(BaseHandler, VKMixin):
           self.render("login.html", error="Имя должно состоять из латинских или русских букв")
       self.set_secure_cookie("user", name)
       self.set_secure_cookie("user_id", str(uuid.uuid4()))
+      self.set_secure_cookie("access_token", user['access_token'])
       self.redirect("/")
 
 class VKTest(BaseHandler, VKMixin):
     @tornado.web.authenticated
     @tornado.web.asynchronous
     def get(self):
-        access_token = self.current_user["access_token"]
+        access_token = self.get_secure_cookie("access_token")
         self.vk_request(self.async_callback(self._on_test), access_token=access_token, api_method="friends.get", params={"fields": "photo"})
 
     def _on_test(self, response):
