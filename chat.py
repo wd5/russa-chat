@@ -511,7 +511,18 @@ class VKHandler(BaseHandler, VKMixin):
       self.set_secure_cookie("user_id", str(uuid.uuid4()))
       self.redirect("/")
 
-          # Create tornadio server
+class VKTest(BaseHandler, VKMixin):
+    @tornado.web.authenticated
+    @tornado.web.asynchronous
+    def get(self):
+        access_token = self.current_user["access_token"]
+        self.vk_request(self.async_callback(self._on_test), access_token=access_token, api_method="friends.get", params={"fields": "photo"})
+
+    def _on_test(self, response):
+        # "response" is json-response from server
+        self.redirect("/")
+
+# Create tornadio server
 ChatRouter = tornadio2.router.TornadioRouter(ChatConnection,dict(enabled_protocols=['xhr-polling','jsonp-polling','htmlfile'],session_check_interval=15,session_expiry=10))
 
 StatsRouter = tornadio2.router.TornadioRouter(PingConnection, dict(enabled_protocols=['websocket','xhr-polling','jsonp-polling', 'htmlfile'],websocket_check=True),namespace='stats')
@@ -523,6 +534,7 @@ urls = ([(r"/", IndexHandler),
          (r"/auth/login", AuthLoginHandler),
          (r"/auth/logout", AuthLogoutHandler),
          (r"/vkauth", VKHandler),
+         (r"/test", VKTest),
          (r"/WebSocketMain.swf", WebSocketFileHandler),
         ])
 
