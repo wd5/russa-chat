@@ -427,6 +427,12 @@ class ChatConnection(tornadio2.conn.SocketConnection):
         username = decode_signed_value(application.settings["cookie_secret"],
             "user", info.get_cookie("user").value)
         user = User.objects.filter(username=username)
+        try:
+            sex = decode_signed_value(application.settings["cookie_secret"],
+                "sex", info.get_cookie("sex").value)
+            return sex
+        except :
+            pass
         if user:
             user = User.objects.get(username=username)
             if user.is_men:
