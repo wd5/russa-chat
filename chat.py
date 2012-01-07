@@ -495,7 +495,6 @@ class VKHandler(BaseHandler, VKMixin):
 
       self.authorize_redirect(client_id=self.settings["client_id"], redirect_uri="http://russa-chat.ru/vkauth", extra_params=args)
 
-  @tornado.web.asynchronous
   def _on_auth(self, user):
       if not user:
           raise tornado.web.HTTPError(500, "Auth failed")
@@ -522,12 +521,11 @@ class VKHandler(BaseHandler, VKMixin):
           self.set_secure_cookie("user", name)
           self.set_secure_cookie("user_id", str(user['response'][0]['uid']))
           self.set_secure_cookie("access_token", user['access_token'])
-          self.vk_request(self.async_callback(self._on_test), access_token=user['access_token'], api_method="getProfiles", params={"uids": user['response'][0]['uid'], "fields": "sex"})
+          self.vk_request(self.async_callback(self._set_sex), access_token=user['access_token'], api_method="getProfiles", params={"uids": user['response'][0]['uid'], "fields": "sex"})
       else:
           self.render("login.html", error="Имя должно состоять из латинских или русских букв")
 
-  def _on_test(self, response):
-      time.sleep(100)
+  def _set_sex(self, response):
       sex = response['response'][0]['sex']
       if sex == 2:
           sex = "male"
@@ -550,7 +548,7 @@ class VKTest(BaseHandler, VKMixin):
 # Create tornadio server
 ChatRouter = tornadio2.router.TornadioRouter(ChatConnection,dict(enabled_protocols=['xhr-polling','jsonp-polling','htmlfile'],session_check_interval=15,session_expiry=10))
 
-StatsRouter = tornadio2.router.TornadioRouter(PingConnection, dict(enabled_protocols=['websocket','xhr-polling','jsonp-polling', 'htmlfile'],websocket_check=True),namespace='stats')
+StatsRouter = tornadio2.router.TornadioRouter(PingConnection, dict(enabled_protocols=['xhr-polling','jsonp-polling', 'htmlfile'],websocket_check=True),namespace='stats')
 
 urls = ([(r"/", IndexHandler),
          (r"/stats", StatsHandler),
