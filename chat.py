@@ -66,8 +66,6 @@ class BaseHandler(tornado.web.RequestHandler, VKMixin):
         user_id = self.get_secure_cookie("user_id")
         return user_id
 
-    @tornado.web.asynchronous
-    @gen.engine
     def get_user_sex(self):
         username = self.get_current_user()
         user = User.objects.filter(username=username)
@@ -78,17 +76,13 @@ class BaseHandler(tornado.web.RequestHandler, VKMixin):
         if user:
             user = User.objects.get(username=username)
             if user.is_men:
-                yield "male"
-                return
+                return "male"
             else:
-                yield "female"
-                return
+                return "female"
         elif access_token:
-            response = yield gen.Task(self.vk_request(access_token=access_token, api_method="getProfiles", params={"uids": self.get_user_id(), "fields": "sex"}))
-            print response
+            pass
         else:
-            yield "user"
-            return
+            return "user"
 
 class Registration(BaseHandler):
     men = False
