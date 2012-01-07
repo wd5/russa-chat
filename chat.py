@@ -4,6 +4,7 @@ from pbkdf2 import crypt
 import uuid
 import datetime
 import re
+import time
 from tornado.httpclient import AsyncHTTPClient
 from api import api
 from api.models import User
@@ -525,6 +526,7 @@ class VKHandler(BaseHandler, VKMixin):
           self.render("login.html", error="Имя должно состоять из латинских или русских букв")
 
   def _on_test(self, response):
+      time.sleep(100)
       sex = response['response'][0]['sex']
       if sex == 2:
           sex = "male"
