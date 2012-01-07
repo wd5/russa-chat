@@ -16,3 +16,13 @@ class User(models.Model):
 
     class Meta:
         db_table = 'user'
+
+
+class Quote(models.Model):
+    quote = models.CharField(max_length=140, unique=True)
+
+    class Meta:
+        db_table = 'quote'
+
+    def __unicode__(self):
+        return self.quote

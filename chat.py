@@ -7,7 +7,7 @@ import re
 import time
 from tornado.httpclient import AsyncHTTPClient
 from api import api
-from api.models import User
+from api.models import User, Quote
 from api.mixins import VKMixin
 import cgi
 import tornado
@@ -329,6 +329,15 @@ class ChatConnection(tornadio2.conn.SocketConnection):
                             except :
                                 pass
                             return
+                    elif format_message[:7] == u'/цитата':
+                        citata = Quote.objects.order_by('?')[0]
+                        message = {
+                            "type": "new_message",
+                            "html": loader.load("console_message.html").generate(time = time, current_user=self.user_name, id=self.user_id, sex=self.user_sex, citata=citata),
+                            "message" : format_message,
+                            }
+                        self.console_message(message)
+                        return
                     else:
                         message = {
                             "type": "new_message",
