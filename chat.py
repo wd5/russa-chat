@@ -4,6 +4,7 @@ from pbkdf2 import crypt
 import uuid
 import datetime
 import re
+from tornado.httpclient import AsyncHTTPClient
 from api import api
 from api.models import User
 from api.mixins import VKMixin
@@ -20,6 +21,7 @@ import os.path
 import logging
 from urllib import urlencode
 import urllib
+from tornado import gen
 from tornado.web import decode_signed_value
 try:
   from local_settings import *
@@ -54,8 +56,6 @@ class WebSocketFileHandler(tornado.web.RequestHandler):
             self.finish()
 
 class BaseHandler(tornado.web.RequestHandler, VKMixin):
-    @tornado.web.asynchronous
-    @tornado.gen.engine
     def get_current_user(self):
         user = self.get_secure_cookie("user")
         if not user:
@@ -66,6 +66,8 @@ class BaseHandler(tornado.web.RequestHandler, VKMixin):
         user_id = self.get_secure_cookie("user_id")
         return user_id
 
+    @tornado.web.asynchronous
+    @gen.engine
     def get_user_sex(self):
         username = self.get_current_user()
         user = User.objects.filter(username=username)
@@ -76,18 +78,17 @@ class BaseHandler(tornado.web.RequestHandler, VKMixin):
         if user:
             user = User.objects.get(username=username)
             if user.is_men:
-                return "male"
+                yield "male"
+                return
             else:
-                return "female"
+                yield "female"
+                return
         elif access_token:
-            args = {"access_token": access_token, "uids" : self.get_user_id(), "fields" : "sex"}
-            api_method = "getProfiles"
-            url = self._OAUTH_REQUEST_URL + api_method + ".json?" + urlencode(args)
-            f = urllib.urlopen(url)
-            aaa = tornado.escape.json_decode(f.read())
-            print aaa
+            response = yield gen.Task(self.vk_request(access_token=access_token, api_method="getProfiles", params={"uids": self.get_user_id(), "fields": "sex"}))
+            print response
         else:
-          return "user"
+            yield "user"
+            return
 
 class Registration(BaseHandler):
     men = False
@@ -519,13 +520,12 @@ class VKHandler(BaseHandler, VKMixin):
           self.set_secure_cookie("user", name)
           self.set_secure_cookie("user_id", str(user['response'][0]['uid']))
           self.set_secure_cookie("access_token", user['access_token'])
-          self.redirect("/")
-          return
+          self.vk_request(self.async_callback(self._on_test), access_token=user['access_token'], api_method="getProfiles", params={"uids": user['response'][0]['uid'], "fields": "sex"})
       else:
           self.render("login.html", error="Имя должно состоять из латинских или русских букв")
-      self.set_secure_cookie("user", name)
-      self.set_secure_cookie("user_id", str(user['response'][0]['uid']))
-      self.set_secure_cookie("access_token", user['access_token'])
+
+  def _on_test(self, response):
+      print response
       self.redirect("/")
 
 class VKTest(BaseHandler, VKMixin):
