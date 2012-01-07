@@ -519,9 +519,10 @@ class VKHandler(BaseHandler, VKMixin):
           self.render("login.html", error="Имя должно состоять из латинских или русских букв")
 
   def _on_test(self, response):
-      print response
-      print response['response']
-      print response['response'][0]['sex']
+      sex = response['response'][0]['sex']
+      if sex == 2:
+          print "male"
+      self.set_secure_cookie("sex", response['response'][0]['sex'])
       self.redirect("/")
 
 class VKTest(BaseHandler, VKMixin):
