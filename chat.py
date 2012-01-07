@@ -520,6 +520,9 @@ class VKHandler(BaseHandler, VKMixin):
 
   def _on_test(self, response):
       print response
+      print response[0]
+      print response[0][0]
+      print response[0][sex]
       self.redirect("/")
 
 class VKTest(BaseHandler, VKMixin):
