@@ -495,6 +495,7 @@ class VKHandler(BaseHandler, VKMixin):
 
       self.authorize_redirect(client_id=self.settings["client_id"], redirect_uri="http://russa-chat.ru/vkauth", extra_params=args)
 
+  @tornado.web.asynchronous
   def _on_auth(self, user):
       if not user:
           raise tornado.web.HTTPError(500, "Auth failed")
