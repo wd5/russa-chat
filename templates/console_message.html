@@ -4,9 +4,13 @@
     </div>
     <div class="msg_text">
         <div class="msg_name">
-            Цитата для
+            {% if type %}
+                Цитата для
+            {% else %}
+                Анекдот для
+            {% end %}
             <a id="{{id}}" href="noscript" class="from user_nik sub_id_{{id}}" title="личное сообщение">{{ current_user }}</a>:
-            {{citata}}
+            <pre>{{ msg }}</pre>
         </div>
     </div>
 </div>

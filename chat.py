@@ -7,7 +7,7 @@ import re
 import time
 from tornado.httpclient import AsyncHTTPClient
 from api import api
-from api.models import User, Quote
+from api.models import User, Quote, Anekdote
 from api.mixins import VKMixin
 import cgi
 import tornado
@@ -333,7 +333,16 @@ class ChatConnection(tornadio2.conn.SocketConnection):
                         citata = Quote.objects.order_by('?')[0]
                         message = {
                             "type": "new_message",
-                            "html": loader.load("console_message.html").generate(time = time, current_user=self.user_name, id=self.user_id, sex=self.user_sex, citata=citata),
+                            "html": loader.load("console_message.html").generate(time = time, current_user=self.user_name, id=self.user_id, sex=self.user_sex, msg=citata, type=True),
+                            "message" : format_message,
+                            }
+                        self.console_message(message)
+                        return
+                    elif format_message[:8] == u'/анекдот':
+                        anekdote = Anekdote.objects.order_by('?')[0]
+                        message = {
+                            "type": "new_message",
+                            "html": loader.load("console_message.html").generate(time = time, current_user=self.user_name, id=self.user_id, sex=self.user_sex, msg=anekdote, type=False),
                             "message" : format_message,
                             }
                         self.console_message(message)

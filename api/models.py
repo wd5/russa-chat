@@ -17,7 +17,6 @@ class User(models.Model):
     class Meta:
         db_table = 'user'
 
-
 class Quote(models.Model):
     quote = models.CharField(max_length=140, unique=True)
 
@@ -26,3 +25,12 @@ class Quote(models.Model):
 
     def __unicode__(self):
         return self.quote
+
+class Anekdote(models.Model):
+    anek = models.TextField()
+
+    class Meta:
+        db_table = 'anekdots'
+
+    def __unicode__(self):
+        return self.anek
