@@ -521,8 +521,7 @@ class VKHandler(BaseHandler, VKMixin):
   def _on_test(self, response):
       print response
       print response['response']
-      print response['response']['sex']
-      print response['response']['0']
+      print response['response'][0]
       self.redirect("/")
 
 class VKTest(BaseHandler, VKMixin):
