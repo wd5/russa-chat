@@ -80,7 +80,7 @@ class BaseHandler(tornado.web.RequestHandler, VKMixin):
             else:
                 return "female"
         elif access_token:
-            pass
+            return self.get_secure_cookie('sex')
         else:
             return "user"
 
@@ -521,8 +521,10 @@ class VKHandler(BaseHandler, VKMixin):
   def _on_test(self, response):
       sex = response['response'][0]['sex']
       if sex == 2:
-          print "male"
-      self.set_secure_cookie("sex", response['response'][0]['sex'])
+          sex = "male"
+      else:
+          sex = "female"
+      self.set_secure_cookie("sex", sex)
       self.redirect("/")
 
 class VKTest(BaseHandler, VKMixin):
