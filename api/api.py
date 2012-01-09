@@ -2,6 +2,7 @@ import re
 
 def to_smile(match):
     smiles = {
+        ':facepalm:' : '<img src=\'/static/smiles/standart/facepalm.gif\'/>',
         ':avtor:' : '<img src=\'/static/smiles/standart/avtor.png\'/>',
         ':loveshower:' : '<img src=\'/static/smiles/standart/loveshower.gif\'/>',
         ':guitar:' : '<img src=\'/static/smiles/standart/guitar.gif\'/>',
@@ -58,10 +59,11 @@ def to_smile(match):
         ':rolls:' : '<img src=\'/static/smiles/big/rolls.gif\'/>',
         ':car:' : '<img src=\'/static/smiles/big/car.gif\'/>',
         ':snowmobile:' : '<img src=\'/static/smiles/big/snowmobile.gif\'/>',
+        ':trollface:' : '<img src=\'/static/smiles/special/Trollface.png\'/>',
     }
     return smiles[match.group()]
 
-smiles_code = ':avtor:|:loveshower:|:guitar:|:ass:|:snowmobile:|:up:|:car:|:rolls:|:wc:|:kick:|:music_girl:|:sacar:|:rock:|:chips:|:dubina:|:girl:|:peace:|:dancing_chilli:|:cheerleader:|:guns:|:kruger:|:mol:|:nun:|:rev:|:crazygirl:|:big_smile:|:celebrity:|:clap:|:crazy:|:crazynuts:|:crazyny:|:csotona:|:flyhigh:|:fuck_yeah:|:fuck_you:|:fun_run:|:kult:|:laugh:|:metal:|:shuffle:|:tarantino_dance:|:ura:|:wall:|:bpr:|:bps:|:bpt:|:wxa:|:wxb:|:wxc:|:wxd:|:wxf:|:wxg:|:wxh:|:wxi:|:wxj:|:wxk:'
+smiles_code = ':avtor:|:loveshower:|:facepalm:|:guitar:|:ass:|:trollface:|:snowmobile:|:up:|:car:|:rolls:|:wc:|:kick:|:music_girl:|:sacar:|:rock:|:chips:|:dubina:|:girl:|:peace:|:dancing_chilli:|:cheerleader:|:guns:|:kruger:|:mol:|:nun:|:rev:|:crazygirl:|:big_smile:|:celebrity:|:clap:|:crazy:|:crazynuts:|:crazyny:|:csotona:|:flyhigh:|:fuck_yeah:|:fuck_you:|:fun_run:|:kult:|:laugh:|:metal:|:shuffle:|:tarantino_dance:|:ura:|:wall:|:bpr:|:bps:|:bpt:|:wxa:|:wxb:|:wxc:|:wxd:|:wxf:|:wxg:|:wxh:|:wxi:|:wxj:|:wxk:'
 
 def unescape(match):
     message = str(match.group())
