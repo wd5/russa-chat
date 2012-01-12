@@ -139,6 +139,7 @@ function addMessage(response){
         window.location = '/auth/logout';
     }
     else {
+        $USERS_ONLNE = 0;
         $("#sidebar_inner").children('a').remove();
         for (i in response) {
             $USERS_ONLNE++;
