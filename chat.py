@@ -371,7 +371,7 @@ class ChatConnection(tornadio2.conn.SocketConnection):
                     for waiter in self.waiters:
                         if waiter.user_id == input['value']:
                             private_to = waiter.user_name
-                    print u'Приват от %s для : ' % self.user_name
+                    print u'Приват от %s для %s: %s' % (self.user_name.decode('utf-8'), private_to.decode('utf-8'), message["message"])
                     message1 = {
                         "private" : "True",
                         "type": "new_message",
