@@ -15,25 +15,9 @@
 $(window).load(function(){
     window.scrollTo(0,1e3);
 });
-$(function(){
-    if(!$.cookie("skin")){
-        $.cookie("skin",'fullscreen');
-    }
-    $('body').attr('id',$.cookie("skin"));
-    $('#skin').click(function(event){
-        event.preventDefault();
-        if($.cookie("skin")=='fullscreen'){
-            $.cookie("skin",'default');
-            $('body').attr('id','default');
-        }else{
-            $.cookie("skin",'fullscreen');
-            $('body').attr('id','fullscreen');
-        }
-    });
-});
 </script>
 </head>
-<body onload="scrollTop()">
+<body onload="scrollTop()" id="fullscreen">
 <!--[if IE]>
   <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 <![endif]-->
@@ -46,7 +30,6 @@ $(function(){
 			<div id="header_logo" class="alignleft">
 				<a href="/">чат г.Старая Русса beta</a>
 			</div>
-			<a id="skin" href="noscript">Сменить скин</a>
 			<a class="out_link" href="/auth/logout" title="выйти">{{ _("Выйти") }}</a>
 		</div>
 	</header>

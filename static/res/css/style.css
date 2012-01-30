@@ -144,6 +144,54 @@ body.main input{
     height: 600px;
     overflow-y: scroll;
 }
+
+#sidebar_inner .user {
+  margin-bottom: .5em;
+}
+
+#sidebar_inner .user_nik {
+	padding: 5px;
+    padding-right: 22px;
+	margin-right: .2em;
+	display: inline-block;
+	vertical-align: middle;
+	zoom: 1;
+	*display: inline;
+	text-decoration: none;
+}
+#sidebar_inner .user_nik:hover{
+	background-color: #d9dcdf;
+	box-shadow:inset 0 1px 2px #cdd2d7;
+	-moz-box-shadow:inset 0 1px 2px #cdd2d7;
+	-webkit-box-shadow:inset 0 1px 2px #cdd2d7;
+	border-radius:5px;
+}
+
+#sidebar_inner .gender_user {
+	background: url(../img/user.png) no-repeat right 4px;
+}
+#sidebar_inner .gender_male {
+	background: url(../img/male.png) no-repeat right 4px;
+}
+#sidebar_inner .gender_female {
+	background: url(../img/female.png) no-repeat right 4px;
+}
+
+#sidebar_inner .user_info {
+	width: 16px;
+	height: 16px;
+	text-indent: 16px;
+	overflow: hidden;
+	display: inline-block;
+	vertical-align: middle;
+	zoom: 1;
+	*display: inline;
+	
+	background: url(../img/information.png) no-repeat 0 0;  
+	}
+	#sidebar_inner .user_info:hover { background-position: 0 100% }
+
+/*
 #sidebar_inner a{
 	padding: 5px;
 	cursor: pointer;
@@ -157,6 +205,7 @@ body.main input{
 	-webkit-box-shadow:inset 0 1px 2px #cdd2d7;
 	border-radius:5px;
 }
+*/
 #private_name{
 	position: relative;
 }

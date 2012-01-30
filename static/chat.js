@@ -64,6 +64,7 @@ $(document).ready(function() {
 
     s.on('message', function(data) {
         addMessage(data);
+		//console.log(data);
     });
 
     if (/*@cc_on!@*/false) {
@@ -142,12 +143,19 @@ function addMessage(response){
         $USERS_ONLNE = 0;
         $("#sidebar_inner").children('a').remove();
         for (i in response) {
+		    console.log(response[i]);
             $USERS_ONLNE++;
             var $status = '';
-            if (response[i][3]) { $status = response[i][3]}
-            $("#sidebar_inner").append('<a id="' + response[i][1] + '" href="noscript" class="user_nik sub_id_'
+            if (response[i][3]) { $status = response[i][3] }
+            /*$("#sidebar_inner").append('<a id="' + response[i][1] + '" href="noscript" class="user_nik sub_id_'
                 + response[i][1] + '" title="личное сообщение">' + response[i][0] + '<img src="/static/res/img/' +
-            response[i][2] + '.png"><span class="alignright">' + $status + '</span></a>')
+            response[i][2] + '.png" class=ico><span class="alignright">' + $status + '</span></a>')*/
+            $("#sidebar_inner").append("<div class=user>"
+			  + "<a href=noscript id='" + response[i][1] + "' class='user_nik sub_id_" + response[i][1] + " gender_" + response[i][2] + "' title='личное сообщение'>"
+			  + response[i][0]
+			  + "</a>"
+			  + "<a href='#' class=user_info title='информация о пользователе " + response[i][0] + "'>[i]</a>"
+			+ "</div>");
         }
     }
     window.scrollTo(0, document.body.scrollHeight);
