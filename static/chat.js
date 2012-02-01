@@ -125,7 +125,7 @@ function addMessage(response){
     }
     else if (response.type == 'user_is_out') {
         $("#inbox").append(response.html);
-        $('#'+response.user_id).remove();
+        $('#'+response.user_id).parent().remove();
         $USERS_ONLNE--;
         $('#sidebar_inner').children('h6').replaceWith('<h6>Пользователи онлайн(' + $USERS_ONLNE + '):</h6>')
     }
@@ -141,15 +141,12 @@ function addMessage(response){
     }
     else {
         $USERS_ONLNE = 0;
-        $("#sidebar_inner").children('a').remove();
+        $("#sidebar_inner").children('.user').remove();
         for (i in response) {
 		    console.log(response[i]);
             $USERS_ONLNE++;
             var $status = '';
             if (response[i][3]) { $status = response[i][3] }
-            /*$("#sidebar_inner").append('<a id="' + response[i][1] + '" href="noscript" class="user_nik sub_id_'
-                + response[i][1] + '" title="личное сообщение">' + response[i][0] + '<img src="/static/res/img/' +
-            response[i][2] + '.png" class=ico><span class="alignright">' + $status + '</span></a>')*/
             $("#sidebar_inner").append("<div class=user>"
 			  + "<a href=noscript id='" + response[i][1] + "' class='user_nik sub_id_" + response[i][1] + " gender_" + response[i][2] + "' title='личное сообщение'>"
 			  + response[i][0]

@@ -1,1 +1,3 @@
-<a id="{{ id }}" href="noscript" class="user_nik sub_id_{{ id }}" title="личное сообщение">{{ current_user }}<img src="/static/res/img/{{ sex }}.png" class=ico><span class="alignright">{% if away %}{{away}}{% end %}</span></a>
+<div class="user">
+<a id="{{ id }}" href="noscript" class="user_nik sub_id_{{ id }} gender_{{ sex }}" title="личное сообщение">{{ current_user }}{% if away %}{{away}}{% end %}</a><a href='#' class=user_info title="информация о пользователе {{current_user}}">[i]</a>
+</div>
