@@ -61,12 +61,18 @@ def to_smile(match):
         ':snowmobile:' : '<img src=\'/static/smiles/big/snowmobile.gif\'/>',
         ':trollface:' : '<img src=\'/static/smiles/special/Trollface.png\'/>',
         ':ufff:' : '<img src=\'/static/smiles/special/ufff.gif\'/>',
+        ':whyyy:' : '<img src=\'/static/smiles/special/whyyy.gif\'/>',
+        ':wtf:' : '<img src=\'/static/smiles/special/wtf.gif\'/>',
+        ':fuuuck:' : '<img src=\'/static/smiles/special/fuuuck.gif\'/>',
+        ':fuck_yea:' : '<img src=\'/static/smiles/special/fuck_yea.gif\'/>',
+        ':prezrenie:' : '<img src=\'/static/smiles/special/prezrenie.gif\'/>',
+        ':trololo:' : '<img src=\'/static/smiles/special/trololo.gif\'/>',
         ':brutal:' : '<img src=\'/static/smiles/big/brutal.gif\'/>',
         ':rose:' : '<img src=\'/static/smiles/big/rose.gif\'/>',
     }
     return smiles[match.group()]
 
-smiles_code = ':avtor:|:loveshower:|:ufff:|:facepalm:|:brutal:|:rose:|:guitar:|:ass:|:trollface:|:snowmobile:|:up:|:car:|:rolls:|:wc:|:kick:|:music_girl:|:sacar:|:rock:|:chips:|:dubina:|:girl:|:peace:|:dancing_chilli:|:cheerleader:|:guns:|:kruger:|:mol:|:nun:|:rev:|:crazygirl:|:big_smile:|:celebrity:|:clap:|:crazy:|:crazynuts:|:crazyny:|:csotona:|:flyhigh:|:fuck_yeah:|:fuck_you:|:fun_run:|:kult:|:laugh:|:metal:|:shuffle:|:tarantino_dance:|:ura:|:wall:|:bpr:|:bps:|:bpt:|:wxa:|:wxb:|:wxc:|:wxd:|:wxf:|:wxg:|:wxh:|:wxi:|:wxj:|:wxk:'
+smiles_code = ':avtor:|:loveshower:|:ufff:|:facepalm:|:whyyy:|:trololo:|:prezrenie:|:fuck_yea:|:fuuuck:|:wtf:|:brutal:|:rose:|:guitar:|:ass:|:trollface:|:snowmobile:|:up:|:car:|:rolls:|:wc:|:kick:|:music_girl:|:sacar:|:rock:|:chips:|:dubina:|:girl:|:peace:|:dancing_chilli:|:cheerleader:|:guns:|:kruger:|:mol:|:nun:|:rev:|:crazygirl:|:big_smile:|:celebrity:|:clap:|:crazy:|:crazynuts:|:crazyny:|:csotona:|:flyhigh:|:fuck_yeah:|:fuck_you:|:fun_run:|:kult:|:laugh:|:metal:|:shuffle:|:tarantino_dance:|:ura:|:wall:|:bpr:|:bps:|:bpt:|:wxa:|:wxb:|:wxc:|:wxd:|:wxf:|:wxg:|:wxh:|:wxi:|:wxj:|:wxk:'
 
 def unescape(match):
     message = str(match.group())
