@@ -291,6 +291,12 @@ class ChatConnection(tornadio2.conn.SocketConnection):
             }
             self.users_online.append([self.user_name, self.user_id, self.user_sex, self.away])
             self.console_message(message)
+            if len(ChatConnection.users_online) < 5:
+                message = {
+                    "type": "new_message",
+                    "html": loader.load("system_message.html").generate(time = time, message="В данный момент в чате мало народу, не уходите а просто оставьте вкладку открытой, только так здесь будет с кем поговорить:)"),
+                    }
+                self.send(message)
 
     def on_message(self, message_src):
         time = datetime.datetime.time(datetime.datetime.now()).strftime("%H:%M")
