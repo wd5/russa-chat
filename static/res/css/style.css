@@ -299,6 +299,7 @@ body.main input{
 #inbox .msg .msg_text p{
 	line-height: 20px;
 	white-space: normal;
+	vertical-align: middle;
 }
 #inbox .msg .msg_name{
 	margin: 0 0 3px;
@@ -443,6 +444,7 @@ body.main input{
 	float: none;
 	line-height: normal;
 }
+#fullscreen #inbox .msg .msg_text p { vertical-align: middle }
 #fullscreen #inbox .msg_text{
 	width: auto;
 	white-space: nowrap;
