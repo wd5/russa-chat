@@ -291,26 +291,6 @@ class ChatConnection(tornadio2.conn.SocketConnection):
             }
             self.users_online.append([self.user_name, self.user_id, self.user_sex, self.away])
             self.console_message(message)
-            self.console_message(message)
-            self.console_message(message)
-            self.console_message(message)
-            self.console_message(message)
-            self.console_message(message)
-            self.console_message(message)
-            self.console_message(message)
-            self.console_message(message)
-            self.console_message(message)
-            self.console_message(message)
-            self.console_message(message)
-            self.console_message(message)
-            self.console_message(message)
-            self.console_message(message)
-            self.console_message(message)
-            self.console_message(message)
-            self.console_message(message)
-            self.console_message(message)
-            self.console_message(message)
-            self.console_message(message)
             if len(ChatConnection.users_online) < 5:
                 message = {
                     "type": "new_message",
