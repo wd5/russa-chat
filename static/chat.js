@@ -49,9 +49,13 @@ $(document).ready(function() {
 	    		}
 	    	}
     	}
-        $('#inbox').css({paddingBottom: '135px'});
         window.scrollTo(0, document.body.scrollHeight);
+        $('#inbox').css({paddingBottom: '135px'});
+        $('#inbox').css('visibility', 'visible');
+		console.log($('#inbox'));
+		$('#inbox').show();
         $('#message').focus();
+		
     });
     $('#private_name .closer').live('click',function(){
     	$('#private').val("");
@@ -64,7 +68,6 @@ $(document).ready(function() {
 
     s.on('message', function(data) {
         addMessage(data);
-		//console.log(data);
     });
 
     if (/*@cc_on!@*/false) {
@@ -143,7 +146,6 @@ function addMessage(response){
         $USERS_ONLNE = 0;
         $("#sidebar_inner").children('.user').remove();
         for (i in response) {
-		    console.log(response[i]);
             $USERS_ONLNE++;
             var $status = '';
             if (response[i][3]) { $status = response[i][3] }
@@ -155,5 +157,7 @@ function addMessage(response){
 			+ "</div>");
         }
     }
-    window.scrollTo(0, document.body.scrollHeight);
+	$('html, body').animate({scrollTop: document.body.scrollHeight}, 1000);
+	$('#inbox').css('visibility', 'visible');
+	$('#message').focus();
 }

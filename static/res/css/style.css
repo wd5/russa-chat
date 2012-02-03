@@ -2,6 +2,7 @@
 
 body{font:12px/1.231 verdana, sans-serif; *font-size:small}
 body, select, input, textarea {color: #202020}
+nobr { white-space: nowrap }
 
 ::-moz-selection{background:#FF5E99;color:#fff;text-shadow:none}
 ::selection{background:#FF5E99;color:#fff;text-shadow:none}
@@ -103,15 +104,17 @@ body.main input{
 #header_block{
 	width: 872px;
 	margin: 0 auto;
-	text-shadow: 0 1px 1px #000000;
-	font-weight: bold;
+	/*text-shadow: 0 1px 1px #000000;
+	font-weight: bold;*/
 }
 #header_block a{
 	text-decoration: none;
-	line-height: 48px;
+	/*line-height: 48px;*/
 }
 #header_logo{
 	width: 242px;
+	line-height: 48px;
+	font-weight: bold;
 }
 #header_logo a{
 	color: #E6E6E6;
@@ -135,14 +138,15 @@ body.main input{
 }
 #sidebar{
 	width: 272px;
+	height: 100%;
 	margin: 52px 0 0;
 	position: fixed;
 }
 #sidebar_inner{
 	padding: 22px 20px 22px 22px;
 	color: #5B7393;
-    height: 600px;
-    overflow-y: scroll;
+    height: 100%;
+    /*overflow-y: scroll;*/
 }
 
 #sidebar_inner .user {
@@ -246,6 +250,7 @@ body.main input{
 }
 #inbox{
 	padding: 52px 0 95px;
+	visibility: hidden;
 }
 #inbox .msg{
 	margin: 10px;
@@ -444,7 +449,7 @@ body.main input{
 	float: none;
 	line-height: normal;
 }
-#fullscreen #inbox .msg .msg_text p { vertical-align: middle }
+/*#fullscreen #inbox .msg .msg_text p { vertical-align: middle }*/
 #fullscreen #inbox .msg_text{
 	width: auto;
 	white-space: nowrap;
@@ -476,6 +481,56 @@ body.main input{
 #fullscreen #message{
 	width: 95%;
 }
+
+.nav {}
+
+#header .nav  { margin-top: 8px; }
+
+.nav .side div { width: 1px }
+
+.nav .rows {
+	border: 1px solid #96AABE;
+	border-top: 0;
+	margin: 0px;
+}
+.nav .rows a {
+	padding: 4px 10px 0px 27px;
+	display: block;
+	height: 18px;
+	background: #ebebeb no-repeat;
+	color: #607890;
+	font-size: 12px;
+	cursor: pointer;
+}
+.nav .rows a:hover {
+  text-decoration: none;
+  background-color: #DAE2E8;
+  color: #036;
+}
+
+#gear-opener { 
+	position: relative;
+	display: inline-block;
+	z-index: 2;
+	border: 1px solid transparent;
+}
+
+#gear-opener:hover {
+  background-color: #ebebeb;
+  border: 1px solid #96AABE;
+}
+
+#gear-opener:hover .inner { display: block }
+
+#gear-opener .inner {
+	padding: 0 0 10px;
+	display: none;
+	position: absolute;
+	top: 33px;
+	left: -2px;
+	z-index: 0;
+}
+
 /*END*/
 @media print{
 *{background:transparent !important;color:black !important;text-shadow:none !important;filter:none !important;-ms-filter:none !important}

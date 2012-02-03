@@ -15,6 +15,18 @@
 $(window).load(function(){
     window.scrollTo(0,1e3);
 });
+$(function(){
+	$(window).resize(function(event){
+		var sidebar = $('#sidebar');
+		var sidebar_inner = $('#sidebar_inner');
+		var input = $('#input');
+		sidebar.css('height', sidebar.height() - input.height());
+		sidebar_inner.css('height', sidebar_inner.height() - input.height());
+	})
+	
+	$(window).trigger('resize');
+
+})
 </script>
 </head>
 <body onload="scrollTop()" id="fullscreen">
@@ -30,7 +42,34 @@ $(window).load(function(){
 			<div id="header_logo" class="alignleft">
 				<a href="/">чат г.Старая Русса beta</a>
 			</div>
-			<a class="out_link" href="/auth/logout" title="выйти">{{ _("Выйти") }}</a>
+			
+			<div class="nav alignright">
+				<a id="gear-opener">
+					<img src="/static/res/img/cog.png">
+					
+					<div class="inner">
+					<table cellspacing="0" cellpadding="0" id="gear-items">  
+						<tbody>
+							<tr>    
+								<td class="side"><div></div></td>    
+								<td>
+									<div class="rows">
+										<a class="add_media_type_2_photo" style="background-image: url(http://cdn1.iconfinder.com/data/icons/spirit20/user-profile.png); background-position: 2px 0px; "><nobr>Редактировать профиль</nobr></a>
+										<a class="add_media_type_2_video" style="background-image: url(http://cdn1.iconfinder.com/data/icons/fugue/icon/balloon-quotation.png); background-position: 4px 3px; "><nobr>Анекдот</nobr></a>
+										<a class="add_media_type_2_audio" style="background-image: url(http://cdn1.iconfinder.com/data/icons/splashyIcons/comments_reply.png); background-position: 4px 3px; "><nobr>Цитата</nobr></a>
+										<a class="add_media_type_2_audio" style="background-image: url(http://cdn1.iconfinder.com/data/icons/silk2/status_away.png); background-position: 4px 3px; "><nobr>Отойду</nobr></a>
+									</div>
+								</td>
+								<td class="side"><div></div></td>
+							</tr>
+						</tbody>
+					</table>
+					</div>
+				</a>
+				<a href="/auth/logout" id="logout" title="выйти"><img src="/static/res/img/Gnome-System-Log-Out-32.png"></a>
+			</div><!-- /class=nav -->
+			
+			<!--a class="out_link" href="/auth/logout" title="выйти">{{ _("Выйти") }}</a-->
 		</div>
 	</header>
 		<div id="page" class="clearfix">
