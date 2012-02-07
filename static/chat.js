@@ -142,10 +142,10 @@ function addMessage(response){
         $('#sidebar_inner').children('h6').replaceWith('<h6>Пользователи онлайн(' + $USERS_ONLNE + '):</h6>')
     }
     else if (response.type == 'status') {
-        $('#' + response.user_id).children('span').replaceWith('<span class="alignright">' + response.status + '</span>');
+        $('#' + response.user_id).next().next().text(response.status)
     }
     else if (response.type == 'drop_away') {
-        $('#' + response.user_id).children('span').replaceWith('<span class="alignright"></span>');
+        $('#' + response.user_id).next().next().text("")
     }
     else if (response.type == 'kick') {
         alert("Вы плохо себя вели!");
@@ -163,6 +163,7 @@ function addMessage(response){
 			  + response[i][0]
 			  + "</a>"
 			  + "<a href='#' class=user_info title='информация о пользователе " + response[i][0] + "'>[i]</a>"
+              + "<span class=\"alignright\">" + $status + "</span>"
 			+ "</div>");
         }
     }
