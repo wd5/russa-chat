@@ -24,9 +24,14 @@ $(document).ready(function() {
         if ($.trim($('#messageform').find("textarea").val()) != "") {
             newMessage($('#messageform'), s);
         }
+    });
     $('a.quote').live('click',function(){
-            alert('!');
-        });
+        var form = [{name: "message", value: "/цитата"}];
+        s.json.send(form);
+    });
+    $('a.joke').live('click',function(){
+        var form = [{name: "message", value: "/анекдот"}];
+        s.json.send(form);
     });
     //Приват
     $("a.user_nik").live("click", function(event) {
@@ -92,6 +97,7 @@ $(document).ready(function() {
 
 // Постинг сообщения в чат
 function newMessage(form, s) {
+    console.log(form.serializeArray());
     s.json.send(form.serializeArray());
     $('#messageform').find("textarea").val('');
     form.slideDown();
