@@ -24,6 +24,9 @@ $(document).ready(function() {
         if ($.trim($('#messageform').find("textarea").val()) != "") {
             newMessage($('#messageform'), s);
         }
+    $("a.quote").live("click", function() {
+        alert("111");
+    })
     });
     //Приват
     $("a.user_nik").live("click", function(event) {
