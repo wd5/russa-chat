@@ -508,7 +508,7 @@ body.main input{
   color: #036;
 }
 
-#gear-opener { 
+#gear-opener {
 	position: relative;
 	display: inline-block;
 	z-index: 2;

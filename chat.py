@@ -308,9 +308,11 @@ class ChatConnection(tornadio2.conn.SocketConnection):
                     return
                 else:
                     format_message = api.format_message(cgi.escape(input['value']))
-                    if format_message[:6] == '/away ':
+                    if format_message[:5] == '/away':
                         i = self.users_online.index([self.user_name, self.user_id, self.user_sex, self.away])
                         self.away = format_message[6:21]
+                        if not self.away:
+                            self.away = 'Отсутствую...'
                         message = {
                             "type": "status",
                             "user_id": self.user_id,
