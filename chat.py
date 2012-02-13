@@ -358,7 +358,7 @@ class ChatConnection(tornadio2.conn.SocketConnection):
                     else:
                         message = {
                             "type": "new_message",
-                            "html": loader.load("message.html").generate(message=format_message, time = time, current_user=self.user_name, id=self.user_id),
+                            "html": loader.load("message.html").generate(message=format_message.lower(), time = time, current_user=self.user_name, id=self.user_id),
                             "message" : format_message,
                         }
                         if self.away:
