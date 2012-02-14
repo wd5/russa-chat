@@ -10,7 +10,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="shortcut icon" href="favicon.ico">
 <link rel="stylesheet" href="{{ static_url("res/css/style.css") }}" type="text/css"/>
+<link rel="stylesheet" href="{{ static_url("res/css/redmond/jquery-ui-1.8.17.custom.css") }}" type="text/css"/>
 <script src="{{ static_url("res/js/jquery.min.js") }}" type="text/javascript"></script>
+<script src="{{ static_url("res/js/jquery-ui-1.8.17.custom.min.js") }}" type="text/javascript"></script>
 <script type="text/javascript" language="javascript">
 $(window).load(function(){
     window.scrollTo(0,1e3);
@@ -25,6 +27,25 @@ $(function(){
 	})
 	
 	$(window).trigger('resize');
+	
+	$( "#profile_editor" ).dialog({
+		width: 630,
+		modal: true,
+		autoOpen: false,
+		/*buttons: {
+			"Сохранить": function() {},
+			"выйти без изменений": function() {
+				$( this ).dialog( "close" );
+			}
+		}*/
+	});
+	
+	$("#profile_edit").click(function(){
+		$( "#profile_editor" ).dialog( "open" );
+	});
+	$("#close_profile_editor").click(function(){
+		$( "#profile_editor" ).dialog( "close" );
+	});
 
 })
 </script>
@@ -54,7 +75,7 @@ $(function(){
 								<td class="side"><div></div></td>    
 								<td>
 									<div class="rows">
-										<a class="add_media_type_2_photo" style="background-image: url(http://cdn1.iconfinder.com/data/icons/spirit20/user-profile.png); background-position: 2px 0px; "><nobr>Редактировать профиль</nobr></a>
+										<a id="profile_edit" style="background-image: url(http://cdn1.iconfinder.com/data/icons/spirit20/user-profile.png); background-position: 2px 0px; "><nobr>Редактировать профиль</nobr></a>
 										<a class="joke" style="background-image: url(http://cdn1.iconfinder.com/data/icons/fugue/icon/balloon-quotation.png); background-position: 4px 3px; "><nobr>Анекдот</nobr></a>
 										<a class="quote" style="background-image: url(http://cdn1.iconfinder.com/data/icons/splashyIcons/comments_reply.png); background-position: 4px 3px; "><nobr>Цитата</nobr></a>
 										<a class="away" style="background-image: url(http://cdn1.iconfinder.com/data/icons/silk2/status_away.png); background-position: 4px 3px; "><nobr>Отойду</nobr></a>
@@ -117,6 +138,84 @@ $(function(){
 
 		</div>
     </div>
+	
+<div id="profile_editor" title="Редактирование профиля">
+<table cellspacing="3">
+	<tr>
+		<td class="label"><label>Имя:</label></td>
+		<td class="input"><input type="text" class="text" id="pedit_first_name"></td>
+	</tr>
+	<tr>
+		<td class="label"><label>Фамилия:</label></td>
+		<td class="input"><input type="text" class="text" id="pedit_last_name"></td>
+	</tr>
+	<tr>
+		<td class="label"><label>Отчество:</label></td>
+		<td class="input"><input type="text" class="text" id="pedit_middle_name"></td>
+	</tr>
+	<tr>
+		<td class="label"><label>День рождения:</label></td>
+		<td class="input">
+			<input type="text" class="text" style="width:53px" maxlength="2" placeholder="день">
+			<input type="text" class="text" style="width:53px" maxlength="2" placeholder="месяц">
+			<input type="text" class="text" style="width:53px" maxlength="4" placeholder="год">
+		</td>
+	</tr>
+	<tr>
+		<td class="label"><label>Родной город:</label></td>
+		<td class="input"><input type="text" class="text"></td>
+	</tr>
+	<tr>
+		<td class="label"><label>Город проживания:</label></td>
+		<td class="input"><input type="text" class="text"></td>
+	</tr>
+	<tr>
+		<td class="label"><label>Телефон:</label></td>
+		<td class="input"><input type="text" class="text"></td>
+	</tr>
+	<tr>
+		<td class="label"><label>Skype:</label></td>
+		<td class="input"><input type="text" class="text"></td>
+	</tr>
+	<tr>
+		<td class="label"><label>Vkontakte:</label></td>
+		<td class="input"><input type="text" class="text"></td>
+	</tr>
+	<tr>
+		<td class="label"><label>Facebook:</label></td>
+		<td class="input"><input type="text" class="text"></td>
+	</tr>
+	<tr>
+		<td class="label"><label>Twitter:</label></td>
+		<td class="input"><input type="text" class="text"></td>
+	</tr>
+	<tr>
+		<td class="label"><label>Личный сайт:</label></td>
+		<td class="input"><input type="text" class="text"></td>
+	</tr>
+	<tr>
+		<td class="label"><label>Место работы:</label></td>
+		<td class="input"><input type="text" class="text"></td>
+	</tr>
+	<tr>
+		<td class="label"><label>Школа:</label></td>
+		<td class="input"><input type="text" class="text"></td>
+	</tr>
+	<tr>
+		<td class="label"><label>ВУЗ:</label></td>
+		<td class="input"><input type="text" class="text"></td>
+	</tr>
+	<tr>
+		<td class="label"><label>О себе:</label></td>
+		<td class="input"><textarea></textarea></td>
+	</tr>
+</table>
+<div style="text-align:center">
+	<button class="button_blue" style="display: inline-block;">Сохранить</button>
+	<span style="margin-left:.5em"><a href="#" id="close_profile_editor">выйти без изменений</a></span>
+</div>
+</div>
+	
     <audio id="audiotag1" src="/static/vkontakte.ru.chat.sound.wav" preload="auto"></audio>
     <script src="{{ static_url("chat.js") }}" type="text/javascript"></script>
     <script src="{{ static_url("jquery.cookie.js") }}" type="text/javascript"></script>
