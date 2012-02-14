@@ -241,7 +241,7 @@ class IndexHandler(BaseHandler):
     """Regular HTTP handler to serve the chatroom page"""
     @tornado.web.authenticated
     def get(self):
-        self.render('index.html', users_online = map(lambda a: loader.load("user.html").generate(current_user=a[0], id=a[1], sex=a[2], away=a[3]), ChatConnection.users_online), quantity=len(ChatConnection.users_online), messages = ChatConnection.messages_cache)
+        self.render('index.html', users_online = map(lambda a: loader.load("user.html").generate(current_user=a[0], id=a[1], sex=a[2], away=a[3], profile=a[4]), ChatConnection.users_online), quantity=len(ChatConnection.users_online), messages = ChatConnection.messages_cache)
 
 class SocketIOHandler(BaseHandler):
     def get(self):
@@ -267,7 +267,6 @@ class ChatConnection(tornadio2.conn.SocketConnection):
         self.user_name = self.get_current_user(info)
         self.waiters.add(self)
         self.user_id = self.get_user_id(info)
-        self.profile = self.get_profile_link(info)
         for i in self.users_online:
             if i[0] == self.user_name:
                 if not i[3] == False:
@@ -280,18 +279,20 @@ class ChatConnection(tornadio2.conn.SocketConnection):
                         waiter.send(drop_away)
         self.send(self.users_online)
         self.user_sex = self.get_user_sex(info)
+        if not self.user_sex == "user":
+            self.profile = self.get_profile_link(info)
         time = datetime.datetime.time(datetime.datetime.now()).strftime("%H:%M")
         new_user = False
         print "Подключился %s" % self.user_name
-        if [self.user_name, self.user_id, self.user_sex, self.away] not in self.users_online:
+        if [self.user_name, self.user_id, self.user_sex, self.away, self.profile] not in self.users_online:
             new_user = True
         if new_user:
             message = {
                 "type": "new_user",
-                "user": loader.load("user.html").generate(current_user=self.user_name, id=self.user_id, sex=self.user_sex, away=self.away),
+                "user": loader.load("user.html").generate(current_user=self.user_name, id=self.user_id, sex=self.user_sex, away=self.away, profile=self.profile),
                 "html": loader.load("new_user.html").generate(time = time, current_user=self.user_name, id=self.user_id, sex=self.user_sex),
             }
-            self.users_online.append([self.user_name, self.user_id, self.user_sex, self.away])
+            self.users_online.append([self.user_name, self.user_id, self.user_sex, self.away, self.profile])
             self.console_message(message)
             if len(ChatConnection.users_online) < 5:
                 message = {
@@ -311,7 +312,7 @@ class ChatConnection(tornadio2.conn.SocketConnection):
                 else:
                     format_message = api.format_message(cgi.escape(input['value']))
                     if format_message[:5] == '/away':
-                        i = self.users_online.index([self.user_name, self.user_id, self.user_sex, self.away])
+                        i = self.users_online.index([self.user_name, self.user_id, self.user_sex, self.away, self.profile])
                         self.away = True
                         message = {
                             "type": "status",
@@ -320,7 +321,7 @@ class ChatConnection(tornadio2.conn.SocketConnection):
                             }
                         for waiter in self.waiters:
                             waiter.send(message)
-                        self.users_online[i] = [self.user_name, self.user_id, self.user_sex, self.away]
+                        self.users_online[i] = [self.user_name, self.user_id, self.user_sex, self.away, self.profile]
                         return
                     elif format_message[:6] == '/kick ':
                         if self.user_name == 'Владимир':
@@ -366,9 +367,9 @@ class ChatConnection(tornadio2.conn.SocketConnection):
                                 "type": "drop_away",
                                 "user_id": self.user_id
                             }
-                            i = self.users_online.index([self.user_name, self.user_id, self.user_sex, self.away])
+                            i = self.users_online.index([self.user_name, self.user_id, self.user_sex, self.away, self.profile])
                             self.away = False
-                            self.users_online[i] = [self.user_name, self.user_id, self.user_sex, self.away]
+                            self.users_online[i] = [self.user_name, self.user_id, self.user_sex, self.away, self.profile]
                             for waiter in self.waiters:
                                 waiter.send(drop_away)
             elif input['name'] == 'personal[]':
@@ -435,7 +436,7 @@ class ChatConnection(tornadio2.conn.SocketConnection):
         try:
             self.waiters.remove(self)
             if self.user_name not in map(lambda a: a.user_name, self.waiters):
-                self.users_online.remove([self.user_name, self.user_id, self.user_sex, self.away])
+                self.users_online.remove([self.user_name, self.user_id, self.user_sex, self.away, self.profile])
                 message = {
                     "type": "user_is_out",
                     "user_id": self.user_id,
@@ -471,10 +472,16 @@ class ChatConnection(tornadio2.conn.SocketConnection):
             return "user"
 
     def get_profile_link(self, info):
-        id = decode_signed_value(application.settings["cookie_secret"],
-            "user_id", info.get_cookie("user_id").value)
-        print id
-        return id
+        try:
+            access_token = decode_signed_value(application.settings["cookie_secret"],
+                "access_token", info.get_cookie("access_token").value)
+            id = decode_signed_value(application.settings["cookie_secret"],
+                "user_id", info.get_cookie("user_id").value)
+            return "http://vk.com/id%s" % id
+        except :
+            user = User.objects.get(username=self.user_name)
+            return "http://russa-chat.ru/profile/%s" % user.id
+
 
 class PingConnection(tornadio2.conn.SocketConnection):
     @tornadio2.event('ping')
