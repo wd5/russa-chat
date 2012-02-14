@@ -261,11 +261,13 @@ class ChatConnection(tornadio2.conn.SocketConnection):
     user_id = None
     user_sex = None
     away = False
+    profile = None
 
     def on_open(self, info):
         self.user_name = self.get_current_user(info)
         self.waiters.add(self)
         self.user_id = self.get_user_id(info)
+        self.profile = self.get_profile_link(info)
         for i in self.users_online:
             if i[0] == self.user_name:
                 if not i[3] == False:
@@ -452,13 +454,13 @@ class ChatConnection(tornadio2.conn.SocketConnection):
     def get_user_sex(self, info):
         username = decode_signed_value(application.settings["cookie_secret"],
             "user", info.get_cookie("user").value)
-        user = User.objects.filter(username=username)
         try:
             sex = decode_signed_value(application.settings["cookie_secret"],
                 "sex", info.get_cookie("sex").value)
             return sex
         except :
             pass
+        user = User.objects.filter(username=username)
         if user:
             user = User.objects.get(username=username)
             if user.is_men:
@@ -467,6 +469,12 @@ class ChatConnection(tornadio2.conn.SocketConnection):
                 return "female"
         else:
             return "user"
+
+    def get_profile_link(self, info):
+        id = decode_signed_value(application.settings["cookie_secret"],
+            "user_id", info.get_cookie("user_id").value)
+        print id
+        return id
 
 class PingConnection(tornadio2.conn.SocketConnection):
     @tornadio2.event('ping')
