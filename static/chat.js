@@ -29,7 +29,7 @@ $(document).ready(function() {
         alert("Пока не работает");
     });
     $('a.quote').live('click',function(){
-       // $("#gear-opener .inner").css('display', 'none');
+        $("#gear-opener .inner").css('display', 'none');
         var form = [{name: "message", value: "/цитата"}];
         s.json.send(form);
     });
