@@ -54,17 +54,16 @@ $(document).ready(function() {
 /*    $('#profile_edit').click(function(){
 		alert('Пока не работает');
     });*/
-    $('a.quote').live('click',function(){
-        
+    $('#cite').live('click',function(){
         var form = [{name: "message", value: "/цитата"}];
         s.json.send(form);
     });
 	
-    $('a.joke').live('click',function(){
+    $('#joke').live('click',function(){
         var form = [{name: "message", value: "/анекдот"}];
         s.json.send(form);
     });
-    $('a.away').live('click',function(){
+    $('#away').live('click',function(){
         var form = [{name: "message", value: "/away"}];
         s.json.send(form);
     });
@@ -93,9 +92,8 @@ $(document).ready(function() {
 	    	}
     	}
         window.scrollTo(0, document.body.scrollHeight);
-        $('#inbox').css({paddingBottom: '135px'});
+        $('#inbox').css({paddingBottom: '145px'});
         $('#inbox').css('visibility', 'visible');
-		console.log($('#inbox'));
 		$('#inbox').show();
         $('#message').focus();
 		
@@ -105,7 +103,7 @@ $(document).ready(function() {
     	$('#personal').val("");
     	$('#private_name').html("");
     	$('.clone_personal').remove();
-    	$('#inbox').css({paddingBottom: '95px'});
+    	//$('#inbox').css({paddingBottom: '95px'});
     	$('.personal_link').removeClass('personal_link');
     });
 
@@ -178,20 +176,11 @@ function addMessage(response){
     }
     else if (response.type == 'status') {
         //$('#' + response.user_id).next().next().text(response.status)
-		console.log(response.user_id + '|' + response.status);
-		if (response.status === true) {
-			$('#' + response.user_id).addClass('away');
-			alert('+');
-		}
-		else if (response.status === false) {
-			$('#' + response.user_id).removeClass('away');
-		}
-		else {
-			console.log('Response.status = ' + response.status);
-		}
+		setUserAwayStatus(response.user_id, response.status);
     }
     else if (response.type == 'drop_away') {
-        $('#' + response.user_id).next().next().text("")
+        //$('#' + response.user_id).next().next().text("")
+		setUserAwayStatus(response.user_id, false);
     }
     else if (response.type == 'kick') {
         alert("Вы плохо себя вели!");
@@ -202,18 +191,27 @@ function addMessage(response){
         $("#sidebar_inner").children('.user').remove();
         for (i in response) {
             $USERS_ONLNE++;
-            //var $status = '';
-            //if (response[i][3]) { $status = response[i][3] }
+            var status = false;
+            if (response[i][3]) { status = response[i][3] }
             $("#sidebar_inner").append("<div class=user>"
 			  + "<a href=noscript id='" + response[i][1] + "' class='user_nik sub_id_" + response[i][1] + " gender_" + response[i][2] + "' title='личное сообщение'>"
 			  + response[i][0]
 			  + "</a>"
 			  + "<a href='#' class=user_info title='информация о пользователе " + response[i][0] + "'>[i]</a>"
-              //+ "<span class=\"alignright\">" + $status + "</span>"
+              //+ "<span class=\"alignright\">" + status + "</span>"
 			+ "</div>");
+			
+			setUserAwayStatus(response[i][1], status);
         }
     }
 	$('html, body').animate({scrollTop: document.body.scrollHeight}, 1000);
 	$('#inbox').css('visibility', 'visible');
 	$('#message').focus();
+}
+
+function setUserAwayStatus(user_id, status) {
+	if (status)
+		$('#' + user_id).parents('.user').addClass('away');
+	else
+		$('#' + user_id).parents('.user').removeClass('away');
 }

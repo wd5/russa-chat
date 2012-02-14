@@ -102,7 +102,7 @@ body.main input{
 	z-index:101;
 }
 #header_block{
-	width: 872px;
+	width: 750px;
 	margin: 0 auto;
 	/*text-shadow: 0 1px 1px #000000;
 	font-weight: bold;*/
@@ -162,6 +162,9 @@ body.main input{
 	zoom: 1;
 	*display: inline;
 	text-decoration: none;
+	
+	-webkit-transition-property: background;
+	-webkit-transition-duration: .2s;
 }
 #sidebar_inner .user_nik:hover{
 	background-color: #d9dcdf;
@@ -169,6 +172,9 @@ body.main input{
 	-moz-box-shadow:inset 0 1px 2px #cdd2d7;
 	-webkit-box-shadow:inset 0 1px 2px #cdd2d7;
 	border-radius:5px;
+}
+#sidebar_inner .away {
+	opacity: .6;
 }
 
 #sidebar_inner .gender_user {
@@ -212,6 +218,7 @@ body.main input{
 */
 #private_name{
 	position: relative;
+	min-height: 2em;
 }
 #private_name div{
 	padding: 5px 10px;
@@ -334,15 +341,16 @@ body.main input{
     width: 630px;
     z-index: 200;
 }
-#input table{
+/*#input table{
 	width: 100%;
-}
+}*/
 #input .input_block{
 	padding: 20px;
 }
 .button_blue{
 	height: 30px;
     padding: 0 15px;
+	margin-top: .5em;
     background:#6398d9; 
     background:-moz-linear-gradient(top,#77a8e2,#5189d0); 
     background:-webkit-gradient(linear,left bottom,left top,color-stop(0,#5189d0),color-stop(1,#77a8e2)); 
@@ -470,13 +478,13 @@ body.main input{
 	color: rgba(81,180,22,.8);
 }
 #fullscreen #inbox{
-	padding: 52px 10px 95px 0;
+	padding: 52px 10px 145px 0;
 }
 #fullscreen #input{
 	width: 100%;
 }
 #fullscreen #input .input_block{
-	padding: 20px 242px 20px 20px;
+	padding: 10px 242px 20px 20px;
 }
 #fullscreen #message{
 	width: 95%;
@@ -560,6 +568,31 @@ body.main input{
 	}
 	#profile_editor textarea { height: 100px }
 
+.away_btn, .cite_btn , .joke_btn {
+	display: inline-block;
+	padding: 4px 10px 5px 27px;
+	background: #F7F7F7 url(http://cdn1.iconfinder.com/data/icons/silk2/status_away.png) no-repeat 4px 3px;
+	text-decoration: none;
+	
+	-webkit-transition-property: background-color, border-radius;
+	-webkit-transition-duration: .2s;
+	}
+	.away_btn:hover, .cite_btn:hover, .joke_btn:hover {
+		background-color: #ddd;
+		box-shadow:inset 0 1px 2px #cdd2d7;
+		-moz-box-shadow:inset 0 1px 2px #cdd2d7;
+		-webkit-box-shadow:inset 0 1px 2px #cdd2d7;
+		border-radius:5px;
+	}
+.joke_btn { background: #F7F7F7 url(http://cdn1.iconfinder.com/data/icons/fugue/icon/balloon-quotation.png) no-repeat 4px 3px; }
+.cite_btn { background: #F7F7F7 url(http://cdn1.iconfinder.com/data/icons/splashyIcons/comments_reply.png) no-repeat 4px 3px; }
+
+.input_table { width: 75% }
+
+@media only screen and (max-width: 1024px) {
+  .input_table { width: 120% }
+}
+	
 /*END*/
 @media print{
 *{background:transparent !important;color:black !important;text-shadow:none !important;filter:none !important;-ms-filter:none !important}

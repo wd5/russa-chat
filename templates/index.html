@@ -56,9 +56,9 @@ $(function(){
 								<td>
 									<div class="rows">
 										<a id="profile_edit" style="background-image: url(http://cdn1.iconfinder.com/data/icons/spirit20/user-profile.png); background-position: 2px 0px; "><nobr>Редактировать профиль</nobr></a>
-										<a class="joke" style="background-image: url(http://cdn1.iconfinder.com/data/icons/fugue/icon/balloon-quotation.png); background-position: 4px 3px; "><nobr>Анекдот</nobr></a>
+										<!--a class="joke" style="background-image: url(http://cdn1.iconfinder.com/data/icons/fugue/icon/balloon-quotation.png); background-position: 4px 3px; "><nobr>Анекдот</nobr></a>
 										<a class="quote" style="background-image: url(http://cdn1.iconfinder.com/data/icons/splashyIcons/comments_reply.png); background-position: 4px 3px; "><nobr>Цитата</nobr></a>
-										<a class="away" style="background-image: url(http://cdn1.iconfinder.com/data/icons/silk2/status_away.png); background-position: 4px 3px; "><nobr>Отойду</nobr></a>
+										<a class="away" style="background-image: url(http://cdn1.iconfinder.com/data/icons/silk2/status_away.png); background-position: 4px 3px; "><nobr>Отойду</nobr></a-->
 									</div>
 								</td>
 								<td class="side"><div></div></td>
@@ -92,25 +92,30 @@ $(function(){
 				      <div id="input">
 				      	<div class="input_block">
 				      	{% include smile.html %}
-				      	<div id="private_name">
-				      	</div>
-				        <form action="/a/message/new" method="post" id="messageform">
-				          <table>
-				            <tr>
-				          	  <td></td>
-				              <td><textarea name="message" id="message" placeholder="Ваше сообщение..."/></textarea></td>
-				              <td class="send_button">
-				                <input class="button_blue" type="submit" value="{{ _("Отправить") }}"/>
-				                {% module xsrf_form_html() %}
-				              </td>
-				              <td class="smile_button">
-				                <a id="smile_link" href="javascript:smiles()" title="Смайлы">Smiles</a>
-				              </td>
-				            </tr>
-				          </table>
-				          <input id="private" type="hidden" value="" name="private">
-				          <input id="personal" type="hidden" value="" name="personal[]">
-				        </form>
+						
+				      	<div id="private_name"></div>
+						
+						<table  class="input_table">
+							<tr>
+								<td width=50>
+									<a id="smile_link" href="javascript:smiles()" title="Смайлы">Smiles</a>
+								</td>
+								<td>
+									<form action="/a/message/new" method="post" id="messageform">
+									  <textarea name="message" id="message" placeholder="Ваше сообщение..."></textarea>
+									  <input id="private" type="hidden" value="" name="private">
+									  <input id="personal" type="hidden" value="" name="personal[]">
+									</form>
+									<input class="button_blue" type="submit" value="{{ _("Отправить") }}"/>
+									{% module xsrf_form_html() %}
+								</td>
+								<td width=160>
+									<a href="javascript:void(0)" class="away_btn" id="away">Отойду</a><br>
+									<a href="javascript:void(0)" class="cite_btn" id="cite">Получить цитату</a><br>
+									<a href="javascript:void(0)" class="joke_btn" id="joke">Получить анекдот</a>
+								</td>
+							</tr>
+						</table>
 				        </div>
 				      </div>
 

@@ -1,3 +1,3 @@
 <div class=user>
-    <a href=noscript id='{{ id }}" href="noscript" class="user_nik sub_id_{{ id }} gender_{{ sex }}" title="личное сообщение">{{ current_user }}</a><a href='{{ profile }}' class=user_info title="информация о пользователе {{current_user}}">[i]</a><!--span class="alignright">{% if away %}{{away}}{% end %}</span-->
+    <a id="{{ id }}" href="noscript" class="user_nik sub_id_{{ id }} gender_{{ sex }} {% if away %}{{away}}{% end %}" title="личное сообщение">{{ current_user }}</a><a href='{{ profile }}' class=user_info title="информация о пользователе {{current_user}}">[i]</a><!--span class="alignright"></span-->
 </div>
