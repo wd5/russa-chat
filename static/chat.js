@@ -25,12 +25,20 @@ $(document).ready(function() {
             newMessage($('#messageform'), s);
         }
     });
+    $('a.edit_profile').live('click',function(){
+        alert("Пока не работает");
+    });
     $('a.quote').live('click',function(){
+        $("#gear-opener .inner").css('display', 'none');
         var form = [{name: "message", value: "/цитата"}];
         s.json.send(form);
     });
     $('a.joke').live('click',function(){
         var form = [{name: "message", value: "/анекдот"}];
+        s.json.send(form);
+    });
+    $('a.away').live('click',function(){
+        var form = [{name: "message", value: "/away"}];
         s.json.send(form);
     });
     //Приват
