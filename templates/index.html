@@ -27,26 +27,6 @@ $(function(){
 	})
 	
 	$(window).trigger('resize');
-	
-	$( "#profile_editor" ).dialog({
-		width: 630,
-		modal: true,
-		autoOpen: false,
-		/*buttons: {
-			"Сохранить": function() {},
-			"выйти без изменений": function() {
-				$( this ).dialog( "close" );
-			}
-		}*/
-	});
-	
-	$("#profile_edit").click(function(){
-		$( "#profile_editor" ).dialog( "open" );
-	});
-	$("#close_profile_editor").click(function(){
-		$( "#profile_editor" ).dialog( "close" );
-	});
-
 })
 </script>
 </head>

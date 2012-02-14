@@ -25,14 +25,41 @@ $(document).ready(function() {
             newMessage($('#messageform'), s);
         }
     });
-    $('a.edit_profile').live('click',function(){
-        alert("Пока не работает");
-    });
+	
+	$('#gear-opener').hover(function(){
+		$("#gear-opener .inner").show();
+	}, function(){
+		$("#gear-opener .inner").hide();
+	});
+	$('#gear-opener a').click(function(){
+		$("#gear-opener .inner").hide();
+	});	
+	
+	/**
+	 * Модульное окно редактирования профиля
+	 */
+	 $( "#profile_editor" ).dialog({
+		width: 630,
+		modal: true,
+		autoOpen: false,
+	});
+	$("#profile_edit").click(function(){
+		$( "#profile_editor" ).dialog( "open" );
+	});
+	$("#close_profile_editor").click(function(){
+		$( "#profile_editor" ).dialog( "close" );
+	});
+
+	
+/*    $('#profile_edit').click(function(){
+		alert('Пока не работает');
+    });*/
     $('a.quote').live('click',function(){
-        $("#gear-opener .inner").css('display', 'none');
+        
         var form = [{name: "message", value: "/цитата"}];
         s.json.send(form);
     });
+	
     $('a.joke').live('click',function(){
         var form = [{name: "message", value: "/анекдот"}];
         s.json.send(form);
@@ -150,7 +177,18 @@ function addMessage(response){
         $('#sidebar_inner').children('h6').replaceWith('<h6>Пользователи онлайн(' + $USERS_ONLNE + '):</h6>')
     }
     else if (response.type == 'status') {
-        $('#' + response.user_id).next().next().text(response.status)
+        //$('#' + response.user_id).next().next().text(response.status)
+		console.log(response.user_id + '|' + response.status);
+		if (response.status === true) {
+			$('#' + response.user_id).addClass('away');
+			alert('+');
+		}
+		else if (response.status === false) {
+			$('#' + response.user_id).removeClass('away');
+		}
+		else {
+			console.log('Response.status = ' + response.status);
+		}
     }
     else if (response.type == 'drop_away') {
         $('#' + response.user_id).next().next().text("")
@@ -164,14 +202,14 @@ function addMessage(response){
         $("#sidebar_inner").children('.user').remove();
         for (i in response) {
             $USERS_ONLNE++;
-            var $status = '';
-            if (response[i][3]) { $status = response[i][3] }
+            //var $status = '';
+            //if (response[i][3]) { $status = response[i][3] }
             $("#sidebar_inner").append("<div class=user>"
 			  + "<a href=noscript id='" + response[i][1] + "' class='user_nik sub_id_" + response[i][1] + " gender_" + response[i][2] + "' title='личное сообщение'>"
 			  + response[i][0]
 			  + "</a>"
 			  + "<a href='#' class=user_info title='информация о пользователе " + response[i][0] + "'>[i]</a>"
-              + "<span class=\"alignright\">" + $status + "</span>"
+              //+ "<span class=\"alignright\">" + $status + "</span>"
 			+ "</div>");
         }
     }

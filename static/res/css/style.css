@@ -520,8 +520,8 @@ body.main input{
   border: 1px solid #96AABE;
 }
 
-#gear-opener:hover .inner { display: block !important }
-#gear-opener:active .inner { display: none !important }
+/*#gear-opener:hover .inner { display: block !important }*/
+/*#gear-opener:active .inner { display: none !important }*/
 
 #gear-opener .inner {
 	padding: 0 0 10px;
