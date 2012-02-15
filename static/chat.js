@@ -199,7 +199,7 @@ function addMessage(response){
                 + "<a href=noscript id='" + response[i][1] + "' class='user_nik sub_id_" + response[i][1] + " gender_" + response[i][2] + "' title='личное сообщение'>"
                 + response[i][0]
                 + "</a>"
-                + "<a href='" + response[i][4] + "' class=user_info title='информация о пользователе " + response[i][0] + "'>[i]</a>"
+                + "<a target='_blank' href='" + response[i][4] + "' class=user_info title='информация о пользователе " + response[i][0] + "'>[i]</a>"
                 //+ "<span class=\"alignright\">" + status + "</span>"
                 + "</div>"
                 }
