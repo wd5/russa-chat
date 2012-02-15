@@ -324,6 +324,8 @@ class ChatConnection(tornadio2.conn.SocketConnection):
                     return
                 else:
                     format_message = api.format_message(cgi.escape(input['value']))
+                    if len(format_message) > 100:
+                        return
                     if format_message[:5] == '/away':
                         return
                     elif format_message[:6] == '/kick ':
