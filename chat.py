@@ -86,10 +86,10 @@ class BaseHandler(tornado.web.RequestHandler, VKMixin):
             return "user"
     
     def is_vk(self):
-        try:
-            self.get_secure_cookie("access_token")
+        if self.get_secure_cookie("access_token"):
+            print "lala"
             return True
-        except :
+        else:
             return False
 
 class Registration(BaseHandler):
