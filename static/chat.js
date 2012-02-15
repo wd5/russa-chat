@@ -19,7 +19,7 @@ $(document).ready(function() {
             return false;
         }
     });
-    $("#messageform input").live("click", function(event) {
+    $(".button_blue").live("click", function(event) {
         event.preventDefault();
         if ($.trim($('#messageform').find("textarea").val()) != "") {
             newMessage($('#messageform'), s);
