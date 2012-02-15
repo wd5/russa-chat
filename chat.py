@@ -84,6 +84,13 @@ class BaseHandler(tornado.web.RequestHandler, VKMixin):
             return self.get_secure_cookie('sex')
         else:
             return "user"
+    
+    def is_vk(self):
+        try:
+            self.get_secure_cookie("access_token")
+            return True
+        except :
+            return False
 
 class Registration(BaseHandler):
     men = False
@@ -241,7 +248,7 @@ class IndexHandler(BaseHandler):
     """Regular HTTP handler to serve the chatroom page"""
     @tornado.web.authenticated
     def get(self):
-        self.render('index.html', users_online = map(lambda a: loader.load("user.html").generate(current_user=a[0], id=a[1], sex=a[2], away=a[3], profile=a[4]), ChatConnection.users_online), quantity=len(ChatConnection.users_online), messages = ChatConnection.messages_cache)
+        self.render('index.html',sex=self.get_user_sex(), is_vk = self.is_vk(), users_online = map(lambda a: loader.load("user.html").generate(current_user=a[0], id=a[1], sex=a[2], away=a[3], profile=a[4]), ChatConnection.users_online), quantity=len(ChatConnection.users_online), messages = ChatConnection.messages_cache)
 
 
 class ProfileHandler(BaseHandler):

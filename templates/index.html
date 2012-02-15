@@ -43,8 +43,9 @@ $(function(){
 			<div id="header_logo" class="alignleft">
 				<a href="/">чат г.Старая Русса beta</a>
 			</div>
-			
+
 			<div class="nav alignright">
+                {% if not sex == 'user' and is_vk == 'true' %}
 				<a id="gear-opener">
 					<img src="/static/res/img/cog.png">
 					
@@ -67,6 +68,7 @@ $(function(){
 					</table>
 					</div>
 				</a>
+                {% end %}
 				<a href="/auth/logout" id="logout" title="выйти"><img src="/static/res/img/Gnome-System-Log-Out-32.png"></a>
 			</div><!-- /class=nav -->
 			
