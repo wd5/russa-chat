@@ -324,17 +324,9 @@ class ChatConnection(tornadio2.conn.SocketConnection):
                     return
                 else:
                     format_message = api.format_message(cgi.escape(input['value']))
+                    if len(format_message) > 100:
+                        return 
                     if format_message[:5] == '/away':
-                        i = self.users_online.index([self.user_name, self.user_id, self.user_sex, self.away, self.profile])
-                        self.away = True
-                        message = {
-                            "type": "status",
-                            "user_id": self.user_id,
-                            "status" : self.away,
-                            }
-                        for waiter in self.waiters:
-                            waiter.send(message)
-                        self.users_online[i] = [self.user_name, self.user_id, self.user_sex, self.away, self.profile]
                         return
                     elif format_message[:6] == '/kick ':
                         if self.user_name == 'Владимир':
@@ -352,22 +344,8 @@ class ChatConnection(tornadio2.conn.SocketConnection):
                                 pass
                             return
                     elif format_message[:7] == u'/цитата':
-                        citata = Quote.objects.order_by('?')[0]
-                        message = {
-                            "type": "new_message",
-                            "html": loader.load("console_message.html").generate(time = time, current_user=self.user_name, id=self.user_id, sex=self.user_sex, msg=citata, type=True),
-                            "message" : format_message,
-                            }
-                        self.console_message(message)
                         return
                     elif format_message[:8] == u'/анекдот':
-                        anekdote = Anekdote.objects.order_by('?')[0]
-                        message = {
-                            "type": "new_message",
-                            "html": loader.load("console_message.html").generate(time = time, current_user=self.user_name, id=self.user_id, sex=self.user_sex, msg=anekdote, type=False),
-                            "message" : format_message,
-                            }
-                        self.console_message(message)
                         return
                     else:
                         message = {
