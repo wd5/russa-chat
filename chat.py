@@ -87,7 +87,6 @@ class BaseHandler(tornado.web.RequestHandler, VKMixin):
     
     def is_vk(self):
         if self.get_secure_cookie("access_token"):
-            print "lala"
             return True
         else:
             return False
