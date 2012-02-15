@@ -130,7 +130,6 @@ $(document).ready(function() {
 
 // Постинг сообщения в чат
 function newMessage(form, s) {
-    console.log(form.serializeArray());
     s.json.send(form.serializeArray());
     $('#messageform').find("textarea").val('');
     form.slideDown();
@@ -211,7 +210,6 @@ function addMessage(response){
                 + "</div>"
             }
 
-            console.log($user_html);
             $("#sidebar_inner").append($user_html);
 			setUserAwayStatus(response[i][1], status);
         }
