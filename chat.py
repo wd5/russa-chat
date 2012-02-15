@@ -243,6 +243,13 @@ class IndexHandler(BaseHandler):
     def get(self):
         self.render('index.html', users_online = map(lambda a: loader.load("user.html").generate(current_user=a[0], id=a[1], sex=a[2], away=a[3], profile=a[4]), ChatConnection.users_online), quantity=len(ChatConnection.users_online), messages = ChatConnection.messages_cache)
 
+
+class ProfileHandler(BaseHandler):
+    """Regular HTTP handler to serve the chatroom page"""
+    @tornado.web.authenticated
+    def get(self, profile_id):
+        self.render('profile.html')
+
 class SocketIOHandler(BaseHandler):
     def get(self):
         self.render(op.join(ROOT, '/static/socket.io.js'))
@@ -480,7 +487,7 @@ class ChatConnection(tornadio2.conn.SocketConnection):
             return "http://vk.com/id%s" % id
         except :
             user = User.objects.get(username=self.user_name)
-            return "http://russa-chat.ru/profile/%s" % user.id
+            return "/profile/%s" % user.id
 
 
 class PingConnection(tornadio2.conn.SocketConnection):
@@ -594,6 +601,7 @@ urls = ([(r"/", IndexHandler),
          (r"/stats", StatsHandler),
          (r"/socket.io.js", SocketIOHandler),
          (r"/reg", Registration),
+         (r"/profile/([0-9]+)", ProfileHandler),
          (r"/auth/login", AuthLoginHandler),
          (r"/auth/logout", AuthLogoutHandler),
          (r"/vkauth", VKHandler),
