@@ -192,15 +192,27 @@ function addMessage(response){
         for (i in response) {
             $USERS_ONLNE++;
             var status = false;
+            var user_html;
             if (response[i][3]) { status = response[i][3] }
-            $("#sidebar_inner").append("<div class=user>"
-			  + "<a href=noscript id='" + response[i][1] + "' class='user_nik sub_id_" + response[i][1] + " gender_" + response[i][2] + "' title='личное сообщение'>"
-			  + response[i][0]
-			  + "</a>"
-			  + "<a href='#' class=user_info title='информация о пользователе " + response[i][0] + "'>[i]</a>"
-              //+ "<span class=\"alignright\">" + status + "</span>"
-			+ "</div>");
-			
+            if (response[i][4]) {
+                $user_html = "<div class=user>"
+                + "<a href=noscript id='" + response[i][1] + "' class='user_nik sub_id_" + response[i][1] + " gender_" + response[i][2] + "' title='личное сообщение'>"
+                + response[i][0]
+                + "</a>"
+                + "<a href='" + response[i][4] + "' class=user_info title='информация о пользователе " + response[i][0] + "'>[i]</a>"
+                //+ "<span class=\"alignright\">" + status + "</span>"
+                + "</div>"
+                }
+            else {
+                $user_html = "<div class=user>"
+                + "<a href=noscript id='" + response[i][1] + "' class='user_nik sub_id_" + response[i][1] + " gender_" + response[i][2] + "' title='личное сообщение'>"
+                + response[i][0]
+                + "</a>"
+                + "</div>"
+            }
+
+            console.log($user_html);
+            $("#sidebar_inner").append($user_html);
 			setUserAwayStatus(response[i][1], status);
         }
     }
