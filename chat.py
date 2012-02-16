@@ -5,7 +5,6 @@ import uuid
 import datetime
 import re
 import time
-from tornado.httpclient import AsyncHTTPClient
 from api import api
 from api.models import User, Quote, Anekdote
 from api.mixins import VKMixin
@@ -19,10 +18,6 @@ import tornadio2.router
 import tornadio2.server
 import tornadio2.conn
 import os.path
-import logging
-from urllib import urlencode
-import urllib
-from tornado import gen
 from tornado.web import decode_signed_value
 try:
   from local_settings import *
@@ -217,14 +212,14 @@ class AuthLogoutHandler(BaseHandler):
   def get(self):
       self.clear_all_cookies()
       self.redirect("/")
-      time = datetime.datetime.time(datetime.datetime.now()).strftime("%H:%M")
+      time_now = datetime.datetime.time(datetime.datetime.now()).strftime("%H:%M")
       username = self.get_current_user()
       userid = self.get_user_id()
       sex = self.get_user_sex()
       message = {
           "type": "user_is_out",
           "user_id": userid,
-          "html": loader.load("message_out.html").generate(time = time, sex = sex, current_user = username, timeout=False),
+          "html": loader.load("message_out.html").generate(time = time_now, sex = sex, current_user = username, timeout=False),
           }
       for waiter in ChatConnection.waiters:
           waiter.send(message)
@@ -275,6 +270,8 @@ class ChatConnection(tornadio2.conn.SocketConnection):
     user_sex = None
     away = False
     profile = None
+    first_message_time = None
+    count_message = 0
 
     def on_open(self, info):
         self.user_name = self.get_current_user(info)
@@ -294,7 +291,7 @@ class ChatConnection(tornadio2.conn.SocketConnection):
         self.user_sex = self.get_user_sex(info)
         if not self.user_sex == "user":
             self.profile = self.get_profile_link(info)
-        time = datetime.datetime.time(datetime.datetime.now()).strftime("%H:%M")
+        time_now = datetime.datetime.time(datetime.datetime.now()).strftime("%H:%M")
         new_user = False
         print "Подключился %s" % self.user_name
         if [self.user_name, self.user_id, self.user_sex, self.away, self.profile] not in self.users_online:
@@ -303,19 +300,39 @@ class ChatConnection(tornadio2.conn.SocketConnection):
             message = {
                 "type": "new_user",
                 "user": loader.load("user.html").generate(current_user=self.user_name, id=self.user_id, sex=self.user_sex, away=self.away, profile=self.profile),
-                "html": loader.load("new_user.html").generate(time = time, current_user=self.user_name, id=self.user_id, sex=self.user_sex),
+                "html": loader.load("new_user.html").generate(time = time_now, current_user=self.user_name, id=self.user_id, sex=self.user_sex),
             }
             self.users_online.append([self.user_name, self.user_id, self.user_sex, self.away, self.profile])
             self.console_message(message)
             if len(ChatConnection.users_online) < 5:
                 message = {
                     "type": "new_message",
-                    "html": loader.load("system_message.html").generate(time = time, message="В данный момент в чате мало народу, не уходите а просто оставьте вкладку открытой, только так здесь будет с кем поговорить:)"),
+                    "html": loader.load("system_message.html").generate(time = time_now, message="В данный момент в чате мало народу, не уходите а просто оставьте вкладку открытой, только так здесь будет с кем поговорить:)"),
                     }
                 self.send(message)
 
     def on_message(self, message_src):
-        time = datetime.datetime.time(datetime.datetime.now()).strftime("%H:%M")
+        self.count_message+=1
+        if self.first_message_time:
+            self.last_message_time = time.time()
+            if int(str(self.last_message_time - self.first_message_time).split(".")[0]) > 3:
+                self.first_message_time = None
+                self.count_message = 0
+            elif self.count_message > 5:
+                message = {
+                    "type": "kick",
+                    }
+                for waiter in self.waiters:
+                    if waiter.user_name == self.user_name:
+                        waiter_del = waiter
+                        waiter.send(message)
+                try:
+                    ChatConnection.waiters.remove(waiter_del)
+                except :
+                    pass
+        else:
+            self.first_message_time = time.time()
+        time_now = datetime.datetime.time(datetime.datetime.now()).strftime("%H:%M")
         personals = []
         private = False
         for input in message_src:
@@ -323,6 +340,8 @@ class ChatConnection(tornadio2.conn.SocketConnection):
                 if not input['value']:
                     return
                 else:
+                    if len(input['value']) > 500:
+                        return
                     format_message = api.format_message(cgi.escape(input['value']))
                     if format_message[:5] == '/away':
                         i = self.users_online.index([self.user_name, self.user_id, self.user_sex, self.away, self.profile])
@@ -355,7 +374,7 @@ class ChatConnection(tornadio2.conn.SocketConnection):
                         citata = Quote.objects.order_by('?')[0]
                         message = {
                             "type": "new_message",
-                            "html": loader.load("console_message.html").generate(time = time, current_user=self.user_name, id=self.user_id, sex=self.user_sex, msg=citata, type=True),
+                            "html": loader.load("console_message.html").generate(time = time_now, current_user=self.user_name, id=self.user_id, sex=self.user_sex, msg=citata, type=True),
                             "message" : format_message,
                             }
                         self.send(message)
@@ -374,7 +393,7 @@ class ChatConnection(tornadio2.conn.SocketConnection):
                         anekdote = Anekdote.objects.order_by('?')[0]
                         message = {
                             "type": "new_message",
-                            "html": loader.load("console_message.html").generate(time = time, current_user=self.user_name, id=self.user_id, sex=self.user_sex, msg=anekdote, type=False),
+                            "html": loader.load("console_message.html").generate(time = time_now, current_user=self.user_name, id=self.user_id, sex=self.user_sex, msg=anekdote, type=False),
                             "message" : format_message,
                             }
                         self.send(message)
@@ -392,7 +411,7 @@ class ChatConnection(tornadio2.conn.SocketConnection):
                     else:
                         message = {
                             "type": "new_message",
-                            "html": loader.load("message.html").generate(message=format_message, time = time, current_user=self.user_name, id=self.user_id),
+                            "html": loader.load("message.html").generate(message=format_message, time = time_now, current_user=self.user_name, id=self.user_id),
                             "message" : format_message,
                         }
                         if self.away:
@@ -417,12 +436,12 @@ class ChatConnection(tornadio2.conn.SocketConnection):
                     message1 = {
                         "private" : "True",
                         "type": "new_message",
-                        "html": loader.load("private_message.html").generate(message=message["message"], time = time, current_user=self.user_name, id=self.user_id, who="тебя"),
+                        "html": loader.load("private_message.html").generate(message=message["message"], time = time_now, current_user=self.user_name, id=self.user_id, who="тебя"),
                     }
                     message2 = {
                         "private" : "True",
                         "type": "new_message",
-                        "html": loader.load("private_message.html").generate(message=message["message"], time = time, current_user=self.user_name, id=self.user_id, who=private_to),
+                        "html": loader.load("private_message.html").generate(message=message["message"], time = time_now, current_user=self.user_name, id=self.user_id, who=private_to),
                     }
                     private = True
         if personals:
@@ -431,9 +450,9 @@ class ChatConnection(tornadio2.conn.SocketConnection):
             for waiter in self.waiters:
                 if waiter.user_id in personals:
                     personals_name.add(waiter.user_name)
-            message["html"] = loader.load("personal_message.html").generate(message=message["message"], time = time, current_user=self.user_name, id=self.user_id, personals=personals_name)
+            message["html"] = loader.load("personal_message.html").generate(message=message["message"], time = time_now, current_user=self.user_name, id=self.user_id, personals=personals_name)
             message["personal"] = "True"
-            message_for_all["html"] = loader.load("personal_message_all.html").generate(message=message["message"], time = time, current_user=self.user_name, id=self.user_id, personals=personals_name)
+            message_for_all["html"] = loader.load("personal_message_all.html").generate(message=message["message"], time = time_now, current_user=self.user_name, id=self.user_id, personals=personals_name)
             message_for_all["type"] = "new_message"
             del message["message"]
             for waiter in self.waiters:
@@ -465,7 +484,7 @@ class ChatConnection(tornadio2.conn.SocketConnection):
             ChatConnection.messages_cache = ChatConnection.messages_cache[1:]
 
     def on_close(self):
-        time = datetime.datetime.time(datetime.datetime.now()).strftime("%H:%M")
+        time_now = datetime.datetime.time(datetime.datetime.now()).strftime("%H:%M")
         try:
             self.waiters.remove(self)
             if self.user_name not in map(lambda a: a.user_name, self.waiters):
@@ -473,7 +492,7 @@ class ChatConnection(tornadio2.conn.SocketConnection):
                 message = {
                     "type": "user_is_out",
                     "user_id": self.user_id,
-                    "html": loader.load("message_out.html").generate(time = time, sex = self.user_sex, current_user = self.user_name, timeout=True),
+                    "html": loader.load("message_out.html").generate(time = time_now, sex = self.user_sex, current_user = self.user_name, timeout=True),
                 }
                 self.console_message(message)
         except :
@@ -530,7 +549,7 @@ class VKHandler(BaseHandler, VKMixin):
   @tornado.web.asynchronous
   def get(self):
       self.clear_all_cookies()
-      time = datetime.datetime.time(datetime.datetime.now()).strftime("%H:%M")
+      time_now = datetime.datetime.time(datetime.datetime.now()).strftime("%H:%M")
       username = self.get_current_user()
       userid = self.get_user_id()
       sex = self.get_user_sex()
@@ -538,7 +557,7 @@ class VKHandler(BaseHandler, VKMixin):
           message = {
               "type": "user_is_out",
               "user_id": userid,
-              "html": loader.load("message_out.html").generate(time = time, sex = sex, current_user = username, timeout=False),
+              "html": loader.load("message_out.html").generate(time = time_now, sex = sex, current_user = username, timeout=False),
               }
           for waiter in ChatConnection.waiters:
               waiter.send(message)
