@@ -627,7 +627,7 @@ application = tornado.web.Application(
     xsrf_cookies=True,
     template_path=os.path.join(os.path.dirname(__file__), "templates"),
     cookie_secret="43oETzKXQAGaYdkL5gEmGeJJFuYh7EQnp2XdTP1o/Vo=",
-    debug=False,
+    debug=True,
     login_url="/auth/login",
     client_id=2644170,
     client_secret="2Z8zrQH5wFGJGLGHOt3u",
