@@ -359,6 +359,16 @@ class ChatConnection(tornadio2.conn.SocketConnection):
                             "message" : format_message,
                             }
                         self.send(message)
+                        if self.away:
+                            drop_away = {
+                                "type": "drop_away",
+                                "user_id": self.user_id
+                            }
+                            i = self.users_online.index([self.user_name, self.user_id, self.user_sex, self.away, self.profile])
+                            self.away = False
+                            self.users_online[i] = [self.user_name, self.user_id, self.user_sex, self.away, self.profile]
+                            for waiter in self.waiters:
+                                waiter.send(drop_away)
                         return
                     elif format_message[:8] == u'/анекдот':
                         anekdote = Anekdote.objects.order_by('?')[0]
@@ -368,6 +378,16 @@ class ChatConnection(tornadio2.conn.SocketConnection):
                             "message" : format_message,
                             }
                         self.send(message)
+                        if self.away:
+                            drop_away = {
+                                "type": "drop_away",
+                                "user_id": self.user_id
+                            }
+                            i = self.users_online.index([self.user_name, self.user_id, self.user_sex, self.away, self.profile])
+                            self.away = False
+                            self.users_online[i] = [self.user_name, self.user_id, self.user_sex, self.away, self.profile]
+                            for waiter in self.waiters:
+                                waiter.send(drop_away)
                         return
                     else:
                         message = {
