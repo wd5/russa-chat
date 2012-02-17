@@ -129,10 +129,11 @@ $(function(){
 	
 <div id="profile_editor" title="Редактирование профиля">
 <form action="#" method="post" id="profile-form">
+{% module xsrf_form_html() %}
 <table cellspacing="3">
 	<tr>
 		<td class="label"><label>Имя:</label></td>
-		<td class="input"><input type="text" class="text" id="pedit_first_name"></td>
+		<td class="input"><input type="text" class="text" id="name"></td>
 	</tr>
 	<tr>
 		<td class="label"><label>Фамилия:</label></td>

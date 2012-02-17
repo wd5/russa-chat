@@ -52,12 +52,10 @@ $(document).ready(function() {
 
 	$('#profile-save').click(function(){
 		var profileForm = $('#profile-form');
-		$.post('test.html', profileForm.serialize(), function(data) {
+		$.post('/profile', profileForm.serialize(), function(data) {
 		 console.log(data);
 		});
-	})
-
-	
+	});
 /*    $('#profile_edit').click(function(){
 		alert('Пока не работает');
     });*/

@@ -13,6 +13,21 @@ class User(models.Model):
     username = models.CharField(max_length=15, unique=True)
     password = models.CharField(max_length=128)
     is_men = models.BooleanField()
+    name = models.CharField(max_length=15,blank=True)
+    patronymic = models.CharField(max_length=15, blank=True)
+    birthday = models.DateField(null=True)
+    birthplace = models.CharField(max_length=15, blank=True)
+    liveplace = models.CharField(max_length=15, blank=True)
+    phone = models.IntegerField(max_length=15, null=True)
+    skype = models.CharField(max_length=15, blank=True)
+    vkontakte = models.URLField(max_length=15, blank=True)
+    facebook = models.URLField(max_length=15, blank=True)
+    twitter = models.URLField(max_length=15, blank=True)
+    site = models.URLField(max_length=15, blank=True)
+    work = models.CharField(max_length=15, blank=True)
+    school = models.CharField(max_length=15, blank=True)
+    institute = models.CharField(max_length=15, blank=True)
+    about = models.TextField(max_length=300, blank=True)
 
     class Meta:
         db_table = 'user'

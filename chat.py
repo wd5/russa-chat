@@ -251,6 +251,11 @@ class ProfileHandler(BaseHandler):
     def get(self, profile_id):
         self.render('profile.html')
 
+class PostProfile(BaseHandler):
+    @tornado.web.authenticated
+    def post(self):
+        print self.get_argument("name")
+
 class SocketIOHandler(BaseHandler):
     def get(self):
         self.render(op.join(ROOT, '/static/socket.io.js'))
@@ -647,6 +652,7 @@ urls = ([(r"/", IndexHandler),
          (r"/socket.io.js", SocketIOHandler),
          (r"/reg", Registration),
          (r"/profile/([0-9]+)", ProfileHandler),
+         (r"/profile", PostProfile),
          (r"/auth/login", AuthLoginHandler),
          (r"/auth/logout", AuthLogoutHandler),
          (r"/vkauth", VKHandler),
