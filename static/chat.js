@@ -50,6 +50,13 @@ $(document).ready(function() {
 		$( "#profile_editor" ).dialog( "close" );
 	});
 
+	$('#profile-save').click(function(){
+		var profileForm = $('#profile-form');
+		$.post('test.html', profileForm.serialize(), function(data) {
+		 console.log(data);
+		});
+	})
+
 	
 /*    $('#profile_edit').click(function(){
 		alert('Пока не работает');

@@ -18,12 +18,13 @@ $(window).load(function(){
     window.scrollTo(0,1e3);
 });
 $(function(){
-	$(window).resize(function(event){
 		var sidebar = $('#sidebar');
 		var sidebar_inner = $('#sidebar_inner');
+		var header = $('#header');
 		var input = $('#input');
-		sidebar.css('height', sidebar.height() - input.height());
-		sidebar_inner.css('height', sidebar_inner.height() - input.height());
+
+	$(window).resize(function(event){
+		sidebar_inner.css('height', sidebar.height() - input.height() - header.height() - 25);//sidebar_inner.height() - input.height() + header.height());
 	})
 	
 	$(window).trigger('resize');
@@ -50,7 +51,7 @@ $(function(){
 					<img src="/static/res/img/cog.png">
 					
 					<div class="inner">
-					<table cellspacing="0" cellpadding="0" id="gear-items">  
+					<table cellspacing="0" cellpadding="0" id="gear-items">
 						<tbody>
 							<tr>    
 								<td class="side"><div></div></td>    
@@ -127,6 +128,7 @@ $(function(){
     </div>
 	
 <div id="profile_editor" title="Редактирование профиля">
+<form action="#" method="post" id="profile-form">
 <table cellspacing="3">
 	<tr>
 		<td class="label"><label>Имя:</label></td>
@@ -198,9 +200,10 @@ $(function(){
 	</tr>
 </table>
 <div style="text-align:center">
-	<button class="button_blue" style="display: inline-block;">Сохранить</button>
+	<button class="button_blue" style="display: inline-block;" id="profile-save">Сохранить</button>
 	<span style="margin-left:.5em"><a href="#" id="close_profile_editor">выйти без изменений</a></span>
 </div>
+</form>
 </div>
 	
     <audio id="audiotag1" src="/static/vkontakte.ru.chat.sound.wav" preload="auto"></audio>
