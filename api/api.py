@@ -83,6 +83,6 @@ def format_message(message):
     format_message = re.sub(smiles_code, to_smile, message, count=3)
     format_message = re.sub(smiles_code, "", format_message)
     format_message = re.sub('&lt;img src=\'/static/.*&gt;',unescape, format_message)
-    format_message = re.sub('https?:\/\/(?P<name>[a-zA-Z0-9\.\/?=%\&\+\;]+)', '<a href="http://\g<name>" target="_blank">\g<name></a>', format_message)
+    format_message = re.sub('https?:\/\/(?P<name>[a-zA-Z0-9-_\.\/?=%\&\+\;]+)', '<a href="http://\g<name>" target="_blank">\g<name></a>', format_message)
     return format_message
 

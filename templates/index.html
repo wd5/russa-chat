@@ -133,71 +133,71 @@ $(function(){
 <table cellspacing="3">
 	<tr>
 		<td class="label"><label>Имя:</label></td>
-		<td class="input"><input type="text" class="text" id="name"></td>
+		<td class="input"><input type="text" class="text" id="pedit_first_name" name="name" value="{{ profile.name }}"></td>
 	</tr>
 	<tr>
 		<td class="label"><label>Фамилия:</label></td>
-		<td class="input"><input type="text" class="text" id="pedit_last_name"></td>
+		<td class="input"><input type="text" class="text" id="pedit_last_name" name="surname" value="{{ profile.surname }}"></td>
 	</tr>
 	<tr>
 		<td class="label"><label>Отчество:</label></td>
-		<td class="input"><input type="text" class="text" id="pedit_middle_name"></td>
+		<td class="input"><input type="text" class="text" id="pedit_middle_name" name="patronymic" value="{{ profile.patronymic }}"></td>
 	</tr>
 	<tr>
 		<td class="label"><label>День рождения:</label></td>
 		<td class="input">
-			<input type="text" class="text" style="width:53px" maxlength="2" placeholder="день">
-			<input type="text" class="text" style="width:53px" maxlength="2" placeholder="месяц">
-			<input type="text" class="text" style="width:53px" maxlength="4" placeholder="год">
+			<input type="text" class="text" style="width:53px" maxlength="2" placeholder="день" name="day" value="{{ profile.birthday.day }}">
+			<input type="text" class="text" style="width:53px" maxlength="2" placeholder="месяц" name="month" value="{{ profile.birthday.month }}">
+			<input type="text" class="text" style="width:53px" maxlength="4" placeholder="год" name="year" value="{{ profile.birthday.year }}">
 		</td>
 	</tr>
 	<tr>
 		<td class="label"><label>Родной город:</label></td>
-		<td class="input"><input type="text" class="text"></td>
+		<td class="input"><input type="text" class="text" name="birthplace" value="{{ profile.birthplace }}"></td>
 	</tr>
 	<tr>
 		<td class="label"><label>Город проживания:</label></td>
-		<td class="input"><input type="text" class="text"></td>
+		<td class="input"><input type="text" class="text" name="liveplace" value="{{ profile.liveplace }}"></td>
 	</tr>
 	<tr>
 		<td class="label"><label>Телефон:</label></td>
-		<td class="input"><input type="text" class="text"></td>
+		<td class="input"><input type="text" class="text" name="phone" value="{% if profile.phone %}{{profile.phone}}{% end %}"></td>
 	</tr>
 	<tr>
 		<td class="label"><label>Skype:</label></td>
-		<td class="input"><input type="text" class="text"></td>
+		<td class="input"><input type="text" class="text" name="skype" value="{{ profile.skype }}"></td>
 	</tr>
 	<tr>
 		<td class="label"><label>Vkontakte:</label></td>
-		<td class="input"><input type="text" class="text"></td>
+		<td class="input"><input type="text" class="text" name="vkontakte" value="{{ profile.vkontakte }}"></td>
 	</tr>
 	<tr>
 		<td class="label"><label>Facebook:</label></td>
-		<td class="input"><input type="text" class="text"></td>
+		<td class="input"><input type="text" class="text" name="facebook" value="{{ profile.facebook }}"></td>
 	</tr>
 	<tr>
 		<td class="label"><label>Twitter:</label></td>
-		<td class="input"><input type="text" class="text"></td>
+		<td class="input"><input type="text" class="text" name="twitter" value="{{ profile.twitter }}"></td>
 	</tr>
 	<tr>
 		<td class="label"><label>Личный сайт:</label></td>
-		<td class="input"><input type="text" class="text"></td>
+		<td class="input"><input type="text" class="text" name="site" value="{{ profile.site }}"></td>
 	</tr>
 	<tr>
 		<td class="label"><label>Место работы:</label></td>
-		<td class="input"><input type="text" class="text"></td>
+		<td class="input"><input type="text" class="text" name="work" value="{{ profile.work }}"></td>
 	</tr>
 	<tr>
 		<td class="label"><label>Школа:</label></td>
-		<td class="input"><input type="text" class="text"></td>
+		<td class="input"><input type="text" class="text" name="school" value="{{ profile.school }}"></td>
 	</tr>
 	<tr>
 		<td class="label"><label>ВУЗ:</label></td>
-		<td class="input"><input type="text" class="text"></td>
+		<td class="input"><input type="text" class="text" name="institute" value="{{ profile.institute }}"></td>
 	</tr>
 	<tr>
 		<td class="label"><label>О себе:</label></td>
-		<td class="input"><textarea></textarea></td>
+		<td class="input"><textarea name="about">{{ profile.about }}</textarea></td>
 	</tr>
 </table>
 <div style="text-align:center">

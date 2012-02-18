@@ -55,6 +55,7 @@ $(document).ready(function() {
 		$.post('/profile', profileForm.serialize(), function(data) {
 		 console.log(data);
 		});
+        $( "#profile_editor" ).dialog( "close" );
 	});
 /*    $('#profile_edit').click(function(){
 		alert('Пока не работает');

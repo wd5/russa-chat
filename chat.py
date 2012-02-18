@@ -242,7 +242,8 @@ class IndexHandler(BaseHandler):
     """Regular HTTP handler to serve the chatroom page"""
     @tornado.web.authenticated
     def get(self):
-        self.render('index.html',sex=self.get_user_sex(), is_vk = self.is_vk(), users_online = map(lambda a: loader.load("user.html").generate(current_user=a[0], id=a[1], sex=a[2], away=a[3], profile=a[4]), ChatConnection.users_online), quantity=len(ChatConnection.users_online), messages = ChatConnection.messages_cache)
+        profile = User.objects.get(username=self.get_current_user())
+        self.render('index.html',sex=self.get_user_sex(), is_vk = self.is_vk(), users_online = map(lambda a: loader.load("user.html").generate(current_user=a[0], id=a[1], sex=a[2], away=a[3], profile=a[4]), ChatConnection.users_online), quantity=len(ChatConnection.users_online), messages = ChatConnection.messages_cache, profile=profile)
 
 
 class ProfileHandler(BaseHandler):
@@ -254,7 +255,60 @@ class ProfileHandler(BaseHandler):
 class PostProfile(BaseHandler):
     @tornado.web.authenticated
     def post(self):
-        print self.get_argument("name")
+        name = self.get_argument("name","")
+        surname = self.get_argument("surname","")
+        patronymic = self.get_argument("patronymic","")
+        day = self.get_argument("day","")
+        month = self.get_argument("month","")
+        year = self.get_argument("year","")
+        birthplace = self.get_argument("birthplace","")
+        liveplace = self.get_argument("liveplace","")
+        phone = self.get_argument("phone","")
+        skype = self.get_argument("skype","")
+        vkontakte = self.get_argument("vkontakte","")
+        facebook = self.get_argument("facebook","")
+        twitter = self.get_argument("twitter","")
+        site = self.get_argument("site","")
+        work = self.get_argument("work","")
+        school = self.get_argument("school","")
+        institute = self.get_argument("institute","")
+        about = self.get_argument("about","")
+        profile = User.objects.get(username=self.get_current_user())
+        if name:
+            profile.name=name
+        if surname:
+            profile.surname=surname
+        if day:
+            if month:
+                if year:
+                    profile.birthday = str(year + "-" + month + "-" + day)
+        if patronymic:
+            profile.patronymic=patronymic
+        if birthplace:
+            profile.birthplace=birthplace
+        if liveplace:
+            profile.liveplace=liveplace
+        if phone:
+            profile.phone=phone
+        if skype:
+            profile.skype=skype
+        if vkontakte:
+            profile.vkontakte=vkontakte
+        if facebook:
+            profile.facebook=facebook
+        if twitter:
+            profile.twitter=twitter
+        if site:
+            profile.site=site
+        if work:
+            profile.work=work
+        if school:
+            profile.school=school
+        if institute:
+            profile.institute=institute
+        if about:
+            profile.about=about
+        profile.save()
 
 class SocketIOHandler(BaseHandler):
     def get(self):
