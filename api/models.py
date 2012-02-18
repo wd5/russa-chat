@@ -19,7 +19,7 @@ class User(models.Model):
     birthday = models.DateField(null=True)
     birthplace = models.CharField(max_length=15, blank=True)
     liveplace = models.CharField(max_length=15, blank=True)
-    phone = models.IntegerField(max_length=15, blank=True)
+    phone = models.IntegerField(max_length=15, blank=True, null=True)
     skype = models.CharField(max_length=15, blank=True)
     vkontakte = models.URLField(max_length=50, blank=True)
     facebook = models.URLField(max_length=50, blank=True)
