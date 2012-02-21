@@ -134,7 +134,7 @@ $(function(){
 <table cellspacing="3">
 	<tr>
 		<td class="label"><label>Имя:</label></td>
-		<td class="input"><input type="text" class="text" id="pedit_first_name" name="name" value="{{ profile.name }}"></td>
+		<td class="input"><input type="text" class="text" id="pedit_first_name" name="name" value="{% if profile.name %}{{ profile.name }} {%end%}"></td>
 	</tr>
 	<tr>
 		<td class="label"><label>Фамилия:</label></td>
@@ -147,9 +147,9 @@ $(function(){
 	<tr>
 		<td class="label"><label>День рождения:</label></td>
 		<td class="input">
-			<input type="text" class="text" style="width:53px" maxlength="2" placeholder="день" name="day" value="{{ profile.birthday.day }}">
-			<input type="text" class="text" style="width:53px" maxlength="2" placeholder="месяц" name="month" value="{{ profile.birthday.month }}">
-			<input type="text" class="text" style="width:53px" maxlength="4" placeholder="год" name="year" value="{{ profile.birthday.year }}">
+			<input type="text" class="text" style="width:53px" maxlength="2" placeholder="день" name="day" value="{% if profile.birthday %} {{ profile.birthday.day }} {% end %}">
+			<input type="text" class="text" style="width:53px" maxlength="2" placeholder="месяц" name="month" value="{% if profile.birthday %} {{ profile.birthday.month }} {% end %}">
+			<input type="text" class="text" style="width:53px" maxlength="4" placeholder="год" name="year" value="{% if profile.birthday %} {{ profile.birthdday.year }} {% end %}">
 		</td>
 	</tr>
 	<tr>
