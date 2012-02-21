@@ -53,9 +53,18 @@ $(document).ready(function() {
 	$('#profile-save').click(function(){
 		var profileForm = $('#profile-form');
 		$.post('/profile', profileForm.serialize(), function(data) {
+         errors = jQuery.parseJSON(data);
+         if (data) {
+             for (i in errors) {
+                 console.log(errors[i].error);
+                 console.log(errors[i].input_name);
+             }
+         }
+         else {
+             $( "#profile_editor" ).dialog( "close" );
+         }
 		 console.log(data);
 		});
-        $( "#profile_editor" ).dialog( "close" );
 	});
 /*    $('#profile_edit').click(function(){
 		alert('Пока не работает');

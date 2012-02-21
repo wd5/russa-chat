@@ -1,5 +1,7 @@
           # -*- coding: utf-8 -*-
 from os import path as op
+import json
+from django.core.exceptions import ValidationError
 from pbkdf2 import crypt
 import uuid
 import datetime
@@ -254,65 +256,289 @@ class ProfileHandler(BaseHandler):
     """Regular HTTP handler to serve the chatroom page"""
     @tornado.web.authenticated
     def get(self, profile_id):
-        self.render('profile.html')
+        try:
+            profile = User.objects.get(id=profile_id)
+            self.render('profile.html', profile=profile)
+        except :
+            pass
 
 class PostProfile(BaseHandler):
     @tornado.web.authenticated
     def post(self):
-        name = self.get_argument("name","")
-        surname = self.get_argument("surname","")
-        patronymic = self.get_argument("patronymic","")
+        errors = []
+        p = re.compile(u'^[a-zA-Z]*$|^[а-яА-Я]*$')
+        name = self.get_argument("name","").title()
+        if name:
+            m = p.match(name)
+            if len(name) > 15:
+                error = {
+                    "input_name": "name",
+                    "error": u'Имя не должно превышать 15 символов'
+                    }
+                errors.append(error)
+            elif not m:
+                error = {
+                    "input_name": "name",
+                    "error": u'Имя должно состоять из латинских или русских букв'
+                    }
+                errors.append(error)
+        surname = self.get_argument("surname","").title()
+        if surname:
+            m = p.match(surname)
+            if len(surname) > 15:
+                error = {
+                    "input_name": "surname",
+                    "error": u'Фамилия не должна превышать 15 символов'
+                    }
+                errors.append(error)
+            elif not m:
+                error = {
+                    "input_name": "surname",
+                    "error": u'Фамилия должна состоять из латинских или русских букв'
+                    }
+                errors.append(error)
+        patronymic = self.get_argument("patronymic","").title()
+        if patronymic:
+            m = p.match(patronymic)
+            if len(patronymic) > 15:
+                error = {
+                    "input_name": "patronymic",
+                    "error": u'Отчество не должно превышать 15 символов'
+                    }
+                errors.append(error)
+            elif not m:
+                error = {
+                    "input_name": "patronymic",
+                    "error": u'Отчество должно состоять из латинских или русских букв'
+                    }
+                errors.append(error)
         day = self.get_argument("day","")
         month = self.get_argument("month","")
         year = self.get_argument("year","")
+        if year:
+            if int(year) < 1940:
+                error = {
+                    "input_name": "year",
+                    "error": u'А вы не слишком стары для этого?'
+                    }
+                errors.append(error)
+            elif int(year) > 2010:
+                error = {
+                    "input_name": "year",
+                    "error": u'В детский сад не опаздаешь?'
+                    }
+                errors.append(error)
         birthplace = self.get_argument("birthplace","")
-        liveplace = self.get_argument("liveplace","")
-        phone = self.get_argument("phone","")
-        skype = self.get_argument("skype","")
-        vkontakte = self.get_argument("vkontakte","")
-        facebook = self.get_argument("facebook","")
-        twitter = self.get_argument("twitter","")
-        site = self.get_argument("site","")
-        work = self.get_argument("work","")
-        school = self.get_argument("school","")
-        institute = self.get_argument("institute","")
-        about = self.get_argument("about","")
-        profile = User.objects.get(username=self.get_current_user())
-        if name:
-            profile.name=name
-        if surname:
-            profile.surname=surname
-        if day:
-            if month:
-                if year:
-                    profile.birthday = str(year + "-" + month + "-" + day)
-        if patronymic:
-            profile.patronymic=patronymic
         if birthplace:
-            profile.birthplace=birthplace
+            if len(birthplace) > 15:
+                error = {
+                    "input_name": "birthplace",
+                    "error": u'Родной город не должен превышать 15 символов'
+                    }
+                errors.append(error)
+        liveplace = self.get_argument("liveplace","")
         if liveplace:
-            profile.liveplace=liveplace
+            if len(liveplace) > 15:
+                error = {
+                    "input_name": "liveplace",
+                    "error": u'Город проживания не должен превышать 15 символов'
+                    }
+                errors.append(error)
+        phone = self.get_argument("phone","")
         if phone:
-            profile.phone=phone
+            p = re.compile(u'^[0-9-\ ()]*$')
+            m = p.match(phone)
+            if len(phone) > 15:
+                error = {
+                    "input_name": "phone",
+                    "error": u'Телефон не должен превышать 15 симфолов'
+                    }
+                errors.append(error)
+            elif not m:
+                error = {
+                    "input_name": "phone",
+                    "error": u'Недопустимые символы в телефоне'
+                    }
+                errors.append(error)
+        skype = self.get_argument("skype","").lower()
         if skype:
-            profile.skype=skype
+            p = re.compile(u'^[0-9a-zA-Z]*$')
+            m = p.match(skype)
+            if len(skype) > 32:
+                error = {
+                    "input_name": "skype",
+                    "error": u'Skype не должен превышать 32 символа'
+                    }
+                errors.append(error)
+            elif len(skype) < 6:
+                error = {
+                    "input_name": "skype",
+                    "error": u'Skype не должен быть меньше 6 символов'
+                    }
+                errors.append(error)
+            elif not m:
+                error = {
+                    "input_name": "skype",
+                    "error": u'Имя Skype должно быть латинскими буквами'
+                    }
+                errors.append(error)
+        vkontakte = self.get_argument("vkontakte","")
         if vkontakte:
-            profile.vkontakte=vkontakte
+            p = re.compile(u'^http:\/\/vk\.com|vkontakte\.ru\/[a-zA-z0-9\.\_\-]*$')
+            m = p.match(vkontakte)
+            if len(vkontakte) > 50:
+                error = {
+                    "input_name": "vkontakte",
+                    "error": u'Адрес vkontakte не должен быть более 50 символов'
+                    }
+                errors.append(error)
+            elif not m:
+                error = {
+                    "input_name": "vkontakte",
+                    "error": u'Не верный адрес vkontakte'
+                    }
+                errors.append(error)
+        facebook = self.get_argument("facebook","")
         if facebook:
-            profile.facebook=facebook
+            p = re.compile(u'^http:\/\/facebook\.com\/[a-zA-z0-9\.\_\-]*$')
+            m = p.match(vkontakte)
+            if len(facebook) > 50:
+                error = {
+                    "input_name": "facebook",
+                    "error": u'Адрес facebook не должен быть более 50 символов'
+                    }
+                errors.append(error)
+            elif not m:
+                error = {
+                    "input_name": "facebook",
+                    "error": u'Не верный адрес facebook'
+                    }
+                errors.append(error)
+        twitter = self.get_argument("twitter","")
         if twitter:
-            profile.twitter=twitter
+            p = re.compile(u'^http:\/\/facebook\.com\/[a-zA-z0-9\.\_\-\#\!\/]*$')
+            m = p.match(vkontakte)
+            if len(twitter) > 50:
+                error = {
+                    "input_name": "twitter",
+                    "error": u'Адрес twitter не должен быть более 50 символов'
+                    }
+                errors.append(error)
+            elif not m:
+                error = {
+                    "input_name": "twitter",
+                    "error": u'Не верный адрес twitter'
+                    }
+                errors.append(error)
+        site = self.get_argument("site","")
         if site:
-            profile.site=site
+            p = re.compile(u'^https?:\/\/(?P<name>[a-zA-Z0-9-_\.\/?=%\&\+\;]+)')
+            m = p.match(vkontakte)
+            if len(site) > 100:
+                error = {
+                    "input_name": "site",
+                    "error": u'Адрес сайта не должен быть более 100 символов'
+                    }
+                errors.append(error)
+            elif not m:
+                error = {
+                    "input_name": "site",
+                    "error": u'Не верный адрес сайта'
+                    }
+                errors.append(error)
+        work = self.get_argument("work","")
         if work:
-            profile.work=work
+            if len(work) > 15:
+                error = {
+                    "input_name": "work",
+                    "error": u'Место работы не должно быть более 15 символов'
+                    }
+                errors.append(error)
+        school = self.get_argument("school","")
         if school:
-            profile.school=school
+            if len(school) > 15:
+                error = {
+                    "input_name": "school",
+                    "error": u'Школа не должна быть более 15 символов'
+                    }
+                errors.append(error)
+        institute = self.get_argument("institute","")
         if institute:
-            profile.institute=institute
+            if len(institute) > 15:
+                error = {
+                    "input_name": "institute",
+                    "error": u'Институт не должен быть более 15 символов'
+                    }
+                errors.append(error)
+                pass
+        about = self.get_argument("about","")
         if about:
-            profile.about=about
-        profile.save()
+            if len(about) > 300:
+                error = {
+                    "input_name": "about",
+                    "error": u'О себе не более 300 символов.'
+                    }
+                errors.append(error)
+        profile = User.objects.get(username=self.get_current_user())
+        if errors:
+            self.write(json.dumps(errors))
+        else:
+            if name:
+                profile.name=name
+            if surname:
+                profile.surname=surname
+            if day:
+                if month:
+                    if year:
+                        profile.birthday = str(year + "-" + month + "-" + day)
+            if patronymic:
+                profile.patronymic=patronymic
+            if birthplace:
+                profile.birthplace=birthplace
+            if liveplace:
+                profile.liveplace=liveplace
+            if phone:
+                profile.phone=phone
+            if skype:
+                profile.skype=skype
+            if vkontakte:
+                profile.vkontakte=vkontakte
+            if facebook:
+                profile.facebook=facebook
+            if twitter:
+                profile.twitter=twitter
+            if site:
+                profile.site=site
+            if work:
+                profile.work=work
+            if school:
+                profile.school=school
+            if institute:
+                profile.institute=institute
+            if about:
+                profile.about=about
+            try:
+                profile.save()
+            except ValidationError, e:
+                if e.messages == [u'Invalid date: day is out of range for month']:
+                    error = {
+                        "input_name": "month",
+                        "error": u'В этом месяце нет такого дня'
+                    }
+                    errors.append(error)
+                elif e.messages == [u'Invalid date: month must be in 1..12']:
+                    error = {
+                        "input_name": "month",
+                        "error": u'Нет такого месяца'
+                    }
+                    errors.append(error)
+                elif e.messages == [u'Enter a valid date in YYYY-MM-DD format.']:
+                    error = {
+                        "input_name": "month",
+                        "error": u'Неправильный формат даты'
+                    }
+                    errors.append(error)
+                self.write(json.dumps(errors))
 
 class SocketIOHandler(BaseHandler):
     def get(self):
