@@ -384,7 +384,7 @@ class PostProfile(BaseHandler):
                 errors.append(error)
         vkontakte = self.get_argument("vkontakte","")
         if vkontakte:
-            p = re.compile(u'^http:\/\/vk\.com|vkontakte\.ru\/[a-zA-z0-9\.\_\-]*$')
+            p = re.compile(u'^http:\/\/(www\.)?vk\.com|vkontakte\.ru\/[a-zA-z0-9\.\_\-]*$')
             m = p.match(vkontakte)
             if len(vkontakte) > 50:
                 error = {
@@ -400,8 +400,8 @@ class PostProfile(BaseHandler):
                 errors.append(error)
         facebook = self.get_argument("facebook","")
         if facebook:
-            p = re.compile(u'^http:\/\/facebook\.com\/[a-zA-z0-9\.\_\-]*$')
-            m = p.match(vkontakte)
+            p = re.compile(u'^http:\/\/(www\.)?facebook\.com\/[a-zA-z0-9\.\_\-]*$')
+            m = p.match(facebook)
             if len(facebook) > 50:
                 error = {
                     "input_name": "facebook",
@@ -416,8 +416,8 @@ class PostProfile(BaseHandler):
                 errors.append(error)
         twitter = self.get_argument("twitter","")
         if twitter:
-            p = re.compile(u'^http:\/\/facebook\.com\/[a-zA-z0-9\.\_\-\#\!\/]*$')
-            m = p.match(vkontakte)
+            p = re.compile(u'^https?:\/\/(www\.)?twitter\.com\/[a-zA-z0-9\.\_\-\#\!\/]*$')
+            m = p.match(twitter)
             if len(twitter) > 50:
                 error = {
                     "input_name": "twitter",
@@ -433,7 +433,7 @@ class PostProfile(BaseHandler):
         site = self.get_argument("site","")
         if site:
             p = re.compile(u'^https?:\/\/(?P<name>[a-zA-Z0-9-_\.\/?=%\&\+\;]+)')
-            m = p.match(vkontakte)
+            m = p.match(site)
             if len(site) > 100:
                 error = {
                     "input_name": "site",
