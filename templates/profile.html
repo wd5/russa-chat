@@ -2,7 +2,7 @@
 {{ profile.name }}<br>
 {{ profile.surname }}<br>
 {{ profile.patronymic }}<br>
-{{ profile.birthday }}<br>
+{% if profile.birthday %}{{ profile.birthday }}{% end %}<br>
 {{ profile.birthplace }}<br>
 {{ profile.liveplace }}<br>
 {{ profile.phone }}<br>
