@@ -246,8 +246,9 @@ class IndexHandler(BaseHandler):
     def get(self):
         for i in ChatConnection.users_online:
             if i[0] == self.get_current_user():
-                self.render("login.html", error="Кто то уже сидит под этим ником")
-                return
+                if not i[1] == self.get_user_id():
+                    self.render("login.html", error="Кто то уже сидит под этим ником")
+                    return
         try:
             profile = User.objects.get(username=self.get_current_user())
             self.render('index.html',sex=self.get_user_sex(), is_vk = self.is_vk(), users_online = map(lambda a: loader.load("user.html").generate(current_user=a[0], id=a[1], sex=a[2], away=a[3], profile=a[4]), ChatConnection.users_online), quantity=len(ChatConnection.users_online), messages = ChatConnection.messages_cache, profile=profile)
