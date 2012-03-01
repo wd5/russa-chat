@@ -25,7 +25,10 @@ $(document).ready(function() {
             newMessage($('#messageform'), s);
         }
     });
-	
+    $(document).keyup(function(e) {
+        if (e.keyCode == 27) {
+            $('.closer').click(); }
+    });
 	$('#gear-opener').hover(function(){
 		$("#gear-opener .inner").show();
 	}, function(){
