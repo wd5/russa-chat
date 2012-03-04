@@ -970,4 +970,3 @@ application = tornado.web.Application(
 
 if __name__ == "__main__":
     tornadio2.server.SocketServer(application)
-    
