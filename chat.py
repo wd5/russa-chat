@@ -94,55 +94,84 @@ class Registration(BaseHandler):
         self.render("registration.html", error_name=False, error_password=False, error_password_again=False, error_sex=False)
 
     def post(self):
-        error_name = error_password = error_password_again = error_sex = False
-        error = False
+        errors = []
         try:
             name = self.get_argument("name")
             p = re.compile(u'^[a-zA-Z0-9_]*$|^[а-яА-Я0-9_]*$')
             m = p.match(name)
             if len(name) > 15:
-                error_name = "Логин не должен быть более 15 символов"
-                error = True
+                error = {
+                    "input_name": "name",
+                    "error": u'Логин не должен быть более 15 символов'
+                }
+                errors.append(error)
             elif m:
                 for waiter in ChatConnection.waiters:
                     if str(waiter.user_name).lower() == name.encode('utf-8').lower():
-                        error_name = "Такой логин уже используется"
-                        error = True
+                        error = {
+                            "input_name": "name",
+                            "error": u'Такой логин уже используется'
+                        }
+                        errors.append(error)
                 if User.objects.filter(username=name):
-                    error_name = "Такой логин уже используется"
-                    error = True
+                    error = {
+                        "input_name": "name",
+                        "error": u'Такой логин уже используется'
+                    }
+                    errors.append(error)
             else:
-                error_name = "Логин должен состоять из латинских или русских букв"
-                error = True
+                error = {
+                    "input_name": "name",
+                    "error": u'Логин должен состоять из латинских или русских букв'
+                }
+                errors.append(error)
         except :
-            error_name = "Укажите логин"
-            error = True
+            error = {
+                "input_name": "name",
+                "error": u'Укажите логин'
+            }
+            errors.append(error)
         try:
             password = self.get_argument("password")
             if len(password) > 15:
-                error_password = "Пароль не должен быть более 15 символов"
-                error = True
+                error = {
+                    "input_name": "password",
+                    "error": u'Пароль не должен быть более 15 символов"'
+                }
+                errors.append(error)
         except :
-            error_password = "Укажите пароль"
-            error = True
+            error = {
+                "input_name": "password",
+                "error": u'Укажите пароль'
+            }
+            errors.append(error)
         try:
             password_again = self.get_argument("password_again")
             if not error_password:
                 if not password == password_again:
-                    error_password_again = "Пароль не совпадает"
-                    error = True
+                    error = {
+                        "input_name": "password_again",
+                        "error": u'Пароль не совпадает'
+                    }
+                    errors.append(error)
         except :
-            error_password_again = "Укажите повторный пароль"
-            error = True
+            error = {
+                "input_name": "password_again",
+                "error": u'Укажите повторный пароль'
+            }
+            errors.append(error)
         try:
             is_men = self.get_argument("sex")
             if is_men == "True":
                 self.men = True
         except :
-            error_sex = "Укажите ваш пол"
-            error = True
-        if error:
-            self.render("registration.html", error_name=error_name, error_password=error_password, error_password_again=error_password_again, error_sex=error_sex)
+            error = {
+                "input_name": "sex",
+                "error": u'Укажите ваш пол'
+            }
+            errors.append(error)
+        if errors:
+            self.write(json.dumps(errors))
         else:
             new_user = User()
             new_user.username = name
