@@ -1,20 +1,20 @@
 <div class="profile">
 	<h1>В Разработке</h1>
-	{{ profile.name }}<br>
-	{{ profile.surname }}<br>
-	{{ profile.patronymic }}<br>
-	{% if profile.birthday %}{{ profile.birthday }}{% end %}<br>
-	{{ profile.birthplace }}<br>
-	{{ profile.liveplace }}<br>
-	{{ profile.phone }}<br>
-	{{ profile.skype }}<br>
-	{{ profile.vkontakte }}<br>
-	{{ profile.facebook }}<br>
-	{{ profile.twitter }}<br>
-	{{ profile.site }}<br>
-	{{ profile.work }}<br>
-	{{ profile.school }}<br>
-	{{ profile.institute }}<br>
-	{{ profile.about }}<br>
+	{% if profile.name %}{{ profile.name }}<br>{% end %}
+    {% if profile.surname %}{{ profile.surname }}<br>{% end %}
+    {% if profile.patronymic %}{{ profile.patronymic }}<br>{% end %}
+	{% if profile.birthday %}{{ profile.birthday }}<br>{% end %}
+    {% if profile.birthplace %}{{ profile.birthplace }}<br>{% end %}
+    {% if profile.liveplace %}{{ profile.liveplace }}<br>{% end %}
+    {% if profile.phone %}{{ profile.phone }}<br>{% end %}
+    {% if profile.skype %}{{ profile.skype }}<br>{% end %}
+    {% if profile.vkontakte %}<a target="_blank" href="{{ profile.vkontakte }}">{{ profile.vkontakte }}</a><br>{% end %}
+    {% if profile.facebook %}<a target="_blank" href="{{ profile.facebook }}">{{ profile.facebook }}</a><br>{% end %}
+    {% if profile.twitter %}<a target="_blank" href="{{ profile.twitter }}">{{ profile.twitter }}</a><br>{% end %}
+    {% if profile.site %}<a target="_blank" href="{{ profile.site }}">Личный сайт</a><br>{% end %}
+    {% if profile.work %}{{ profile.work }}<br>{% end %}
+    {% if profile.school %}{{ profile.school }}<br>{% end %}
+    {% if profile.institute %}{{ profile.institute }}<br>{% end %}
+    {% if profile.about %}{{ profile.about }}<br>{% end %}
 </div>
 
