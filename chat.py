@@ -189,52 +189,52 @@ class AuthLoginHandler(BaseHandler):
       try:
           name = self.get_argument("name")
           if len(name) > 15:
-              self.render("login.html", error="Имя должно состоять Не более чем из 15 символов")
+              self.render("login.html", error="Имя должно состоять Не более чем из 15 символов", input_error="name")
               return
           p = re.compile(u'^[a-zA-Z0-9_]*$|^[а-яА-Я0-9_]*$')
           m = p.match(name)
           if m:
               for waiter in ChatConnection.waiters:
                   if str(waiter.user_name) == name.encode('utf-8'):
-                      self.render("login.html", error="Такое имя уже используется")
+                      self.render("login.html", error="Такое имя уже используется", input_error="name")
                       return
               if User.objects.filter(username=name):
-                  self.render("login.html", error="Такое имя уже используется")
+                  self.render("login.html", error="Такое имя уже используется", input_error="name")
                   return
               self.set_secure_cookie("user", name)
               self.set_secure_cookie("user_id", str(uuid.uuid4()))
               self.redirect("/")
               return
           else:
-              self.render("login.html", error="Имя должно состоять из латинских или русских букв")
+              self.render("login.html", error="Имя должно состоять из латинских или русских букв", input_error="name")
               return
       except :
           pass
       try:
           reg_name = self.get_argument("name_reg")
       except :
-          self.render("login.html", error="Введите логин")
+          self.render("login.html", error="Введите логин", input_error="name_reg")
           return
       try:
           password = self.get_argument("password")
       except :
-          self.render("login.html", error="Введите пароль")
+          self.render("login.html", error="Введите пароль", input_error="password")
           return
       try:
           user = User.objects.get(username=reg_name)
       except :
-          self.render("login.html", error="Логин или пароль не верны")
+          self.render("login.html", error="Логин или пароль не верны", input_error="name_reg")
           return
       if user.password == crypt(password, user.password):
           for waiter in ChatConnection.waiters:
               if str(waiter.user_name).lower() == reg_name.encode('utf-8').lower():
-                  self.render("login.html", error="Такое имя уже используется")
+                  self.render("login.html", error="Такое имя уже используется", input_error="name_reg")
                   return
           self.set_secure_cookie("user", user.username)
           self.set_secure_cookie("user_id", str(uuid.uuid4()))
           self.redirect("/")
       else:
-          self.render("login.html", error="Логин или пароль не верны")
+          self.render("login.html", error="Логин или пароль не верны", input_error="name_reg")
           return
 
 
