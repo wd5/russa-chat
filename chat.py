@@ -147,13 +147,12 @@ class Registration(BaseHandler):
             errors.append(error)
         try:
             password_again = self.get_argument("password_again")
-            if not error_password:
-                if not password == password_again:
-                    error = {
-                        "input_name": "password_again",
-                        "error": u'Пароль не совпадает'
-                    }
-                    errors.append(error)
+            if not password == password_again:
+                error = {
+                    "input_name": "password_again",
+                    "error": u'Пароль не совпадает'
+                }
+                errors.append(error)
         except :
             error = {
                 "input_name": "password_again",
