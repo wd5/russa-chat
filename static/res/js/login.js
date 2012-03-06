@@ -23,7 +23,7 @@ function fn_reg_clickSend(_this){
 }
 function fn_reg_sendData(frm){
 
-	if (frm == null){ return ''; }
+	if (frm == null){ return '';
 	
 	var sendData = '';
 	
