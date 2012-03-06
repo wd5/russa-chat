@@ -59,11 +59,13 @@ $(document).ready(function() {
 		var profileForm = $('#profile-form');
 		$.post('/profile', profileForm.serialize(), function(data) {
          errors = jQuery.parseJSON(data);
-         if (data) {
-             for (i in errors) {
-                 console.log(errors[i].error);
-                 console.log(errors[i].input_name);
-             }
+		 $('.profile-err').hide();
+		 if (data) {
+			for (var i = 0; i < errors.length; i++){
+				 console.log(errors[i].error);
+				 console.log(errors[i].input_name);
+				 fn_chat_profileErr(errors[i].input_name,errors[i].error);
+			}
          }
          else {
              $( "#profile_editor" ).dialog( "close" );
@@ -265,7 +267,7 @@ function addMessage(response){
                 + "<a href=noscript id='" + response[i][1] + "' class='user_nik sub_id_" + response[i][1] + " gender_" + response[i][2] + "' title='личное сообщение'>"
                 + response[i][0]
                 + "</a>"
-                + "<a target='_blank' href='" + response[i][4] + "' class=user_info title='информация о пользователе " + response[i][0] + "'>[i]</a>"
+                + "<a target='_blank' href='" + response[i][4] + "' onclick='return fn_chat_userInfo(this)' class=user_info title='информация о пользователе " + response[i][0] + "'>[i]</a>"
                 //+ "<span class=\"alignright\">" + status + "</span>"
                 + "</div>"
                 }
@@ -292,3 +294,22 @@ function setUserAwayStatus(user_id, status) {
 	else
 		$('#' + user_id).parents('.user').removeClass('away');
 }
+
+function fn_chat_profileErr(input_name,error){
+	
+	if ($('[name="'+input_name+'"]').parents('td').find('.profile-err').html()==null){
+		$('[name="'+input_name+'"]').parents('td').prepend('<div class="profile-err">'+error+'</div>');
+	} else {
+		$('[name="'+input_name+'"]').parents('td').find('.profile-err').html(error);
+	}
+	$('[name="'+input_name+'"]').parents('td').find('.profile-err').fadeIn(600);
+	
+}
+
+function  fn_chat_userInfo(_this){
+	
+	$.ajax({type:"GET", url:_this.href, data:'', success: function(data){ $.fancybox(data); }});
+	return false;
+}
+
+

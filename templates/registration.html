@@ -1,52 +1,34 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<link rel="stylesheet" type="text/css" href="/static/res/css/procssed_241211_11_51_24.css" media="all">
-</head>
-
-<body>
-<div id="auth-content" class="form">
-<h2>Регистрация</h2>
-<form method="post" action="/reg">
-    {% module xsrf_form_html() %}
-	<p class="name">
-		<label for="name">Введите имя пользователя
-{% if error_password %}
-    <br><span class="form-err">{{ error_name }}</span>
-{% end %}
-		</label>
-		<br><input type="text" name="name" size="15" maxlength="15">
-	</p>
-	<p class="password">
-		<label for="email">Введите пароль
-{% if error_name %}
-    <br><span class="form-err">{{ error_password }}</span>
-{% end %}
-		</label>
-		<br><input type="password" name="password" size="15" maxlength="15">
-	</p>
-	<p class="password">
-		<label for="email">Повторите пароль
-{% if error_password_again %}
-    <br><span class="form-err">{{ error_password_again }}</span>
-{% end %}
-		</label>
-		<br><input type="password" name="password_again" size="15" maxlength="15">
-	</p>
-	<p class="gender">
-		<label for="gender">Пол
-{% if error_sex %}
-    <br><span class="form-err">{{ error_sex }}</span>
-{% end %}
-        </label>
-        <br><input type="radio" name="sex" value="True" class="def" id="gender_m"><label for="gender_m">Мужской</label> 
-        <input type="radio" name="sex" value="False" class="def" id="gender_f"><label for="gender_f">Женский</label><br>
-	</p>
-	<p class="submit">
-		<input type="submit" value="Отправить">
-	</p>
-</form>
+<div id="auth-content" class="form-reg">
+	<h2>Регистрация</h2>
+	<form method="post" action="/reg">
+		{% module xsrf_form_html() %}
+		<p class="name">
+			<label for="name">Введите имя пользователя
+				<div class="form-err" id="error_name"></div>
+			</label>
+			<input type="text" name="name" size="15" maxlength="15">
+		</p>
+		<p class="password">
+			<label for="email">Введите пароль
+				<div class="form-err" id="error_password"></div>
+			</label>
+			<input type="password" name="password" size="15" maxlength="15">
+		</p>
+		<p class="password">
+			<label for="email">Повторите пароль
+				<div class="form-err" id="error_password_again"></div>
+			</label>
+			<input type="password" name="password_again" size="15" maxlength="15">
+		</p>
+		<p class="gender">
+			<label for="gender">Пол</label><br />
+			<input type="hidden" name="sex" id="reg_frm_sex" value="" />
+			<input type="radio" name="tmp_sex1" value="True" class="def" id="gender_m"><label for="gender_m">Мужской</label> 
+			<input type="radio" name="tmp_sex2" value="False" class="def" id="gender_f"><label for="gender_f">Женский</label><br>
+			<div class="form-err" id="error_sex"></div>
+		</p>
+		<p class="submit">
+			<input type="submit" value="Отправить" onclick="return fn_reg_clickSend(this)" />
+		</p>
+	</form>
 </div>
-</body>
-</html>

@@ -183,7 +183,7 @@ class Registration(BaseHandler):
 
 class AuthLoginHandler(BaseHandler):
   def get(self):
-      self.render("login.html", error=False)
+      self.render("login.html", error=False, input_error=False)
 
   def post(self):
       try:
@@ -209,7 +209,11 @@ class AuthLoginHandler(BaseHandler):
               self.render("login.html", error="Имя должно состоять из латинских или русских букв", input_error="name")
               return
       except :
-          pass
+          try:
+              self.get_argument("is_guestform")
+              self.render("login.html", error="Введите гостевой логин", input_error="name")
+          except:
+	      pass
       try:
           reg_name = self.get_argument("name_reg")
       except :
@@ -275,7 +279,7 @@ class IndexHandler(BaseHandler):
         for i in ChatConnection.users_online:
             if i[0] == self.get_current_user():
                 if not i[1] == self.get_user_id():
-                    self.render("login.html", error="Кто то уже сидит под этим ником")
+                    self.render("login.html", error="Кто то уже сидит под этим ником", input_error="name_reg")
                     return
         try:
             profile = User.objects.get(username=self.get_current_user())
