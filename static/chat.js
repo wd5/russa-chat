@@ -309,6 +309,7 @@ function fn_chat_profileErr(input_name,error){
 function  fn_chat_userInfo(_this){
     console.log(_this.href);
     if (_this.href.indexOf('vk.com') !== -1) {
+        window.open(__this.href)
     }
     else {
         $.ajax({type:"GET", url:_this.href, data:'', success: function(data){ $.fancybox(data); }});
