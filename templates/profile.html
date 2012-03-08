@@ -1,20 +1,18 @@
 <div class="profile">
-	<h1>В Разработке</h1>
-	{% if profile.name %}{{ profile.name }}<br>{% end %}
-    {% if profile.surname %}{{ profile.surname }}<br>{% end %}
-    {% if profile.patronymic %}{{ profile.patronymic }}<br>{% end %}
-	{% if profile.birthday %}{{ profile.birthday }}<br>{% end %}
-    {% if profile.birthplace %}{{ profile.birthplace }}<br>{% end %}
-    {% if profile.liveplace %}{{ profile.liveplace }}<br>{% end %}
-    {% if profile.phone %}{{ profile.phone }}<br>{% end %}
-    {% if profile.skype %}{{ profile.skype }}<br>{% end %}
-    {% if profile.vkontakte %}<a target="_blank" href="{{ profile.vkontakte }}">{{ profile.vkontakte }}</a><br>{% end %}
-    {% if profile.facebook %}<a target="_blank" href="{{ profile.facebook }}">{{ profile.facebook }}</a><br>{% end %}
-    {% if profile.twitter %}<a target="_blank" href="{{ profile.twitter }}">{{ profile.twitter }}</a><br>{% end %}
-    {% if profile.site %}<a target="_blank" href="{{ profile.site }}">Личный сайт</a><br>{% end %}
-    {% if profile.work %}{{ profile.work }}<br>{% end %}
-    {% if profile.school %}{{ profile.school }}<br>{% end %}
-    {% if profile.institute %}{{ profile.institute }}<br>{% end %}
-    {% if profile.about %}{{ profile.about }}<br>{% end %}
+	<h1>{{ profile.username }}</h1>
+	{% if profile.name %}Имя: <strong>{{ profile.name }} {% end %} {% if profile.surname %}{{ profile.surname }} {% end %} {% if profile.patronymic %}{{ profile.patronymic }}</strong><br>{% end %}
+	{% if profile.birthday %}Дата рождения: <strong>{{ profile.birthday }}</strong><br>{% end %}
+    {% if profile.birthplace %}Родной город: <strong>{{ profile.birthplace }}</strong><br>{% end %}
+    {% if profile.liveplace %}Город проживания: <strong>{{ profile.liveplace }}</strong><br>{% end %}
+    {% if profile.phone %}Телефон: <strong>{{ profile.phone }}</strong><br>{% end %}
+    {% if profile.skype %}Skype: <strong>{{ profile.skype }}</strong><br>{% end %}
+    {% if profile.vkontakte %}Вконтакте: <strong><a target="_blank" href="{{ profile.vkontakte }}">{{ profile.vkontakte }}</a></strong><br>{% end %}
+    {% if profile.facebook %}Facebook: <strong><a target="_blank" href="{{ profile.facebook }}">{{ profile.facebook }}</a></strong><br>{% end %}
+    {% if profile.twitter %}Twitter: <strong><a target="_blank" href="{{ profile.twitter }}">{{ profile.twitter }}</a></strong><br>{% end %}
+    {% if profile.site %}<strong><a target="_blank" href="{{ profile.site }}">Личный сайт</a></strong><br>{% end %}
+    {% if profile.work %}Работа: <strong>{{ profile.work }}</strong><br>{% end %}
+    {% if profile.school %}Школа: <strong>{{ profile.school }}</strong><br>{% end %}
+    {% if profile.institute %}ВУЗ: <strong>{{ profile.institute }}</strong><br>{% end %}
+    {% if profile.about %}О себе: <strong>{{ profile.about }}</strong><br>{% end %}
 </div>
 
