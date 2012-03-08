@@ -1,6 +1,6 @@
 <div class="profile">
 	<h1>{{ profile.username }}</h1>
-	{% if profile.name %}Имя: <strong>{{ profile.name }} {% end %} {% if profile.surname %}{{ profile.surname }} {% end %} {% if profile.patronymic %}{{ profile.patronymic }}</strong><br>{% end %}
+	{% if profile.name %}Имя: <strong>{{ profile.name }} {% end %} {% if profile.surname %}{{ profile.surname }} {% end %} {% if profile.patronymic %}{{ profile.patronymic }}{% end %}</strong><br>
 	{% if profile.birthday %}Дата рождения: <strong>{{ profile.birthday }}</strong><br>{% end %}
     {% if profile.birthplace %}Родной город: <strong>{{ profile.birthplace }}</strong><br>{% end %}
     {% if profile.liveplace %}Город проживания: <strong>{{ profile.liveplace }}</strong><br>{% end %}
