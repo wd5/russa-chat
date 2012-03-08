@@ -134,6 +134,7 @@ $(document).ready(function() {
             $('#personal').val("");
             $('.clone_personal').remove();
             $('#private_name').html('<span class="closer"></span><div>Личное сообщение для '+$(this).text()+'</div>').addClass('private');
+            $MESSAGE_TO_S = false
         }else{
             $('#private').val("");
             var list = new Array();
