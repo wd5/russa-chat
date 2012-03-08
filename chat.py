@@ -965,7 +965,7 @@ class VKTest(BaseHandler, VKMixin):
 # Create tornadio server
 ChatRouter = tornadio2.router.TornadioRouter(ChatConnection,dict(enabled_protocols=['xhr-polling','jsonp-polling','htmlfile'],session_check_interval=15,session_expiry=10))
 
-StatsRouter = tornadio2.router.TornadioRouter(PingConnection, dict(enabled_protocols=['websocket'],websocket_check=True),namespace='stats')
+StatsRouter = tornadio2.router.TornadioRouter(PingConnection, dict(enabled_protocols=['xhr-polling','jsonp-polling', 'htmlfile'],websocket_check=True),namespace='stats')
 
 urls = ([(r"/", IndexHandler),
          (r"/stats", StatsHandler),
