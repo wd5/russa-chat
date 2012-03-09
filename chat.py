@@ -829,16 +829,16 @@ class ChatConnection(sockjs.tornado.SockJSConnection):
             self.console_message(message)
 
     def get_current_user(self, info):
-        return decode_signed_value(application.settings["cookie_secret"],
+        return decode_signed_value(app.settings["cookie_secret"],
                                         "user", info.get_cookie("user").value)
     def get_user_id(self, info):
-        return decode_signed_value(application.settings["cookie_secret"],
+        return decode_signed_value(app.settings["cookie_secret"],
                                         "user_id", info.get_cookie("user_id").value)
     def get_user_sex(self, info):
-        username = decode_signed_value(application.settings["cookie_secret"],
+        username = decode_signed_value(app.settings["cookie_secret"],
             "user", info.get_cookie("user").value)
         try:
-            sex = decode_signed_value(application.settings["cookie_secret"],
+            sex = decode_signed_value(app.settings["cookie_secret"],
                 "sex", info.get_cookie("sex").value)
             return sex
         except :
@@ -855,9 +855,9 @@ class ChatConnection(sockjs.tornado.SockJSConnection):
 
     def get_profile_link(self, info):
         try:
-            access_token = decode_signed_value(application.settings["cookie_secret"],
+            access_token = decode_signed_value(app.settings["cookie_secret"],
                 "access_token", info.get_cookie("access_token").value)
-            id = decode_signed_value(application.settings["cookie_secret"],
+            id = decode_signed_value(app.settings["cookie_secret"],
                 "user_id", info.get_cookie("user_id").value)
             return "http://vk.com/id%s" % id
         except :
@@ -967,38 +967,6 @@ class VKTest(BaseHandler, VKMixin):
         # "response" is json-response from server
         self.redirect("/")
 
-# Create tornadio server
-#ChatRouter = tornadio2.router.TornadioRouter(ChatConnection,dict(enabled_protocols=['xhr-polling','jsonp-polling','htmlfile'],session_check_interval=15,session_expiry=10))
-
-#StatsRouter = tornadio2.router.TornadioRouter(PingConnection, dict(enabled_protocols=['xhr-polling','jsonp-polling', 'htmlfile'],websocket_check=True),namespace='stats')
-
-urls = ([(r"/", IndexHandler),
-         (r"/stats", StatsHandler),
-         (r"/socket.io.js", SocketIOHandler),
-         (r"/reg", Registration),
-         (r"/profile/([0-9]+)", ProfileHandler),
-         (r"/profile", PostProfile),
-         (r"/auth/login", AuthLoginHandler),
-         (r"/auth/logout", AuthLogoutHandler),
-         (r"/vkauth", VKHandler),
-         (r"/test", VKTest),
-         (r"/WebSocketMain.swf", WebSocketFileHandler),
-        ])
-
-#ChatRouter.apply_routes(urls)
-#StatsRouter.apply_routes(urls)
-
-application = tornado.web.Application(
-    urls,
-    flash_policy_port = 843,
-    flash_policy_file = op.join(ROOT, '/static/flashpolicy.xml'),
-    socket_io_port = PORT,
-    client_id=2644170,
-    client_secret="2Z8zrQH5wFGJGLGHOt3u",
-    cookie_secret="43oETzKXQAGaYdkL5gEmGeJJFuYh7EQnp2XdTP1o/Vo=",
-)
-
-
 
 if __name__ == "__main__":
     import logging
@@ -1024,15 +992,15 @@ if __name__ == "__main__":
         cookie_secret="43oETzKXQAGaYdkL5gEmGeJJFuYh7EQnp2XdTP1o/Vo=",
         static_path=os.path.join(os.path.dirname(__file__), "static"),
         template_path=os.path.join(os.path.dirname(__file__), "templates"),
-        debug=True,
+        debug=DEBUG,
         login_url="/auth/login",
-#        xsrf_cookies=True,
+        xsrf_cookies=True,
+        client_id=2644170,
+        client_secret="2Z8zrQH5wFGJGLGHOt3u",
     )
 
     # 3. Make Tornado app listen on port 8080
-    app.listen(8080)
+    app.listen(PORT)
 
     # 4. Start IOLoop
     tornado.ioloop.IOLoop.instance().start()
-
-#    tornadio2.server.SocketServer(application)
