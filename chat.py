@@ -15,12 +15,13 @@ import tornado
 from tornado.options import define
 import tornado.web
 import tornado.httpserver
-import tornadio2
-import tornadio2.router
-import tornadio2.server
-import tornadio2.conn
 import os.path
 from tornado.web import decode_signed_value
+import tornado.ioloop
+import tornado.web
+
+import sockjs.tornado
+
 try:
   from local_settings import *
 except ImportError:
@@ -584,7 +585,7 @@ class StatsHandler(BaseHandler):
     def get(self):
         self.render('stats.html')
 
-class ChatConnection(tornadio2.conn.SocketConnection):
+class ChatConnection(sockjs.tornado.SockJSConnection):
     # Class level variable
     waiters = set()
     users_online = []
@@ -637,6 +638,7 @@ class ChatConnection(tornadio2.conn.SocketConnection):
                 self.send(message)
 
     def on_message(self, message_src):
+        message_src = json.loads(message_src)
         self.count_message+=1
         if self.first_message_time:
             self.last_message_time = time.time()
@@ -809,19 +811,22 @@ class ChatConnection(tornadio2.conn.SocketConnection):
             ChatConnection.messages_cache = ChatConnection.messages_cache[1:]
 
     def on_close(self):
-        time_now = datetime.datetime.time(datetime.datetime.now()).strftime("%H:%M")
         try:
             self.waiters.remove(self)
-            if self.user_name not in map(lambda a: a.user_name, self.waiters):
-                self.users_online.remove([self.user_name, self.user_id, self.user_sex, self.away, self.profile])
-                message = {
+            tornado.ioloop.IOLoop.instance().add_timeout(time.time() + 5, self.check_user)
+        except :
+            return
+
+    def check_user(self):
+        time_now = datetime.datetime.time(datetime.datetime.now()).strftime("%H:%M")
+        if self.user_name not in map(lambda a: a.user_name, self.waiters):
+            self.users_online.remove([self.user_name, self.user_id, self.user_sex, self.away, self.profile])
+            message = {
                     "type": "user_is_out",
                     "user_id": self.user_id,
                     "html": loader.load("message_out.html").generate(time = time_now, sex = self.user_sex, current_user = self.user_name, timeout=True),
                 }
-                self.console_message(message)
-        except :
-            return
+            self.console_message(message)
 
     def get_current_user(self, info):
         return decode_signed_value(application.settings["cookie_secret"],
@@ -860,13 +865,13 @@ class ChatConnection(tornadio2.conn.SocketConnection):
             return "/profile/%s" % user.id
 
 
-class PingConnection(tornadio2.conn.SocketConnection):
-    @tornadio2.event('ping')
+class PingConnection(sockjs.tornado.SockJSConnection):
+#    @tornadio2.event('ping')
     def ping(self, client):
         now = datetime.datetime.now()
         return client, [now.hour, now.minute, now.second, now.microsecond / 1000]
 
-    @tornadio2.event('stats')
+#    @tornadio2.event('stats')
     def stats(self):
         return ChatRouter.stats.dump()
 
@@ -963,9 +968,9 @@ class VKTest(BaseHandler, VKMixin):
         self.redirect("/")
 
 # Create tornadio server
-ChatRouter = tornadio2.router.TornadioRouter(ChatConnection,dict(enabled_protocols=['xhr-polling','jsonp-polling','htmlfile'],session_check_interval=15,session_expiry=10))
+#ChatRouter = tornadio2.router.TornadioRouter(ChatConnection,dict(enabled_protocols=['xhr-polling','jsonp-polling','htmlfile'],session_check_interval=15,session_expiry=10))
 
-StatsRouter = tornadio2.router.TornadioRouter(PingConnection, dict(enabled_protocols=['xhr-polling','jsonp-polling', 'htmlfile'],websocket_check=True),namespace='stats')
+#StatsRouter = tornadio2.router.TornadioRouter(PingConnection, dict(enabled_protocols=['xhr-polling','jsonp-polling', 'htmlfile'],websocket_check=True),namespace='stats')
 
 urls = ([(r"/", IndexHandler),
          (r"/stats", StatsHandler),
@@ -980,25 +985,54 @@ urls = ([(r"/", IndexHandler),
          (r"/WebSocketMain.swf", WebSocketFileHandler),
         ])
 
-ChatRouter.apply_routes(urls)
-StatsRouter.apply_routes(urls)
+#ChatRouter.apply_routes(urls)
+#StatsRouter.apply_routes(urls)
 
 application = tornado.web.Application(
     urls,
     flash_policy_port = 843,
     flash_policy_file = op.join(ROOT, '/static/flashpolicy.xml'),
     socket_io_port = PORT,
-    static_path=os.path.join(os.path.dirname(__file__), "static"),
-    xsrf_cookies=True,
-    template_path=os.path.join(os.path.dirname(__file__), "templates"),
-    cookie_secret="43oETzKXQAGaYdkL5gEmGeJJFuYh7EQnp2XdTP1o/Vo=",
-    debug=True,
-    login_url="/auth/login",
     client_id=2644170,
     client_secret="2Z8zrQH5wFGJGLGHOt3u",
+    cookie_secret="43oETzKXQAGaYdkL5gEmGeJJFuYh7EQnp2XdTP1o/Vo=",
 )
 
 
 
 if __name__ == "__main__":
-    tornadio2.server.SocketServer(application)
+    import logging
+    logging.getLogger().setLevel(logging.DEBUG)
+
+    # 1. Create chat router
+    ChatRouter = sockjs.tornado.SockJSRouter(ChatConnection)
+
+    # 2. Create Tornado application
+    app = tornado.web.Application(
+        [(r"/", IndexHandler),
+            (r"/stats", StatsHandler),
+            (r"/socket.io.js", SocketIOHandler),
+            (r"/reg", Registration),
+            (r"/profile/([0-9]+)", ProfileHandler),
+            (r"/profile", PostProfile),
+            (r"/auth/login", AuthLoginHandler),
+            (r"/auth/logout", AuthLogoutHandler),
+            (r"/vkauth", VKHandler),
+            (r"/test", VKTest),
+            (r"/WebSocketMain.swf", WebSocketFileHandler),
+        ] + ChatRouter.urls,
+        cookie_secret="43oETzKXQAGaYdkL5gEmGeJJFuYh7EQnp2XdTP1o/Vo=",
+        static_path=os.path.join(os.path.dirname(__file__), "static"),
+        template_path=os.path.join(os.path.dirname(__file__), "templates"),
+        debug=True,
+        login_url="/auth/login",
+#        xsrf_cookies=True,
+    )
+
+    # 3. Make Tornado app listen on port 8080
+    app.listen(8080)
+
+    # 4. Start IOLoop
+    tornado.ioloop.IOLoop.instance().start()
+
+#    tornadio2.server.SocketServer(application)

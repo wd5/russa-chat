@@ -6,12 +6,7 @@ $(document).ready(function() {
 	//Очистка инпутов
 	$('#messageform input[type="hidden"]').val('');
 	$('#message').val('').focus();
-    var s = new io.connect('http://' + window.location.host, {
-        rememberTransport: false,
-        'reconnect': true,
-        'reconnection delay': 1000,
-        'max reconnection attempts': 10
-        });
+    var s = new SockJS('http://' + window.location.host);
     // Постинг формы через ajax
     $("#messageform").live("keypress", function(e) {
         if (e.keyCode == 13){
@@ -62,15 +57,12 @@ $(document).ready(function() {
 		 $('.profile-err').hide();
 		 if (data) {
 			for (var i = 0; i < errors.length; i++){
-				 console.log(errors[i].error);
-				 console.log(errors[i].input_name);
 				 fn_chat_profileErr(errors[i].input_name,errors[i].error);
 			}
          }
          else {
              $( "#profile_editor" ).dialog( "close" );
          }
-		 console.log(data);
 		});
 	});
 /*    $('#profile_edit').click(function(){
@@ -177,9 +169,9 @@ $(document).ready(function() {
         $MESSAGE_TO_S = false;
     });
 
-    s.on('message', function(data) {
-        addMessage(data);
-    });
+    s.onmessage = function(data) {
+        addMessage(data.data);
+    };
 
     if (/*@cc_on!@*/false) {
         document.onfocusin = function(){
@@ -198,9 +190,26 @@ $(document).ready(function() {
     }
 });
 
+$.fn.serializeObject = function()
+{
+    var o = {};
+    var a = this.serializeArray();
+    $.each(a, function() {
+        if (o[this.name] !== undefined) {
+            if (!o[this.name].push) {
+                o[this.name] = [o[this.name]];
+            }
+            o[this.name].push(this.value || '');
+        } else {
+            o[this.name] = this.value || '';
+        }
+    });
+    return o;
+};
+
 // Постинг сообщения в чат
 function newMessage(form, s) {
-    s.json.send(form.serializeArray());
+    s.send(JSON.stringify(form.serializeArray()));
     $('#messageform').find("textarea").val('');
     form.slideDown();
     return false;
@@ -308,7 +317,6 @@ function fn_chat_profileErr(input_name,error){
 }
 
 function  fn_chat_userInfo(_this){
-    console.log(_this.href);
     if (_this.href.indexOf('profile/') !== -1) {
         $.ajax({type:"GET", url:_this.href, data:'', success: function(data){ $.fancybox(data); }});
     }
