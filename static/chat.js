@@ -9,8 +9,7 @@ $(document).ready(function() {
     var s = new SockJS('http://' + window.location.host);
     s.onclose = function() {
         setTimeout(function() {
-            console.log('lll');
-            var s = new SockJS('http://' + window.location.host);
+            window.location.reload();
         },4000);
     };
     // Постинг формы через ajax
@@ -195,23 +194,6 @@ $(document).ready(function() {
         }
     }
 });
-
-$.fn.serializeObject = function()
-{
-    var o = {};
-    var a = this.serializeArray();
-    $.each(a, function() {
-        if (o[this.name] !== undefined) {
-            if (!o[this.name].push) {
-                o[this.name] = [o[this.name]];
-            }
-            o[this.name].push(this.value || '');
-        } else {
-            o[this.name] = this.value || '';
-        }
-    });
-    return o;
-};
 
 // Постинг сообщения в чат
 function newMessage(form, s) {
