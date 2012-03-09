@@ -6,7 +6,7 @@ $(document).ready(function() {
 	//Очистка инпутов
 	$('#messageform input[type="hidden"]').val('');
 	$('#message').val('').focus();
-    var s = new SockJS('http://' + window.location.host);
+    var s = new SockJS('http://' + window.location.host + ':' + 8001);
     // Постинг формы через ajax
     $("#messageform").live("keypress", function(e) {
         if (e.keyCode == 13){
