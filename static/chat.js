@@ -7,6 +7,12 @@ $(document).ready(function() {
 	$('#messageform input[type="hidden"]').val('');
 	$('#message').val('').focus();
     var s = new SockJS('http://' + window.location.host);
+    s.onclose = function() {
+        setTimeout(function() {
+            console.log('lll');
+            var s = new SockJS('http://' + window.location.host);
+        },4000);
+    };
     // Постинг формы через ajax
     $("#messageform").live("keypress", function(e) {
         if (e.keyCode == 13){
@@ -70,16 +76,16 @@ $(document).ready(function() {
     });*/
     $('#cite').live('click',function(){
         var form = [{name: "message", value: "/цитата"}];
-        s.json.send(form);
+        s.send(JSON.stringify(form));
     });
 	
     $('#joke').live('click',function(){
         var form = [{name: "message", value: "/анекдот"}];
-        s.json.send(form);
+        s.send(JSON.stringify(form));
     });
     $('#away').live('click',function(){
         var form = [{name: "message", value: "/away"}];
-        s.json.send(form);
+        s.send(JSON.stringify(form));
     });
     //Приват
     $("#inbox a.user_nik").live("click", function(event) {
