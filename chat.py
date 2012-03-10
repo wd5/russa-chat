@@ -44,16 +44,6 @@ class Application(tornado.web.Application):
         )
         tornado.web.Application.__init__(self, handlers, **settings)
 
-class WebSocketFileHandler(tornado.web.RequestHandler):
-    def get(self):
-        # Obviously, you want this on CDN, but for sake of
-        # example this approach will work.
-        self.set_header('Content-Type', 'application/x-shockwave-flash')
-
-        with open(op.join(ROOT, 'static/WebSocketMain.swf'), 'rb') as f:
-            self.write(f.read())
-            self.finish()
-
 class BaseHandler(tornado.web.RequestHandler, VKMixin):
     def get_current_user(self):
         user = self.get_secure_cookie("user")
@@ -638,6 +628,8 @@ class ChatConnection(sockjs.tornado.SockJSConnection):
                 self.send(message)
 
     def on_message(self, message_src):
+        for i in self.waiters:
+            print i.user_name
         message_src = json.loads(message_src)
         self.count_message+=1
         if self.first_message_time:
@@ -987,7 +979,6 @@ if __name__ == "__main__":
             (r"/auth/logout", AuthLogoutHandler),
             (r"/vkauth", VKHandler),
             (r"/test", VKTest),
-            (r"/WebSocketMain.swf", WebSocketFileHandler),
         ] + ChatRouter.urls,
         cookie_secret="43oETzKXQAGaYdkL5gEmGeJJFuYh7EQnp2XdTP1o/Vo=",
         static_path=os.path.join(os.path.dirname(__file__), "static"),
