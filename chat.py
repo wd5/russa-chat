@@ -965,7 +965,7 @@ if __name__ == "__main__":
     logging.getLogger().setLevel(logging.DEBUG)
 
     # 1. Create chat router
-    ChatRouter = sockjs.tornado.SockJSRouter(ChatConnection,user_settings=dict(disabled_transports=['websocket','xhr-streaming']))
+    ChatRouter = sockjs.tornado.SockJSRouter(ChatConnection,user_settings=dict(disabled_transports=['websocket','xhr_streaming']))
 
     # 2. Create Tornado application
     app = tornado.web.Application(
