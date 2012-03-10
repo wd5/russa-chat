@@ -6,7 +6,7 @@ $(document).ready(function() {
 	//Очистка инпутов
 	$('#messageform input[type="hidden"]').val('');
 	$('#message').val('').focus();
-    var s = new SockJS('http://' + window.location.host);
+    var s = new SockJS('http://' + window.location.host +':' + 8001);
     s.onclose = function() {
         setTimeout(function() {
             window.location.reload();
