@@ -805,7 +805,7 @@ class ChatConnection(sockjs.tornado.SockJSConnection):
     def on_close(self):
         try:
             self.waiters.remove(self)
-            tornado.ioloop.IOLoop.instance().add_timeout(time.time() + 5, self.check_user)
+            tornado.ioloop.IOLoop.instance().add_timeout(time.time() + 6, self.check_user)
         except :
             return
 
