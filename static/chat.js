@@ -203,9 +203,21 @@ function newMessage(form, s) {
     return false;
 }
 
+var glob_msgs_n = 0;
 function addMessage(response){
+	
     if (response.type == 'new_message'){
-        var $last = $(response.html).appendTo("#inbox");
+		glob_msgs_n++;
+		var s = response.html;
+		if (glob_msgs_n%2 == 0){
+			var p = s.indexOf('div class="msg clearfix"');
+			if (p != -1){
+				s = s.slice(0,p+23)+' gravirovka'+s.slice(p+23);
+			}
+		}
+		
+		var $last = $(s).appendTo("#inbox");
+		
         if (response.private =="True"){
             if (focus == "False"){
                 document.getElementById('audiotag1').play();
@@ -227,9 +239,11 @@ function addMessage(response){
     }
     else if (response.type == 'new_user') {
         var $last_user = $(response.html).appendTo("#inbox");
+		/*
         setTimeout(function(){
         		$last_user.children('.shadow').animate({opacity:0},4000);
         	},2000);
+		*/
         $("#sidebar_inner").append(response.user);
         $USERS_ONLNE++;
         $('#sidebar_inner').children('h6').replaceWith('<h6>Пользователи онлайн(' + $USERS_ONLNE + '):</h6>')
@@ -253,7 +267,7 @@ function addMessage(response){
         window.location = '/auth/logout';
     }
     else {
-        $USERS_ONLNE = 0;
+		$USERS_ONLNE = 0;
         $("#sidebar_inner").children('.user').remove();
         for (i in response) {
             $USERS_ONLNE++;
@@ -281,6 +295,7 @@ function addMessage(response){
 			setUserAwayStatus(response[i][1], status);
         }
     }
+	
 	$('html, body').animate({scrollTop: document.body.scrollHeight}, 1000);
 	$('#inbox').css('visibility', 'visible');
 	$('#message').focus();

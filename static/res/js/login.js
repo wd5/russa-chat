@@ -36,7 +36,7 @@ function fn_reg_sendData(frm){
 		for (var i = 0; i < frm_inps.length; i++){
 			var name = frm_inps[i].name;
 			if (name !== ''){
-				sendData += ((sendData==='')?'':'&')+name+'='+frm_inps[i].value.replace(/&/g,'%26');
+				sendData += ((sendData==='')?'':'&')+name+'='+encodeURIComponent(frm_inps[i].value);
 			}
 		}
 	}

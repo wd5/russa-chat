@@ -262,6 +262,16 @@ body.main input{
 	border-radius:4px; 
 	box-shadow: 0 1px 4px #169BB4 inset;
 }
+#inbox .private2{
+	border:1px solid #cbcbcb; 
+	-webkit-border-radius:4px; 
+	-moz-border-radius:4px; 
+	border-radius:4px; 
+	box-shadow: 0 1px 4px #B49B16 inset;
+}
+#inbox .gravirovka{
+	background: #f7f7f7;
+}
 #inbox .personal{
 	position: relative;
 }
@@ -278,10 +288,10 @@ body.main input{
 	width: 100%;
 	z-index: 10;
 }
-#inbox .hello_msg{
+#inbox .personal2{
 	position: relative;
 }
-#inbox .hello_msg .shadow{
+#inbox .personal2 .shadow{
 	position: absolute;
 	top:0;
 	left: 0;
@@ -289,7 +299,25 @@ body.main input{
 	-webkit-border-radius:4px; 
 	-moz-border-radius:4px; 
 	border-radius:4px; 
+	box-shadow: 0 1px 4px #1651b4 inset;
+	height: 100%;
+	width: 100%;
+	z-index: 10;
+}
+#inbox .hello_msg{
+	position: relative;
+}
+#inbox .hello_msg .shadow{
+	position: absolute;
+	top:0;
+	left: 0;
+	/*
+	border:1px solid #cbcbcb; 
+	-webkit-border-radius:4px; 
+	-moz-border-radius:4px; 
+	border-radius:4px; 
 	box-shadow: 0 1px 4px #b41616 inset;
+	*/
 	height: 100%;
 	width: 100%;
 	z-index: 10;
@@ -402,7 +430,7 @@ body.main input{
 	position: absolute;
 	left: 0;
 	bottom: 100%;
-	width: 100%;
+	width: 380px;
 	background: white;
 	display: none;
 	-webkit-box-shadow: 0 -4px 4px #C8C8C8;
@@ -418,6 +446,28 @@ body.main input{
 }
 #smile_block a{
 	text-decoration: none;
+}
+#smile_block .tab {
+	float: left;
+	width: 95px;
+	text-align: center;
+	padding: 2px 0;
+	cursor: pointer;
+	background: #ccc;
+}
+#smile_block .tab:hover {
+	color: #036;
+	background: #ddd;
+}
+#smile_block .smile_block .smile_block_sub {
+	display: none;
+}
+#smile_block .smile_block .active {
+	display: block;
+}
+#smile_block .smile-tabs .active ,
+#smile_block .smile-tabs .active:hover {
+	background: #fff;
 }
 #smile_link{
 	margin-left: 49px;
@@ -442,6 +492,7 @@ body.main input{
 	width: 34px;
 	padding-left: 15px;
 }
+
 /*Smiles END*/
 /*Fullscreen SKIN*/
 #fullscreen #page{
@@ -609,6 +660,7 @@ body.main input{
 	position: absolute;
 	margin: -15px 0 0 0;
 }
+
 /*-profile-*/
 .profile {
 	width: 400px;

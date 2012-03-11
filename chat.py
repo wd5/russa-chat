@@ -755,28 +755,33 @@ class ChatConnection(sockjs.tornado.SockJSConnection):
                     message1 = {
                         "private" : "True",
                         "type": "new_message",
-                        "html": loader.load("private_message.html").generate(message=message["message"], time = time_now, current_user=self.user_name, id=self.user_id, who="тебя"),
+                        "html": loader.load("private_message_outgoing.html").generate(message=message["message"], time = time_now, current_user=self.user_name, id=self.user_id, who="тебя"),
                     }
                     message2 = {
                         "private" : "True",
                         "type": "new_message",
-                        "html": loader.load("private_message.html").generate(message=message["message"], time = time_now, current_user=self.user_name, id=self.user_id, who=private_to),
+                        "html": loader.load("private_message_incoming.html").generate(message=message["message"], time = time_now, current_user=self.user_name, id=self.user_id, who=private_to),
                     }
                     private = True
         if personals:
             personals_name = set()
             message_for_all = {}
+            outgoing_message = {}
             for waiter in self.waiters:
                 if waiter.user_id in personals:
                     personals_name.add(waiter.user_name)
-            message["html"] = loader.load("personal_message.html").generate(message=message["message"], time = time_now, current_user=self.user_name, id=self.user_id, personals=personals_name)
+            message["html"] = loader.load("personal_message_incoming.html").generate(message=message["message"], time = time_now, current_user=self.user_name, id=self.user_id, personals=personals_name)
             message["personal"] = "True"
+            outgoing_message["html"] = loader.load("personal_message_outgoing.html").generate(message=message["message"], time = time_now, current_user=self.user_name, id=self.user_id, personals=personals_name)
+            outgoing_message["type"] = "new_message"
             message_for_all["html"] = loader.load("personal_message_all.html").generate(message=message["message"], time = time_now, current_user=self.user_name, id=self.user_id, personals=personals_name)
             message_for_all["type"] = "new_message"
             del message["message"]
             for waiter in self.waiters:
                 if waiter.user_id in personals:
                     waiter.send(message)
+                elif waiter.user_id == self.user_id:
+                    waiter.send(outgoing_message)
                 else:
                     waiter.send(message_for_all)
             ChatConnection.messages_cache.extend([message_for_all])
