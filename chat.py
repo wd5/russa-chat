@@ -357,18 +357,18 @@ class PostProfile(BaseHandler):
                 errors.append(error)
         birthplace = self.get_argument("birthplace","")
         if birthplace:
-            if len(birthplace) > 15:
+            if len(birthplace) > 30:
                 error = {
                     "input_name": "birthplace",
-                    "error": u'Родной город не должен превышать 15 символов'
+                    "error": u'Родной город не должен превышать 30 символов'
                     }
                 errors.append(error)
         liveplace = self.get_argument("liveplace","")
         if liveplace:
-            if len(liveplace) > 15:
+            if len(liveplace) > 30:
                 error = {
                     "input_name": "liveplace",
-                    "error": u'Город проживания не должен превышать 15 символов'
+                    "error": u'Город проживания не должен превышать 30 символов'
                     }
                 errors.append(error)
         phone = self.get_argument("phone","")
