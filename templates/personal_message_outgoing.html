@@ -1,19 +1,16 @@
-<div class="msg clearfix personal">
-	<div class="msg_date">
-		{{ time }}
+<div class="blk c_personal_message_outgoing">
+	<div class="dt">{{ time }}</div>
+	<div class="nick"><span class="in">
+		<a id="{{id}}" href="noscript" class="from user_nik sub_id_{{id}}" title="личное сообщение">{{ current_user }}</a>
+	</span></div>
+	<div class="txt">
+		{% set last = len(personals) - 1 %}
+		<span class="personal_for">
+		{% for value, personal in enumerate(personals) %}
+			{{personal}}{% if value != last %},{% end %}
+		{% end %}
+		</span>
+		{% raw message %}
 	</div>
-	<div class="shadow"></div>
-	<div class="msg_text">
-		<div class="msg_name">
-			<a id="{{id}}" href="noscript" class="from user_nik sub_id_{{id}}" title="личное сообщение">{{ current_user }}</a> :
-            {% set last = len(personals) - 1 %}
-            <span class="personal_for">
-			{% for value, personal in enumerate(personals) %}
-				{{personal}}{% if value != last %},{% end %}
-			{% end %}
-			</span>
-			
-		</div>
-		<p>{% raw message %}</p>
-	</div>
+	<div class="clr"></div>
 </div>

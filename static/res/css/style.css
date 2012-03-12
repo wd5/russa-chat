@@ -528,10 +528,10 @@ body.main input{
 }
 #fullscreen .personal_for{
 	font-weight: bold;
-	color: rgba(81,180,22,.8);
+	color: #405063;
 }
 #fullscreen #inbox{
-	padding: 52px 10px 145px 0;
+	padding: 52px 0 145px 0;
 }
 #fullscreen #input{
 	width: 100%;
@@ -659,6 +659,87 @@ body.main input{
 .form-err-guest {
 	position: absolute;
 	margin: -15px 0 0 0;
+}
+
+/*--- blk ---*/
+#inbox .blk {
+	background: #fff url('../img/blk1.gif') repeat-y -70px 0;
+	border-top: solid 1px #dadada;
+}
+#inbox .blk .dt {
+	float: right;
+	width: 56px;
+	font: 11px Tahoma,sans-serif;
+	color: #929292;
+	padding: 6px 0 6px 0;
+}
+#inbox .blk .nick {
+	float: left;
+	width: 129px;
+	font: 13px Tahoma,sans-serif;
+	color: #454545;
+	padding: 6px 0 6px 0;
+	background: url('../img/blk1b.gif') repeat-x 0 0;
+}
+#inbox .blk .nick .in {
+	display: block;
+	padding: 0 12px 0 5px;
+	text-align: right;
+}
+#inbox .blk .txt {
+	margin: 0 66px 0 140px;
+	padding: 6px 0 6px 0;
+	font: 13px Tahoma,sans-serif;
+}
+#inbox .blk .nick a {
+	text-decoration: none;
+	color: #454545;
+}
+#inbox .blk .nick a:hover {
+	text-decoration: underline;
+}
+#inbox .blk:last-child {
+	border-bottom: solid 1px #dadada;
+}
+/*-blue-*/
+#inbox .c_private_message_incoming ,
+#inbox .c_personal_message_outgoing {
+	background-image: url('../img/blk2.gif');
+	background-color: #f0f5fa;
+	border-top: solid 1px #b1cce6;
+}
+#inbox .c_private_message_incoming .nick ,
+#inbox .c_personal_message_outgoing .nick {
+	background-image: url('../img/blk2b.gif');
+}
+/*-green-*/
+#inbox .c_private_message_outgoing ,
+#inbox .c_personal_message_incoming {
+	background-image: url('../img/blk_grn.gif');
+	background-color: #e7f5ea;
+	border-top: solid 1px #a5d9b1;
+}
+#inbox .c_private_message_outgoing .nick ,
+#inbox .c_personal_message_incoming .nick {
+	background-image: url('../img/blk_grn_b.gif');
+}
+/*-yellow-*/
+#inbox .c_message_out ,
+#inbox .c_new_user ,
+#inbox .c_system_message {
+	background-image: url('../img/blk_y.gif');
+	background-color: #f0efdf;
+	border-top: solid 1px #cdc993;
+}
+#inbox .c_message_out .nick ,
+#inbox .c_new_user .nick ,
+#inbox .c_system_message .nick {
+	background-image: url('../img/blk_y_b.gif');
+}
+#inbox .c_message_out .txt ,
+#inbox .c_new_user .txt ,
+#inbox .c_system_message .txt {
+	font-weight: bold;
 }
 
 /*-profile-*/

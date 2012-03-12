@@ -1,9 +1,15 @@
-<div class="msg">{{ time }}
-{% if sex == 'male' %}
-    {{ current_user }} Ушел
-{% elif sex == 'female' %}
-    {{ current_user }} Ушла
-{% else %}
-    Гость {{ current_user }} ушел
-{% end %}
-{% if timeout %}(timeout){% end %}</div>
+<div class="blk c_message_out">
+	<div class="dt">{{ time }}</div>
+	<div class="nick"><span class="in"> </span></div>
+	<div class="txt">
+		{% if sex == 'male' %}
+			{{ current_user }} Ушел
+		{% elif sex == 'female' %}
+			{{ current_user }} Ушла
+		{% else %}
+			Гость {{ current_user }} ушел
+		{% end %}
+		{% if timeout %}(timeout){% end %}
+	</div>
+	<div class="clr"></div>
+</div>

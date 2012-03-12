@@ -1,11 +1,11 @@
-<div class="msg clearfix private2">
-	<div class="msg_date">
-		{{ time }}
+<div class="blk c_private_message_outgoing">
+	<div class="dt">{{ time }}</div>
+	<div class="nick"><span class="in">
+		<a id="{{id}}" href="noscript" class="from user_nik sub_id_{{id}}" title="личное сообщение">{{ current_user }}</a>
+	</span></div>
+	<div class="txt">
+		(Приватно для <span class="for">{{ who }}</span>!)
+		{% raw message %}
 	</div>
-	<div class="msg_text">
-		<div class="msg_name">
-			<a id="{{id}}" href="noscript" class="from user_nik sub_id_{{id}}" title="личное сообщение">{{ current_user }}</a> : (Приватно для <span class="for">{{ who }}</span>!)
-		</div>
-		<p>{% raw message %}</p>
-	</div>
+	<div class="clr"></div>
 </div>
