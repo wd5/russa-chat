@@ -91,7 +91,7 @@ $(document).ready(function() {
         $MESSAGE_TO_S = false;
         event.preventDefault();
         var tar_id = $(this).attr('id');
-            if (($MESSAGE_TO == tar_id)||($(this).parent().parent().parent().hasClass('private'))) {
+            if (($MESSAGE_TO == tar_id)||($(this).parent().parent().parent().hasClass('c_private_message_outgoing'))) {
                 // Добавляю в инпут private значение id кому сообщение
                 $('#private').val($(this).attr('id'));
                 // Очищаю инпут обращения
