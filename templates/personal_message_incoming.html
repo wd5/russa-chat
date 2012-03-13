@@ -7,7 +7,7 @@
 		{% set last = len(personals) - 1 %}
 		<span class="personal_for">
 		{% for value, personal in enumerate(personals) %}
-			{{personal}}{% if value != last %},{% end %}
+			<a id="{{personal.user_id}}" href="noscript" class="from user_nik sub_id_{{personal.user_id}}" title="личное сообщение">{{personal.user_name}}</a>{% if value != last %},{% end %}
 		{% end %}
 		</span>
 		{% raw message %}

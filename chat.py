@@ -750,8 +750,8 @@ class ChatConnection(sockjs.tornado.SockJSConnection):
                 if input['value']:
                     for waiter in self.waiters:
                         if waiter.user_id == input['value']:
-                            private_to = waiter.user_name
-                    print u'\033[1;41mПриват от %s для %s: %s\033[1;m' % (self.user_name.decode('utf-8'), private_to.decode('utf-8'), message["message"])
+                            private_to = waiter
+                    print u'\033[1;41mПриват от %s для %s: %s\033[1;m' % (self.user_name.decode('utf-8'), private_to.user_name, message["message"])
                     message1 = {
                         "private" : "True",
                         "type": "new_message",
@@ -769,7 +769,7 @@ class ChatConnection(sockjs.tornado.SockJSConnection):
             outgoing_message = {}
             for waiter in self.waiters:
                 if waiter.user_id in personals:
-                    personals_name.add(waiter.user_name)
+                    personals_name.add(waiter)
             message["html"] = loader.load("personal_message_incoming.html").generate(message=message["message"], time = time_now, current_user=self.user_name, id=self.user_id, personals=personals_name)
             message["personal"] = "True"
             outgoing_message["html"] = loader.load("personal_message_outgoing.html").generate(message=message["message"], time = time_now, current_user=self.user_name, id=self.user_id, personals=personals_name)
@@ -789,7 +789,7 @@ class ChatConnection(sockjs.tornado.SockJSConnection):
                 ChatConnection.messages_cache = ChatConnection.messages_cache[1:]
         elif private:
             for waiter in self.waiters:
-                if waiter.user_name == private_to:
+                if waiter.user_name == private_to.user_name:
                     waiter.send(message1)
                 if waiter.user_name == self.user_name:
                     waiter.send(message2)

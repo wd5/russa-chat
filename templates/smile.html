@@ -1,6 +1,6 @@
 <div id="smile_block">	
 	<div class="smile_block">
-		<div class="smile_block_sub active" id="smile_blk_1">
+		<div class="smile_block_sub">
 			<a href="#" title="Facepalm"facepalm">
 				<img src="{{ static_url("smiles/standart/facepalm.gif") }}" alt=":facepalm:"/>
 			</a>
@@ -98,7 +98,7 @@
 				<img src="{{ static_url("smiles/standart/anonist.gif") }}" alt=":anonist:"/>
 			</a>
 		</div>
-		<div class="smile_block_sub" id="smile_blk_2">
+		<div class="smile_block_sub">
 			<a href="#" title="Trollface"trollface">
 				<img src="{{ static_url("smiles/special/Trollface.png") }}" alt=":trollface:"/>
 			</a>
@@ -130,7 +130,7 @@
 				<img src="{{ static_url("smiles/special/happy.gif") }}" alt=":happy:"/>
 			</a>
 		</div>
-		<div class="smile_block_sub" id="smile_blk_3">
+		<div class="smile_block_sub">
 			<a href="#" title="Дубиной по голове"dubina">
 				<img src="{{ static_url("smiles/big/dubina.gif") }}" alt=":dubina:"/>
 			</a>
@@ -177,7 +177,7 @@
 				<img src="{{ static_url("smiles/big/rose.gif") }}" alt=":rose:"/>
 			</a>
 		</div>
-        <div class="smile_block_sub" id="smile_blk_4">
+        <div class="smile_block_sub">
 			<a href="#" title=" "bpr">
 			<img src="{{ static_url("smiles/sex/bpr.gif") }}" alt=":bpr:"/>
 			</a>
@@ -225,12 +225,6 @@
 			</a>
 		</div>
     </div>
-	<div class="smile-tabs">
-		<div class="tab active" id="smile_tab_1">стандартные</div>
-		<div class="tab" id="smile_tab_2">трололо</div>
-		<div class="tab" id="smile_tab_3">большие</div>
-		<div class="tab" id="smile_tab_4">секс</div>
-	</div>
 </div>
 
 <script type="text/javascript">
@@ -245,26 +239,6 @@
 		$('body').click(function(){
 			$smile_block.hide();
 		});
-		$('#smile_tab_1').click(function(event){
-			event.preventDefault(); 
-			event.stopPropagation();
-			fn_smile_showTab(1)
-		});
-		$('#smile_tab_2').click(function(event){
-			event.preventDefault(); 
-			event.stopPropagation();
-			fn_smile_showTab(2)
-		});
-		$('#smile_tab_3').click(function(event){
-			event.preventDefault(); 
-			event.stopPropagation();
-			fn_smile_showTab(3)
-		});
-		$('#smile_tab_4').click(function(event){
-			event.preventDefault(); 
-			event.stopPropagation();
-			fn_smile_showTab(4)
-		});
 		$('#smile_link').click(function(event){
 			event.preventDefault(); 
 			event.stopPropagation();
@@ -275,12 +249,4 @@
 			}
 		});
 	});
-	function fn_smile_showTab(n){
-		if (document.getElementById('smile_tab_'+n).className === 'tab active'){ return; }
-		for (var i = 1; i <= 4; i++){
-			var a = ((i == n)?' active':'');
-			document.getElementById('smile_tab_'+i).className = 'tab'+a;
-			document.getElementById('smile_blk_'+i).className = 'smile_block_sub'+a;
-		}
-	}
 </script>

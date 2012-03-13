@@ -203,20 +203,11 @@ function newMessage(form, s) {
     return false;
 }
 
-var glob_msgs_n = 0;
 function addMessage(response){
 	
     if (response.type == 'new_message'){
-		glob_msgs_n++;
-		var s = response.html;
-		if (glob_msgs_n%2 == 0){
-			var p = s.indexOf('div class="msg clearfix"');
-			if (p != -1){
-				s = s.slice(0,p+23)+' gravirovka'+s.slice(p+23);
-			}
-		}
-		
-		var $last = $(s).appendTo("#inbox");
+	
+		var $last = $(response.html).appendTo("#inbox");
 		
         if (response.private =="True"){
             if (focus == "False"){
