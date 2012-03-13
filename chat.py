@@ -628,8 +628,6 @@ class ChatConnection(sockjs.tornado.SockJSConnection):
                 self.send(message)
 
     def on_message(self, message_src):
-        for i in self.waiters:
-            print i.user_name
         message_src = json.loads(message_src)
         self.count_message+=1
         if self.first_message_time:
@@ -751,7 +749,7 @@ class ChatConnection(sockjs.tornado.SockJSConnection):
                     for waiter in self.waiters:
                         if waiter.user_id == input['value']:
                             private_to = waiter
-                    print u'\033[1;41mПриват от %s для %s: %s\033[1;m' % (self.user_name.decode('utf-8'), private_to.user_name, message["message"])
+                    #print u'\033[1;41mПриват от %s для %s: %s\033[1;m' % (self.user_name.decode('utf-8'), private_to.user_name, message["message"])
                     message1 = {
                         "private" : "True",
                         "type": "new_message",
