@@ -962,6 +962,17 @@ class VKTest(BaseHandler, VKMixin):
         # "response" is json-response from server
         self.redirect("/")
 
+class GetFile(BaseHandler):
+    def get(self):
+        self.render('test_form.html')
+
+    def post(self):
+        file = self.request.files['the_file'][0]
+        output_file = open("uploads/music/" + file['filename'], 'w')
+        output_file.write(file['body'])
+        print output_file.name
+        self.finish(('Your file %s has been uploaded') % file['filename'])
+
 
 if __name__ == "__main__":
     import logging
@@ -976,6 +987,7 @@ if __name__ == "__main__":
             (r"/stats", StatsHandler),
             (r"/socket.io.js", SocketIOHandler),
             (r"/reg", Registration),
+            (r"/test", GetFile),
             (r"/profile/([0-9]+)", ProfileHandler),
             (r"/profile", PostProfile),
             (r"/auth/login", AuthLoginHandler),
