@@ -980,14 +980,17 @@ class GetFile(BaseHandler):
 
     def post(self):
         file = self.request.files['the_file'][0]
-        output_file = open("uploads/music/" + str(random.randrange(0, 10, 8)), 'w')
+        output_file = open("uploads/music/" + str(random.random()).split('.')[1], 'w')
         output_file.write(file['body'])
         tag = eyeD3.Tag()
         tag.link(output_file.name)
         performer = tag.getArtist().encode('latin-1').decode('cp1251').encode('utf-8')
         title = tag.getTitle().encode('latin-1').decode('cp1251').encode('utf-8')
-        sound_name = '%s - %s' % (performer, title)
-        self.render("upload_result.html", file_name = output_file.name, sound_name = sound_name)
+        if not title:
+            self.write("Error")
+        else:
+            sound_name = '%s - %s' % (performer, title)
+            self.render("upload_result.html", file_name = output_file.name, sound_name = sound_name)
 
 if __name__ == "__main__":
     import logging
@@ -996,9 +999,7 @@ if __name__ == "__main__":
     # 1. Create chat router
     ChatRouter = sockjs.tornado.SockJSRouter(ChatConnection,user_settings=dict(disabled_transports=['websocket','xhr_streaming']))
 
-    # 2. Create Tornado application
-    app = tornado.web.Application(
-        [(r"/", IndexHandler),
+    urls = [(r"/", IndexHandler),
             (r"/stats", StatsHandler),
             (r"/socket.io.js", SocketIOHandler),
             (r"/reg", Registration),
@@ -1009,8 +1010,11 @@ if __name__ == "__main__":
             (r"/auth/logout", AuthLogoutHandler),
             (r"/vkauth", VKHandler),
             (r"/test", VKTest),
-	    (r"/uploads/(.*)", tornado.web.StaticFileHandler, {"path": os.path.join(os.path.dirname(__file__), "uploads")}),
-        ] + ChatRouter.urls,
+        ]
+    if DEBUG:
+        urls.append((r"/uploads/(.*)", tornado.web.StaticFileHandler, {"path": os.path.join(os.path.dirname(__file__), "uploads")}))
+    # 2. Create Tornado application
+    app = tornado.web.Application(urls + ChatRouter.urls,
         cookie_secret="43oETzKXQAGaYdkL5gEmGeJJFuYh7EQnp2XdTP1o/Vo=",
         static_path=os.path.join(os.path.dirname(__file__), "static"),
         template_path=os.path.join(os.path.dirname(__file__), "templates"),
