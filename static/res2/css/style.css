@@ -1,0 +1,113 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+html , body {
+	height: 100%;
+	min-width: 900px;
+}
+body {
+	background: #fff url('../img/body.jpg') no-repeat center 190px;
+	font: 12px Arial,sans-serif;
+	color: #333;
+	height: 100%;
+}
+a {
+	color: #517098;
+	text-decoration: none;
+}
+.a_green {
+	color: #5c9341;
+}
+a:hover ,
+.a_green:hover {
+	color: #000;
+}
+img {
+	border: none;
+}
+ul , li {
+	list-style: none;
+}
+.clr {
+	clear: both;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+}
+/*--- page ---*/
+.page {
+	width: 900px;
+	margin: 0 auto;
+	min-height: 100%;
+	height: auto !important;
+	height: 100%;
+	background: url('../img/page.gif') repeat-y 0 0;
+}
+/*--- page-in ---*/
+.page-in {
+	width: 100%;
+	padding-bottom: 90px;
+	height: 1%;
+	position: relative;
+	min-height: 700px;
+}
+.page-in:after {
+	content: '.';
+	display: block;
+	clear: both;
+	visibility: hidden;
+	height: 0;
+}
+.form {
+	width: 431px;
+	height: 96px;
+	margin: 260px auto 0 auto;
+}
+.form .inp {
+	position: absolute;
+	width: 351px;
+	height: 69px;
+	background: url('../img/inp.png') no-repeat 0 0;
+}
+.form .inp input {
+	font: 30px "Trebuchet MS",Tahoma,sans-serif;
+	color: #474747;
+	font-style: italic;
+	background: none;
+	border: none;
+	margin: 15px 0 0 20px;
+}
+.form .btn {
+	position: absolute;
+	width: 61px;
+	height: 57px;
+	background: url('../img/btn.png') no-repeat 0 0;
+	cursor: pointer;
+	margin: 4px 0 0 370px;
+}
+/*--- header ---*/
+.header {
+	height: 220px;
+	background: url('../img/header.png') no-repeat 14px center;
+}
+/*--- footer ---*/
+.footer {
+	margin: -418px auto 0;
+	width: 900px;
+	height: 418px;
+	background: url('../img/footer.png') no-repeat center 0;
+	font: 12px "Trebuchet MS",Tahoma,sans-serif;
+	color: #b4b4b4;
+}
+.footer .copy {
+	padding-top: 385px;
+	text-align: center;
+}
+.footer .copy a {
+	color: #f6c76d;
+	text-decoration: none;
+}
+.footer .copy a:hover {
+	text-decoration: underline;
+}
