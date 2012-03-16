@@ -5,7 +5,7 @@ from django.core.exceptions import ValidationError
 from pbkdf2 import crypt
 import uuid
 import datetime
-import re
+import re, random
 import time
 from api import api
 from api.models import User, Quote, Anekdote
@@ -19,8 +19,8 @@ import os.path
 from tornado.web import decode_signed_value
 import tornado.ioloop
 import tornado.web
-
 import sockjs.tornado
+import eyeD3
 
 try:
   from local_settings import *
@@ -980,9 +980,14 @@ class GetFile(BaseHandler):
 
     def post(self):
         file = self.request.files['the_file'][0]
-        output_file = open("uploads/music/" + file['filename'], 'w')
+        output_file = open("uploads/music/" + str(random.randrange(0, 10, 8)), 'w')
         output_file.write(file['body'])
-        self.render("upload_result.html", file_name = output_file.name)
+        tag = eyeD3.Tag()
+        tag.link(output_file.name)
+        performer = tag.getArtist().encode('latin-1').decode('cp1251').encode('utf-8')
+        title = tag.getTitle().encode('latin-1').decode('cp1251').encode('utf-8')
+        sound_name = '%s - %s' % (performer, title)
+        self.render("upload_result.html", file_name = output_file.name, sound_name = sound_name)
 
 if __name__ == "__main__":
     import logging

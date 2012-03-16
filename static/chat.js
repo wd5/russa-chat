@@ -354,7 +354,7 @@ function fn_mp3_send(el) {
 		return;
 	}
 	
-	$$f({formid:'mp3_form', url:'http://85.10.204.147:8002/test',
+	$$f({formid:'mp3_form', url:'/test',
 		onstart:function () {
 			var sp = el.parentNode.parentNode.getElementsByTagName('span');
 			sp[0].style.display = 'none';
@@ -386,7 +386,7 @@ function fn_mp3_send(el) {
 
 var player = '<div><object width="300" height="30" data="/static/res/mini_player.swf" type="application/x-shockwave-flash">\
 <param name="movie" value="/static/res/mini_player.swf" />\
-<param name="flashvars" value="path_mp3=http://85.10.204.147:8002/*1*&name_mp3=*2*"/>\
+<param name="flashvars" value="path_mp3=/*1*&name_mp3=*2*"/>\
 <param name="wmode" value="transparent"/></object></div>';
 
 function fn_mp3_insertPlayer(data){
