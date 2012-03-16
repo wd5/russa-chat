@@ -1,0 +1,7 @@
+<script type="text/javascript">
+	
+	var s = "Отображаемое \"название\" трека";
+	
+	parent.window.document.getElementById("mp3_fname").innerHTML="{{ file_name }}";
+	parent.window.document.getElementById("mp3_name").innerHTML = s.replace(/>/g,'').replace(/</g,'');
+</script>

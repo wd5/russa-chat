@@ -607,7 +607,7 @@ body.main input{
 		font-size: 11px;
 		line-height: 11px;
 	}
-.away_btn, .cite_btn , .joke_btn , .porf_ed {
+.away_btn, .cite_btn , .joke_btn , .ch , .porf_ed , .mp3 {
 	display: inline-block;
 	padding: 4px 10px 5px 27px;
 	background: #F7F7F7 url(http://cdn1.iconfinder.com/data/icons/silk2/status_away.png) no-repeat 4px 3px;
@@ -616,7 +616,7 @@ body.main input{
 	-webkit-transition-property: background-color, border-radius;
 	-webkit-transition-duration: .2s;
 	}
-	.away_btn:hover, .cite_btn:hover, .joke_btn:hover , .porf_ed:hover {
+	.away_btn:hover, .cite_btn:hover, .joke_btn:hover , .porf_ed:hover , .mp3:hover , .ch:hover {
 		background-color: #ddd;
 		box-shadow:inset 0 1px 2px #cdd2d7;
 		-moz-box-shadow:inset 0 1px 2px #cdd2d7;
@@ -626,7 +626,15 @@ body.main input{
 .joke_btn { background: #F7F7F7 url(http://cdn1.iconfinder.com/data/icons/fugue/icon/balloon-quotation.png) no-repeat 4px 3px; }
 .cite_btn { background: #F7F7F7 url(http://cdn1.iconfinder.com/data/icons/splashyIcons/comments_reply.png) no-repeat 4px 3px; }
 .porf_ed { background: #F7F7F7 url(http://cdn1.iconfinder.com/data/icons/spirit20/user-profile.png) no-repeat 4px 0px; }
-
+.mp3 { background: #F7F7F7 url(../img/mp3.png) no-repeat 4px 3px; }
+.ch {
+	background: none;
+	color: #607890;
+	padding-left: 6px;
+}
+.ch label {
+	padding-left: 8px;
+}
 .input_table { width: 95% }
 
 .form-err {
@@ -718,7 +726,27 @@ body.main input{
 #inbox .c_system_message .txt {
 	font-weight: bold;
 }
-
+/*-mp3-*/
+#input_table .mp3 {
+	position: absolute;
+}
+#mp3_win {
+	background: #F7F7F7;
+	width: 400px;
+	padding: 10px 0;
+	display: none;
+	text-align: center;
+}
+#mp3_win .s1 {
+	cursor: pointer;
+	text-decoration: underline;
+}
+#mp3_win .s2 {
+	display: none;
+}
+#mp3_fname {
+	display: none;
+}
 /*-profile-*/
 .profile {
 	width: 400px;

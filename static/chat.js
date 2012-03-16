@@ -39,6 +39,17 @@ $(document).ready(function() {
 	$('#gear-opener a').click(function(){
 		$("#gear-opener .inner").hide();
 	});	
+
+	//-mp3 win-
+	$("#mp3_win").dialog({
+		width: 400,
+		modal: true,
+		autoOpen: false,
+	});
+	$("#btn_mp3_show").click(function(){
+		$("#mp3_win" ).dialog("open");
+		return false;
+	});
 	
 	/**
 	 * Модульное окно редактирования профиля
@@ -51,6 +62,7 @@ $(document).ready(function() {
 	$("#profile_edit").click(function(){
 		$( "#profile_editor" ).dialog( "open" );
 	});
+	
 	$("#close_profile_editor").click(function(){
 		$( "#profile_editor" ).dialog( "close" );
 	});
@@ -70,9 +82,7 @@ $(document).ready(function() {
          }
 		});
 	});
-/*    $('#profile_edit').click(function(){
-		alert('Пока не работает');
-    });*/
+
     $('#cite').live('click',function(){
         var form = [{name: "message", value: "/цитата"}];
         s.send(JSON.stringify(form));
@@ -86,7 +96,9 @@ $(document).ready(function() {
         var form = [{name: "message", value: "/away"}];
         s.send(JSON.stringify(form));
     });
-    //Приват
+    //insert player
+	$("#inbox").html(fn_mp3_insertPlayer($("#inbox").html()));
+	//Приват
     $("#inbox a.user_nik").live("click", function(event) {
         $MESSAGE_TO_S = false;
         event.preventDefault();
@@ -204,10 +216,10 @@ function newMessage(form, s) {
 }
 
 function addMessage(response){
-	
+
     if (response.type == 'new_message'){
 	
-		var $last = $(response.html).appendTo("#inbox");
+		var $last = $(fn_mp3_insertPlayer(response.html)).appendTo("#inbox");
 		
         if (response.private =="True"){
             if (focus == "False"){
@@ -287,7 +299,9 @@ function addMessage(response){
         }
     }
 	
-	$('html, body').animate({scrollTop: document.body.scrollHeight}, 1000);
+	if (document.getElementById('scroll_checkbox').checked){
+		$('html, body').animate({scrollTop: document.body.scrollHeight}, 1);
+	}
 	$('#inbox').css('visibility', 'visible');
 	$('#message').focus();
 }
@@ -321,4 +335,87 @@ function  fn_chat_userInfo(_this){
 	return false;
 }
 
+function fn_mp3_send(el) {
 
+	var ok = true;
+	var s = $('.ui-dialog').find('.inp_f').val();
+	var p = s.lastIndexOf('.');
+	if (p == -1){ ok = false }
+	else {
+		s = s.slice(p).toLowerCase();
+		if (s !== '.mp3'){
+			ok = false;
+		}
+	}
+	
+	if (!ok){
+		alert('Допустимы файлы только с расширением ".mp3"');
+		document.getElementById('mp3_form').reset();
+		return;
+	}
+	
+	$$f({formid:'mp3_form', url:'http://85.10.204.147:8002/test',
+		onstart:function () {
+			var sp = el.parentNode.parentNode.getElementsByTagName('span');
+			sp[0].style.display = 'none';
+			sp[1].style.display = 'block';
+		},onsend:function() {
+			var sp = el.parentNode.parentNode.getElementsByTagName('span');
+			sp[1].style.display = 'none';
+			sp[0].style.display = 'block';
+			document.getElementById('mp3_form').reset();
+			$("#mp3_win").dialog("close");
+			var tag = '[audio:"'+document.getElementById('mp3_fname').innerHTML+'","'+document.getElementById('mp3_name').innerHTML.replace(/"/g,"'")+'"]';
+			var s = $("#message").val();
+			$("#message").val(s+' '+tag+' ');
+			$("#message").focus();
+			//-caret to end
+			var tx = document.getElementById('message');
+			if (tx.createTextRange){
+				var r = tx.createTextRange();
+				r.collapse(false);
+				r.select();
+			}
+			if (tx.selectionStart){
+				var end = tx.value.length;
+				tx.setSelectionRange(end,end);
+				tx.focus();
+			}
+	}});
+}
+
+var player = '<div><object width="300" height="30" data="/static/res/mini_player.swf" type="application/x-shockwave-flash">\
+<param name="movie" value="/static/res/mini_player.swf" />\
+<param name="flashvars" value="path_mp3=http://85.10.204.147:8002/*1*&name_mp3=*2*"/>\
+<param name="wmode" value="transparent"/></object></div>';
+
+function fn_mp3_insertPlayer(data){
+
+	var res = '';
+	var p = -1;
+	var p2 = -1;
+	var p0 = -1;
+	for (var i = 0; i < 100; i++){
+		p = data.indexOf('[audio:"',p0);
+		if (p == -1){ break; }
+		var p2 = data.indexOf('","',p+1);
+		if (p2 == -1){ break; }
+		//-fname
+		var fname = data.slice(p+8,p2);
+		//-
+		var p3 = data.indexOf('"]',p2+3);
+		if (p3 == -1){ break; }
+		//-name
+		var name = data.slice(p2+3,p3);
+		//-insert
+		res += data.slice(p0+1,p);
+		res += player.replace('*1*',fname).replace('*2*',encodeURIComponent(name));
+		
+		//-
+		p0 = p3+1;
+	}
+	
+	res += data.slice(p0+1);
+	
+	return res;
+}

@@ -962,6 +962,18 @@ class VKTest(BaseHandler, VKMixin):
         # "response" is json-response from server
         self.redirect("/")
 
+
+class VKTest(BaseHandler, VKMixin):
+    @tornado.web.authenticated
+    @tornado.web.asynchronous
+    def get(self):
+        access_token = self.get_secure_cookie("access_token")
+        self.vk_request(self.async_callback(self._on_test), access_token=access_token, api_method="getProfiles", params={"uids": self.get_user_id(), "fields": "sex"})
+
+    def _on_test(self, response):
+        # "response" is json-response from server
+        self.redirect("/")
+
 class GetFile(BaseHandler):
     def get(self):
         self.render('test_form.html')
@@ -970,9 +982,7 @@ class GetFile(BaseHandler):
         file = self.request.files['the_file'][0]
         output_file = open("uploads/music/" + file['filename'], 'w')
         output_file.write(file['body'])
-        print output_file.name
-        self.finish(('Your file %s has been uploaded') % file['filename'])
-
+        self.render("upload_result.html", file_name = output_file.name)
 
 if __name__ == "__main__":
     import logging
@@ -994,6 +1004,7 @@ if __name__ == "__main__":
             (r"/auth/logout", AuthLogoutHandler),
             (r"/vkauth", VKHandler),
             (r"/test", VKTest),
+	    (r"/uploads/(.*)", tornado.web.StaticFileHandler, {"path": os.path.join(os.path.dirname(__file__), "uploads")}),
         ] + ChatRouter.urls,
         cookie_secret="43oETzKXQAGaYdkL5gEmGeJJFuYh7EQnp2XdTP1o/Vo=",
         static_path=os.path.join(os.path.dirname(__file__), "static"),
