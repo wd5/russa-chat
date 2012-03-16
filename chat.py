@@ -984,8 +984,13 @@ class GetFile(BaseHandler):
         output_file.write(file['body'])
         tag = eyeD3.Tag()
         tag.link(output_file.name)
-        performer = tag.getArtist().encode('latin-1').decode('cp1251').encode('utf-8')
-        title = tag.getTitle().encode('latin-1').decode('cp1251').encode('utf-8')
+        try:
+            performer = tag.getArtist().encode('latin-1').decode('cp1251').encode('utf-8')
+            title = tag.getTitle().encode('latin-1').decode('cp1251').encode('utf-8')
+        except :
+            performer = tag.getArtist()
+            title = tag.getTitle()
+            pass
         if not title:
             self.write("Error")
         else:
