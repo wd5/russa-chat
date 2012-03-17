@@ -30,6 +30,9 @@ body.main{
 	background: #fff url(../img/mp_bg.jpg) center top no-repeat;
 	font:12px/1.231 Trebuchet MS, Helvetica, sans-serif;
 }
+body.novg{
+	background: #fff url(../img/mp_bg_novg.jpg) center top no-repeat;
+}
 body.main input{
 	font:12px/1.231 Trebuchet MS, Helvetica, sans-serif;
 }
