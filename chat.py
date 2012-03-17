@@ -178,7 +178,7 @@ class AuthLoginHandler(BaseHandler):
       if host == 'nov-chat.ru':
           self.render("login_novgorod.html", error=False, input_error=False)
       else:
-          self.render("login_novgorod.html", error=False, input_error=False)
+          self.render("login.html", error=False, input_error=False)
 
   def post(self):
       host = self.request.headers['host']
@@ -258,14 +258,22 @@ class AuthLoginHandler(BaseHandler):
       if user.password == crypt(password, user.password):
           for waiter in ChatConnection.waiters:
               if str(waiter.user_name).lower() == reg_name.encode('utf-8').lower():
-                  self.render("login.html", error="Такое имя уже используется", input_error="name_reg")
-                  return
+                  if host == 'nov-chat.ru':
+                      self.render("login_novgorod.html", error="Такое имя уже используется", input_error="name_reg")
+                      return
+                  else:
+                      self.render("login.html", error="Такое имя уже используется", input_error="name_reg")
+                      return
           self.set_secure_cookie("user", user.username)
           self.set_secure_cookie("user_id", str(uuid.uuid4()))
           self.redirect("/")
       else:
-          self.render("login.html", error="Логин или пароль не верны", input_error="name_reg")
-          return
+          if host == 'nov-chat.ru':
+              self.render("login_novgorod.html", error="Логин или пароль не верны", input_error="name_reg")
+              return
+          else:
+              self.render("login.html", error="Логин или пароль не верны", input_error="name_reg")
+              return
 
 
 class AuthLogoutHandler(BaseHandler):
@@ -302,11 +310,16 @@ class IndexHandler(BaseHandler):
     """Regular HTTP handler to serve the chatroom page"""
     @tornado.web.authenticated
     def get(self):
+        host = self.request.headers['host']
         for i in ChatConnection.users_online:
             if i[0] == self.get_current_user():
                 if not i[1] == self.get_user_id():
-                    self.render("login.html", error="Кто то уже сидит под этим ником", input_error="name_reg")
-                    return
+                    if host == 'nov-chat.ru':
+                        self.render("login_novgorod.html", error="Кто то уже сидит под этим ником", input_error="name_reg")
+                        return
+                    else:
+                        self.render("login.html", error="Кто то уже сидит под этим ником", input_error="name_reg")
+                        return
         try:
             profile = User.objects.get(username=self.get_current_user())
             self.render('index.html',sex=self.get_user_sex(), is_vk = self.is_vk(), users_online = map(lambda a: loader.load("user.html").generate(current_user=a[0], id=a[1], sex=a[2], away=a[3], profile=a[4]), ChatConnection.users_online), quantity=len(ChatConnection.users_online), messages = ChatConnection.messages_cache, profile=profile)
@@ -948,6 +961,7 @@ class VKHandler(BaseHandler, VKMixin):
       self.authorize_redirect(client_id=self.settings["client_id"], redirect_uri="http://russa-chat.ru/vkauth", extra_params=args)
 
   def _on_auth(self, user):
+      host = self.request.headers['host']
       if not user:
           raise tornado.web.HTTPError(500, "Auth failed")
       name = tornado.escape.xhtml_escape(user["response"][0]["first_name"])
@@ -975,7 +989,10 @@ class VKHandler(BaseHandler, VKMixin):
           self.set_secure_cookie("access_token", user['access_token'])
           self.vk_request(self.async_callback(self._set_sex), access_token=user['access_token'], api_method="getProfiles", params={"uids": user['response'][0]['uid'], "fields": "sex"})
       else:
-          self.render("login.html", error="Имя должно состоять из латинских или русских букв")
+          if host == 'nov-chat.ru':
+              self.render("login_novgorod.html", error="Имя должно состоять из латинских или русских букв")
+          else:
+              self.render("login.html", error="Имя должно состоять из латинских или русских букв")
 
   def _set_sex(self, response):
       sex = response['response'][0]['sex']
