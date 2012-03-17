@@ -322,10 +322,10 @@ class IndexHandler(BaseHandler):
                         return
         try:
             profile = User.objects.get(username=self.get_current_user())
-            self.render('index.html',sex=self.get_user_sex(), is_vk = self.is_vk(), users_online = map(lambda a: loader.load("user.html").generate(current_user=a[0], id=a[1], sex=a[2], away=a[3], profile=a[4]), ChatConnection.users_online), quantity=len(ChatConnection.users_online), messages = ChatConnection.messages_cache, profile=profile)
+            self.render('index.html',sex=self.get_user_sex(), is_vk = self.is_vk(), users_online = map(lambda a: loader.load("user.html").generate(current_user=a[0], id=a[1], sex=a[2], away=a[3], profile=a[4]), ChatConnection.users_online), quantity=len(ChatConnection.users_online), messages = ChatConnection.messages_cache, profile=profile, host=host)
         except :
             profile = False
-            self.render('index.html',sex=self.get_user_sex(), is_vk = self.is_vk(), users_online = map(lambda a: loader.load("user.html").generate(current_user=a[0], id=a[1], sex=a[2], away=a[3], profile=a[4]), ChatConnection.users_online), quantity=len(ChatConnection.users_online), messages = ChatConnection.messages_cache, profile=profile)
+            self.render('index.html',sex=self.get_user_sex(), is_vk = self.is_vk(), users_online = map(lambda a: loader.load("user.html").generate(current_user=a[0], id=a[1], sex=a[2], away=a[3], profile=a[4]), ChatConnection.users_online), quantity=len(ChatConnection.users_online), messages = ChatConnection.messages_cache, profile=profile, host=host)
 
 class ProfileHandler(BaseHandler):
     """Regular HTTP handler to serve the chatroom page"""

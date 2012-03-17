@@ -3,7 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+{% if host == 'nov-chat.ru' %}
+<title>чат г.Великий Новгород</title>
+{% else %}
 <title>чат г.Старая Русса</title>
+{% end %}
 <meta name="description" content="">
 <meta name="keywords" content="">
 <meta name="author" content="humans.txt">
@@ -44,7 +48,11 @@ $(function(){
 	<header id="header">
 		<div id="header_block">
 			<div id="header_logo" class="alignleft">
+                {% if host == 'nov-chat.ru' %}
+                <a href="/">чат г.Великий Новгород</a>
+                {% else %}
 				<a href="/">чат г.Старая Русса</a>
+                {% end %}
 			</div>
 		</div>
 	</header>
