@@ -176,20 +176,26 @@ class AuthLoginHandler(BaseHandler):
   def get(self):
       host = self.request.headers['host']
       if host == 'nov-chat.ru':
-          self.render("login_novgorod.html", error=False, input_error=False)
+          appid = 2860688
+          self.render("login_novgorod.html", error=False, input_error=False, appid=appid)
       else:
-          self.render("login.html", error=False, input_error=False)
+          appid = 2644170
+          self.render("login.html", error=False, input_error=False, appid=appid)
 
   def post(self):
       host = self.request.headers['host']
+      if host == 'nov-chat.ru':
+          appid = 2860688
+      else:
+          appid = 2644170
       try:
           name = self.get_argument("name")
           if len(name) > 15:
               if host == 'nov-chat.ru':
-                  self.render("login_novgorod.html", error="Имя должно состоять Не более чем из 15 символов", input_error="name")
+                  self.render("login_novgorod.html", error="Имя должно состоять Не более чем из 15 символов", input_error="name", appid=appid)
                   return
               else:
-                  self.render("login.html", error="Имя должно состоять Не более чем из 15 символов", input_error="name")
+                  self.render("login.html", error="Имя должно состоять Не более чем из 15 символов", input_error="name", appid=appid)
                   return
           p = re.compile(u'^[a-zA-Z0-9_]*$|^[а-яА-Я0-9_]*$')
           m = p.match(name)
@@ -197,17 +203,17 @@ class AuthLoginHandler(BaseHandler):
               for waiter in ChatConnection.waiters:
                   if str(waiter.user_name) == name.encode('utf-8'):
                       if host == 'nov-chat.ru':
-                          self.render("login_novgorod.html", error="Такое имя уже используется", input_error="name")
+                          self.render("login_novgorod.html", error="Такое имя уже используется", input_error="name", appid=appid)
                           return
                       else:
-                          self.render("login.html", error="Такое имя уже используется", input_error="name")
+                          self.render("login.html", error="Такое имя уже используется", input_error="name", appid=appid)
                           return
               if User.objects.filter(username=name):
                   if host == 'nov-chat.ru':
-                      self.render("login_novgorod.html", error="Такое имя уже используется", input_error="name")
+                      self.render("login_novgorod.html", error="Такое имя уже используется", input_error="name", appid=appid)
                       return
                   else:
-                      self.render("login.html", error="Такое имя уже используется", input_error="name")
+                      self.render("login.html", error="Такое имя уже используется", input_error="name", appid=appid)
                       return
               self.set_secure_cookie("user", name)
               self.set_secure_cookie("user_id", str(uuid.uuid4()))
@@ -215,64 +221,64 @@ class AuthLoginHandler(BaseHandler):
               return
           else:
               if host == 'nov-chat.ru':
-                  self.render("login_novgorod.html", error="Имя должно состоять из латинских или русских букв", input_error="name")
+                  self.render("login_novgorod.html", error="Имя должно состоять из латинских или русских букв", input_error="name", appid=appid)
               else:
-                  self.render("login.html", error="Имя должно состоять из латинских или русских букв", input_error="name")
+                  self.render("login.html", error="Имя должно состоять из латинских или русских букв", input_error="name", appid=appid)
                   return
       except :
           try:
               self.get_argument("is_guestform")
               if host == 'nov-chat.ru':
-                  self.render("login_novgorod.html", error="Введите гостевой логин", input_error="name")
+                  self.render("login_novgorod.html", error="Введите гостевой логин", input_error="name", appid=appid)
               else:
-                  self.render("login.html", error="Введите гостевой логин", input_error="name")
+                  self.render("login.html", error="Введите гостевой логин", input_error="name", appid=appid)
           except:
-	      pass
+              pass
       try:
           reg_name = self.get_argument("name_reg")
       except :
           if host == 'nov-chat.ru':
-              self.render("login_novgorod.html", error="Введите логин", input_error="name_reg")
+              self.render("login_novgorod.html", error="Введите логин", input_error="name_reg", appid=appid)
               return
           else:
-              self.render("login.html", error="Введите логин", input_error="name_reg")
+              self.render("login.html", error="Введите логин", input_error="name_reg", appid=appid)
               return
       try:
           password = self.get_argument("password")
       except :
           if host == 'nov-chat.ru':
-              self.render("login_novgorod.html", error="Введите пароль", input_error="password")
+              self.render("login_novgorod.html", error="Введите пароль", input_error="password", appid=appid)
               return
           else:
-              self.render("login.html", error="Введите пароль", input_error="password")
+              self.render("login.html", error="Введите пароль", input_error="password", appid=appid)
               return
       try:
           user = User.objects.get(username=reg_name)
       except :
           if host == 'nov-chat.ru':
-              self.render("login_novgorod.html", error="Логин или пароль не верны", input_error="name_reg")
+              self.render("login_novgorod.html", error="Логин или пароль не верны", input_error="name_reg", appid=appid)
               return
           else:
-              self.render("login.html", error="Логин или пароль не верны", input_error="name_reg")
+              self.render("login.html", error="Логин или пароль не верны", input_error="name_reg", appid=appid)
               return
       if user.password == crypt(password, user.password):
           for waiter in ChatConnection.waiters:
               if str(waiter.user_name).lower() == reg_name.encode('utf-8').lower():
                   if host == 'nov-chat.ru':
-                      self.render("login_novgorod.html", error="Такое имя уже используется", input_error="name_reg")
+                      self.render("login_novgorod.html", error="Такое имя уже используется", input_error="name_reg", appid=appid)
                       return
                   else:
-                      self.render("login.html", error="Такое имя уже используется", input_error="name_reg")
+                      self.render("login.html", error="Такое имя уже используется", input_error="name_reg", appid=appid)
                       return
           self.set_secure_cookie("user", user.username)
           self.set_secure_cookie("user_id", str(uuid.uuid4()))
           self.redirect("/")
       else:
           if host == 'nov-chat.ru':
-              self.render("login_novgorod.html", error="Логин или пароль не верны", input_error="name_reg")
+              self.render("login_novgorod.html", error="Логин или пароль не верны", input_error="name_reg", appid=appid)
               return
           else:
-              self.render("login.html", error="Логин или пароль не верны", input_error="name_reg")
+              self.render("login.html", error="Логин или пароль не верны", input_error="name_reg", appid=appid)
               return
 
 
@@ -1000,9 +1006,11 @@ class VKHandler(BaseHandler, VKMixin):
           self.vk_request(self.async_callback(self._set_sex), access_token=user['access_token'], api_method="getProfiles", params={"uids": user['response'][0]['uid'], "fields": "sex"})
       else:
           if host == 'nov-chat.ru':
-              self.render("login_novgorod.html", error="Имя должно состоять из латинских или русских букв")
+              appid = 2860688
+              self.render("login_novgorod.html", error="Имя должно состоять из латинских или русских букв", appid=appid)
           else:
-              self.render("login.html", error="Имя должно состоять из латинских или русских букв")
+              appid = 2644170
+              self.render("login.html", error="Имя должно состоять из латинских или русских букв", appid=appid)
 
   def _set_sex(self, response):
       sex = response['response'][0]['sex']
