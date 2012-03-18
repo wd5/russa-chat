@@ -965,6 +965,7 @@ class VKHandler(BaseHandler, VKMixin):
           redirect_uri = "http://nov-chat.ru/vkauth"
       else:
           self.settings["client_id"] = 2644170
+          self.settings["client_secret"] = "2Z8zrQH5wFGJGLGHOt3u"
           redirect_uri = "http://russa-chat.ru/vkauth"
 
       self.authorize_redirect(client_id=self.settings['client_id'], redirect_uri=redirect_uri, extra_params=args)
