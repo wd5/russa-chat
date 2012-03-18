@@ -966,7 +966,7 @@ class VKHandler(BaseHandler, VKMixin):
           self.settings["client_id"] = 2644170
           redirect_uri = "http://russa-chat.ru/vkauth"
 
-      self.authorize_redirect(client_id=client_id, redirect_uri=redirect_uri, extra_params=args)
+      self.authorize_redirect(client_id=self.settings['client_id'], redirect_uri=redirect_uri, extra_params=args)
 
   def _on_auth(self, user):
       host = self.request.headers['host']
