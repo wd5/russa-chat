@@ -958,7 +958,7 @@ class VKHandler(BaseHandler, VKMixin):
           "scope": "friends"
       }
 
-      self.authorize_redirect(client_id=self.settings["client_id"], redirect_uri="http://russa-chat.ru/vkauth", extra_params=args)
+      self.authorize_redirect(client_id=self.settings["client_id"], redirect_uri="/vkauth", extra_params=args)
 
   def _on_auth(self, user):
       host = self.request.headers['host']
@@ -995,17 +995,13 @@ class VKHandler(BaseHandler, VKMixin):
               self.render("login.html", error="Имя должно состоять из латинских или русских букв")
 
   def _set_sex(self, response):
-      host = self.request.headers['host']
       sex = response['response'][0]['sex']
       if sex == 2:
           sex = "male"
       else:
           sex = "female"
       self.set_secure_cookie("sex", sex)
-      if host == 'nov-chat.ru':
-          self.redirect('http://nov-chat.ru')
-      else:
-          self.redirect('http://russa-chat.ru')
+      self.redirect(host)
 
 class VKTest(BaseHandler, VKMixin):
     @tornado.web.authenticated
