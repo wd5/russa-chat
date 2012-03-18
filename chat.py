@@ -803,7 +803,7 @@ class ChatConnection(sockjs.tornado.SockJSConnection):
                     for waiter in self.waiters:
                         if waiter.user_id == input['value']:
                             private_to = waiter
-                    print u'\033[1;41mПриват от %s для %s: %s\033[1;m' % (self.user_name.decode('utf-8'), private_to.user_name.decode('utf-8'), message["message"])
+                    #print u'\033[1;41mПриват от %s для %s: %s\033[1;m' % (self.user_name.decode('utf-8'), private_to.user_name.decode('utf-8'), message["message"])
                     message1 = {
                         "private" : "True",
                         "type": "new_message",
