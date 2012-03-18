@@ -2,6 +2,7 @@ WEB_SOCKET_SWF_LOCATION = 'WebSocketMain.swf';
 var $USERS_ONLNE = 0;
 var $MESSAGE_TO;
 var $MESSAGE_TO_S;
+var $MY_ID;
 $(document).ready(function() {
     var s;
 	//Очистка инпутов
@@ -109,23 +110,25 @@ $(document).ready(function() {
         $MESSAGE_TO_S = false;
         event.preventDefault();
         var tar_id = $(this).attr('id');
+        if (tar_id !== $MY_ID) {
             if (($MESSAGE_TO == tar_id)||($(this).parent().parent().parent().hasClass('c_private_message_outgoing'))) {
-                // Добавляю в инпут private значение id кому сообщение
-                $('#private').val($(this).attr('id'));
-                // Очищаю инпут обращения
-                $('#personal').val("");
-                // Не знаю что это
-                // $('.clone_personal').remove();
-                $('#private_name').html('<span class="closer"></span><div>Личное сообщение для '+$(this).text()+'</div>').addClass('private');
-                $MESSAGE_TO = false;
+                    // Добавляю в инпут private значение id кому сообщение
+                    $('#private').val($(this).attr('id'));
+                    // Очищаю инпут обращения
+                    $('#personal').val("");
+                    // Не знаю что это
+                    // $('.clone_personal').remove();
+                    $('#private_name').html('<span class="closer"></span><div>Личное сообщение для '+$(this).text()+'</div>').addClass('private');
+                    $MESSAGE_TO = false;
 
-        }else{
-            // Очищаю инпут привата
-            $('#private').val("");
-                // Добавляю в инпут к кому идет обращение
-                $('#personal').val(tar_id);
-                $('#private_name').html('<span class="closer"></span><div>Обращение к '+$(this).text()+'</div>').removeClass('private');
-                $MESSAGE_TO = tar_id;
+            }else{
+                // Очищаю инпут привата
+                $('#private').val("");
+                    // Добавляю в инпут к кому идет обращение
+                    $('#personal').val(tar_id);
+                    $('#private_name').html('<span class="closer"></span><div>Обращение к '+$(this).text()+'</div>').removeClass('private');
+                    $MESSAGE_TO = tar_id;
+            }
         }
         window.scrollTo(0, document.body.scrollHeight);
         $('#inbox').css({paddingBottom: '145px'});
@@ -144,33 +147,35 @@ $(document).ready(function() {
         }
         event.preventDefault();
         var tar_id = $(this).attr('id');
-        if ($MESSAGE_TO_S == tar_id) {
-            $('#private').val($(this).attr('id'));
-            $('#personal').val("");
-            $('.clone_personal').remove();
-            $('#private_name').html('<span class="closer"></span><div>Личное сообщение для '+$(this).text()+'</div>').addClass('private');
-            $MESSAGE_TO_S = false
-        }else{
-            $('#private').val("");
-            var list = new Array();
-            // Нужно проверить tar_id на наличие в clone_personal и personal
-            if ($('#personal').attr('value').length) {
-                list.push(($('#personal').attr('value')));
-            }
-            if ($('.clone_personal').attr('value')) {
-                list.push(($('.clone_personal').attr('value')));
-            }
-            // Если поле привата пусто или наоборот если есть приват а также если в обращении уже есть такой чувак
-            if((!($('#private_name div').length))||($('#private_name').hasClass('private'))||(!((jQuery.inArray(tar_id,list)) == -1))){
-                $('#personal').val(tar_id);
-                $('#private_name').html('<span class="closer"></span><div>Обращение к '+$(this).text()+'</div>').removeClass('private');
+        if (tar_id !== $MY_ID) {
+            if ($MESSAGE_TO_S == tar_id) {
+                $('#private').val($(this).attr('id'));
+                $('#personal').val("");
                 $('.clone_personal').remove();
-                $MESSAGE_TO_S = tar_id;
+                $('#private_name').html('<span class="closer"></span><div>Личное сообщение для '+$(this).text()+'</div>').addClass('private');
+                $MESSAGE_TO_S = false
             }else{
-                if(!($('#sidebar_inner #'+(tar_id)).hasClass('personal_link'))){
-                    $('#private_name div').append(', '+$(this).text());
-                    $('#messageform').append('<input class="clone_personal" id="personal" type="hidden" value="'+(tar_id)+'" name="personal[]">');
+                $('#private').val("");
+                var list = new Array();
+                // Нужно проверить tar_id на наличие в clone_personal и personal
+                if ($('#personal').attr('value').length) {
+                    list.push(($('#personal').attr('value')));
+                }
+                if ($('.clone_personal').attr('value')) {
+                    list.push(($('.clone_personal').attr('value')));
+                }
+                // Если поле привата пусто или наоборот если есть приват а также если в обращении уже есть такой чувак
+                if((!($('#private_name div').length))||($('#private_name').hasClass('private'))||(!((jQuery.inArray(tar_id,list)) == -1))){
+                    $('#personal').val(tar_id);
+                    $('#private_name').html('<span class="closer"></span><div>Обращение к '+$(this).text()+'</div>').removeClass('private');
+                    $('.clone_personal').remove();
                     $MESSAGE_TO_S = tar_id;
+                }else{
+                    if(!($('#sidebar_inner #'+(tar_id)).hasClass('personal_link'))){
+                        $('#private_name div').append(', '+$(this).text());
+                        $('#messageform').append('<input class="clone_personal" id="personal" type="hidden" value="'+(tar_id)+'" name="personal[]">');
+                        $MESSAGE_TO_S = tar_id;
+                    }
                 }
             }
         }
@@ -193,6 +198,7 @@ $(document).ready(function() {
     });
 
     function onmessage(data) {
+        console.log($MY_ID);
         addMessage(data.data);
     }
 
@@ -274,6 +280,9 @@ function addMessage(response){
     else if (response.type == 'kick') {
         alert("Вы плохо себя вели!");
         window.location = '/auth/logout';
+    }
+    else if (response.type == 'your_id') {
+        $MY_ID = response.user_id;
     }
     else {
 		$USERS_ONLNE = 0;

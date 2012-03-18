@@ -657,7 +657,12 @@ class ChatConnection(sockjs.tornado.SockJSConnection):
                     }
                     for waiter in self.waiters:
                         waiter.send(drop_away)
+        your_id = {
+            "type": "your_id",
+            "user_id":  self.user_id
+        }
         self.send(self.users_online)
+        self.send(your_id)
         self.user_sex = self.get_user_sex(info)
         if not self.user_sex == "user":
             self.profile = self.get_profile_link(info)
