@@ -960,10 +960,10 @@ class VKHandler(BaseHandler, VKMixin):
       }
 
       if host == 'nov-chat.ru':
-          client_id = self.settings["client_nov_id"]
+          self.settings["client_id"] = 2860688
           redirect_uri = "http://nov-chat.ru/vkauth"
       else:
-          client_id = self.settings["client_russa_id"]
+          self.settings["client_id"] = 2644170
           redirect_uri = "http://russa-chat.ru/vkauth"
 
       print redirect_uri
@@ -1011,7 +1011,7 @@ class VKHandler(BaseHandler, VKMixin):
       else:
           sex = "female"
       self.set_secure_cookie("sex", sex)
-      self.redirect(host)
+      self.redirect('/')
 
 class VKTest(BaseHandler, VKMixin):
     @tornado.web.authenticated
@@ -1088,8 +1088,7 @@ if __name__ == "__main__":
         debug=DEBUG,
         login_url="/auth/login",
         xsrf_cookies=True,
-        client_russa_id=2644170,
-        client_nov_id=2860688,
+        client_id = 2860688,
         client_secret="2Z8zrQH5wFGJGLGHOt3u",
     )
 
