@@ -1086,7 +1086,7 @@ if __name__ == "__main__":
         debug=DEBUG,
         login_url="/auth/login",
         xsrf_cookies=True,
-        client_id = 2860688,
+        client_id = 2644170,
         client_secret="2Z8zrQH5wFGJGLGHOt3u",
     )
 
