@@ -821,6 +821,7 @@ class ChatConnection(sockjs.tornado.SockJSConnection):
             outgoing_message = {}
             for waiter in self.waiters:
                 if waiter.user_id in personals:
+                    print waiter.user_name
                     personals_name.add(waiter)
             message["html"] = loader.load("personal_message_incoming.html").generate(message=message["message"], time = time_now, current_user=self.user_name, id=self.user_id, personals=personals_name)
             message["personal"] = "True"
