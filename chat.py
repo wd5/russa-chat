@@ -995,14 +995,13 @@ class VKHandler(BaseHandler, VKMixin):
               self.render("login.html", error="Имя должно состоять из латинских или русских букв")
 
   def _set_sex(self, response):
-      host = self.request.headers['host']
       sex = response['response'][0]['sex']
       if sex == 2:
           sex = "male"
       else:
           sex = "female"
       self.set_secure_cookie("sex", sex)
-      self.redirect(host)
+      self.redirect("/")
 
 class VKTest(BaseHandler, VKMixin):
     @tornado.web.authenticated
