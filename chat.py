@@ -921,6 +921,7 @@ class PingConnection(sockjs.tornado.SockJSConnection):
 class VKHandler(BaseHandler, VKMixin):
   @tornado.web.asynchronous
   def get(self):
+      host = self.request.headers['host']
       self.clear_all_cookies()
       time_now = datetime.datetime.time(datetime.datetime.now()).strftime("%H:%M")
       username = self.get_current_user()
@@ -958,7 +959,11 @@ class VKHandler(BaseHandler, VKMixin):
           "scope": "friends"
       }
 
-      self.authorize_redirect(client_id=self.settings["client_id"], redirect_uri="/vkauth", extra_params=args)
+      if host == 'nov-chat.ru':
+          redirect_uri = 'http://nov-chat.ru/vkauth'
+      else:
+          redirect_uri = 'http://russa-chat.ru/vkauth'
+      self.authorize_redirect(client_id=self.settings["client_id"], redirect_uri=redirect_uri, extra_params=args)
 
   def _on_auth(self, user):
       host = self.request.headers['host']
