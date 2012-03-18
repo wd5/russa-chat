@@ -3,15 +3,21 @@ var $USERS_ONLNE = 0;
 var $MESSAGE_TO;
 var $MESSAGE_TO_S;
 $(document).ready(function() {
+    var s;
 	//Очистка инпутов
 	$('#messageform input[type="hidden"]').val('');
 	$('#message').val('').focus();
-    var s = new SockJS('http://' + window.location.host);
-    s.onclose = function() {
+    function connect() {
+        s = new SockJS('http://' + window.location.host);
+        s.onclose = onclose;
+        s.onmessage = onmessage;
+    }
+    function onclose() {
         setTimeout(function() {
-            window.location.reload();
-        },4000);
-    };
+            connect();
+        },3000);
+    }
+    connect();
     // Постинг формы через ajax
     $("#messageform").live("keypress", function(e) {
         if (e.keyCode == 13){
@@ -186,9 +192,9 @@ $(document).ready(function() {
         $MESSAGE_TO_S = false;
     });
 
-    s.onmessage = function(data) {
+    function onmessage(data) {
         addMessage(data.data);
-    };
+    }
 
     if (/*@cc_on!@*/false) {
         document.onfocusin = function(){
