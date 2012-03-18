@@ -960,10 +960,11 @@ class VKHandler(BaseHandler, VKMixin):
       }
 
       if host == 'nov-chat.ru':
-          redirect_uri = 'http://nov-chat.ru/vkauth'
+          client_id = self.settings["client_nov_id"]
       else:
-          redirect_uri = 'http://russa-chat.ru/vkauth'
-      self.authorize_redirect(client_id=self.settings["client_id"], redirect_uri=redirect_uri, extra_params=args)
+          client_id = self.settings["client_russa_id"]
+
+      self.authorize_redirect(client_id=client_id, redirect_uri="/vkauth", extra_params=args)
 
   def _on_auth(self, user):
       host = self.request.headers['host']
@@ -1083,7 +1084,8 @@ if __name__ == "__main__":
         debug=DEBUG,
         login_url="/auth/login",
         xsrf_cookies=True,
-        client_id=2644170,
+        client_russa_id=2644170,
+        client_nov_id=2860688,
         client_secret="2Z8zrQH5wFGJGLGHOt3u",
     )
 
