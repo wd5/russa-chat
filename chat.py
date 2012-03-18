@@ -803,7 +803,7 @@ class ChatConnection(sockjs.tornado.SockJSConnection):
                     for waiter in self.waiters:
                         if waiter.user_id == input['value']:
                             private_to = waiter
-                    #print u'\033[1;41mПриват от %s для %s: %s\033[1;m' % (self.user_name.decode('utf-8'), private_to.user_name, message["message"])
+                    print u'\033[1;41mПриват от %s для %s: %s\033[1;m' % (self.user_name.decode('utf-8'), private_to.user_name.decode('utf-8'), message["message"])
                     message1 = {
                         "private" : "True",
                         "type": "new_message",
@@ -869,13 +869,16 @@ class ChatConnection(sockjs.tornado.SockJSConnection):
     def check_user(self):
         time_now = datetime.datetime.time(datetime.datetime.now()).strftime("%H:%M")
         if self.user_name not in map(lambda a: a.user_name, self.waiters):
-            self.users_online.remove([self.user_name, self.user_id, self.user_sex, self.away, self.profile])
-            message = {
-                    "type": "user_is_out",
-                    "user_id": self.user_id,
-                    "html": loader.load("message_out.html").generate(time = time_now, sex = self.user_sex, current_user = self.user_name, timeout=True),
-                }
-            self.console_message(message)
+            try:
+                self.users_online.remove([self.user_name, self.user_id, self.user_sex, self.away, self.profile])
+                message = {
+                        "type": "user_is_out",
+                        "user_id": self.user_id,
+                        "html": loader.load("message_out.html").generate(time = time_now, sex = self.user_sex, current_user = self.user_name, timeout=True),
+                    }
+                self.console_message(message)
+            except :
+                pass
 
     def get_current_user(self, info):
         return decode_signed_value(app.settings["cookie_secret"],
