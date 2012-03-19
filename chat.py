@@ -321,10 +321,12 @@ class IndexHandler(BaseHandler):
             if i[0] == self.get_current_user():
                 if not i[1] == self.get_user_id():
                     if host == 'nov-chat.ru':
-                        self.render("login_novgorod.html", error="Кто то уже сидит под этим ником", input_error="name_reg")
+                        appid = 2860688
+                        self.render("login_novgorod.html", error="Кто то уже сидит под этим ником", input_error="name_reg", appid=appid)
                         return
                     else:
-                        self.render("login.html", error="Кто то уже сидит под этим ником", input_error="name_reg")
+                        appid = 2644170
+                        self.render("login.html", error="Кто то уже сидит под этим ником", input_error="name_reg", appid=appid)
                         return
         try:
             profile = User.objects.get(username=self.get_current_user())
@@ -710,7 +712,7 @@ class ChatConnection(sockjs.tornado.SockJSConnection):
             self.first_message_time = time.time()
         time_now = datetime.datetime.time(datetime.datetime.now()).strftime("%H:%M")
         personals = []
-        private = False
+        private = []
         for input in message_src:
             if input['name'] == 'message':
                 if not input['value']:
@@ -805,21 +807,8 @@ class ChatConnection(sockjs.tornado.SockJSConnection):
                     personals.append(input['value'])
             elif input['name'] == 'private':
                 if input['value']:
-                    for waiter in self.waiters:
-                        if waiter.user_id == input['value']:
-                            private_to = waiter
-                    #print u'\033[1;41mПриват от %s для %s: %s\033[1;m' % (self.user_name.decode('utf-8'), private_to.user_name.decode('utf-8'), message["message"])
-                    message1 = {
-                        "private" : "True",
-                        "type": "new_message",
-                        "html": loader.load("private_message_outgoing.html").generate(message=message["message"], time = time_now, current_user=self.user_name, id=self.user_id, who="тебя"),
-                    }
-                    message2 = {
-                        "private" : "True",
-                        "type": "new_message",
-                        "html": loader.load("private_message_incoming.html").generate(message=message["message"], time = time_now, current_user=self.user_name, id=self.user_id, who=private_to),
-                    }
-                    private = True
+                    private.append(input['value'])
+
         if personals:
             personals_name = set()
             message_for_all = {}
@@ -846,9 +835,30 @@ class ChatConnection(sockjs.tornado.SockJSConnection):
             if len(ChatConnection.messages_cache) > ChatConnection.cache_size:
                 ChatConnection.messages_cache = ChatConnection.messages_cache[1:]
         elif private:
+            privates_name = set()
+            outgoing_message = {}
             for waiter in self.waiters:
-                if waiter.user_name == private_to.user_name:
+                if waiter.user_id in private:
+                    privates_name.add(waiter)
+            privates_name2 = set()
+
+            message2 = {
+                "private" : "True",
+                "type": "new_message",
+                "html": loader.load("private_message_incoming.html").generate(message=message["message"], time = time_now, current_user=self.user_name, id=self.user_id, who=privates_name),
+                }
+            for waiter in self.waiters:
+                if waiter in privates_name:
+                    for i in privates_name:
+                        if not i.user_name == waiter.user_name:
+                            privates_name2.add(i)
+                    message1 = {
+                        "private" : "True",
+                        "type": "new_message",
+                        "html": loader.load("private_message_outgoing.html").generate(message=message["message"], time = time_now, current_user=self.user_name, id=self.user_id, who=privates_name2),
+                    }
                     waiter.send(message1)
+                    privates_name2 = set()
                 if waiter.user_name == self.user_name:
                     waiter.send(message2)
         else:
