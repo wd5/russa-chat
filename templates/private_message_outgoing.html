@@ -6,9 +6,9 @@
 	<div class="txt">
         {% set last = len(who) - 1 %}
         {% if who %}
-            (Приватно для <span class="for">
-            {% for value, personal in enumerate(who) %} тебя и
-                <a id="{{personal.user_id}}" href="noscript" class="from user_nik sub_id_{{personal.user_id}}" title="личное сообщение">{{personal.user_name}}</a>{% if value != last %},{% end %}</span>!)
+            (Приватно для <span class="for"> тебя и
+            {% for value, personal in enumerate(who) %}
+                <a id="{{personal.user_id}}" href="noscript" class="from user_nik sub_id_{{personal.user_id}}" title="личное сообщение">{{personal.user_name}}</a>{% if value != last %},{% else %}!){% end %}
             {% end %}
             {% raw message %}
         {% else %}
