@@ -75,6 +75,7 @@ $(document).ready(function() {
 	});
 
 	$('#profile-save').click(function(){
+		
 		var profileForm = $('#profile-form');
 		$.post('/profile', profileForm.serialize(), function(data) {
          errors = jQuery.parseJSON(data);
