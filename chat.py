@@ -1080,11 +1080,11 @@ class GetFile(BaseHandler):
             performer = tag.getArtist()
             title = tag.getTitle()
             pass
-        if not title:
-            self.write("Error")
+        if not title or performer:
+            sound_name = 'Без названия'
         else:
             sound_name = '%s - %s' % (performer, title)
-            self.render("upload_result.html", file_name = output_file.name, sound_name = sound_name)
+        self.render("upload_result.html", file_name = output_file.name, sound_name = sound_name)
 
 if __name__ == "__main__":
     import logging

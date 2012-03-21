@@ -74,7 +74,7 @@ def to_smile(match):
         ':anonist:' : '<img src=\'/static/smiles/standart/anonist.gif\'/>',
         ':nedotroga:' : '<img src=\'/static/smiles/sex/nedotroga.gif\'/>',
         ':neiron:' : '<img src=\'/static/smiles/sex/neiron.gif\'/>',
-        ':showtits:' : '<img src=\'/static/smiles/special/show_tits.jpg\'/>',
+        ':showtits:' : '<img src=\'/static/smiles/special/show_tits.png\'/>',
     }
     return smiles[match.group()]
 
