@@ -144,6 +144,11 @@ $(document).ready(function() {
                     $('#messageform').append('<input class="clone_private" id="private" type="hidden" value="'+(tar_id)+'" name="private">');
                 }
             }
+            window.scrollTo(0, document.body.scrollHeight);
+            $('#inbox').css({paddingBottom: '145px'});
+            $('#inbox').css('visibility', 'visible');
+            $('#inbox').show();
+            $('#message').focus();
         }
     });
     $("#inbox a.user_nik").live("click", function(event) {
