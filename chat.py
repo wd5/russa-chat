@@ -711,9 +711,6 @@ class ChatConnection(sockjs.tornado.SockJSConnection):
         else:
             self.first_message_time = time.time()
         time_now = datetime.datetime.time(datetime.datetime.now()).strftime("%H:%M")
-        print "---------"
-        print time_now
-        print "---------"
         personals = []
         private = []
         for input in message_src:
