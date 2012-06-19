@@ -1,11 +1,7 @@
 from django.conf import settings
+import os
 
-try:
-    from local_settings import *
-except ImportError:
-    pass
-
-settings.configure(DATABASE_ENGINE=DATABASE_ENGINE, DATABASE_NAME=DATABASE_NAME, DATABASE_USER=DATABASE_USER, DATABASE_PASSWORD=DATABASE_PASSWORD)
+os.environ['DJANGO_SETTINGS_MODULE'] = 'local_settings'
 
 from django.db import models
 
