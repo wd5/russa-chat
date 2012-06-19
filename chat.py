@@ -27,7 +27,6 @@ try:
 except ImportError:
   pass
 
-
 loader = tornado.template.Loader(os.path.join(os.path.dirname(__file__), "templates"))
 ROOT = op.normpath(op.dirname(__file__))
 # На каком порту зауcкаемся
