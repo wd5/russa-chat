@@ -1,4 +1,3 @@
-from django.conf import settings
 import os
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'local_settings'
